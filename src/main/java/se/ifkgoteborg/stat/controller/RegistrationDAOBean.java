@@ -13,6 +13,7 @@ import javax.persistence.Query;
 
 import se.ifkgoteborg.stat.controller.adapter.SquadPlayer;
 import se.ifkgoteborg.stat.model.Club;
+import se.ifkgoteborg.stat.model.Formation;
 import se.ifkgoteborg.stat.model.FormationPosition;
 import se.ifkgoteborg.stat.model.Game;
 import se.ifkgoteborg.stat.model.Ground;
@@ -25,7 +26,7 @@ import se.ifkgoteborg.stat.util.DateFactory;
 @Stateless
 public class RegistrationDAOBean implements RegistrationDAO {
 
-	@Inject	
+	@Inject
 	EntityManager em;
 	
 	/* (non-Javadoc)
@@ -240,7 +241,7 @@ public class RegistrationDAOBean implements RegistrationDAO {
 				.setParameter("date", date)
 				.getSingleResult();
 		} catch (NoResultException e) {
-			Tournament t = getTournamentByName(tournamentName);
+			Tournament t = getOrCreateTournamentByName(tournamentName);
 			ts = em.merge(new TournamentSeason(t, date));
 		}
 		
@@ -251,7 +252,7 @@ public class RegistrationDAOBean implements RegistrationDAO {
 	}
 
 	@Override
-	public Tournament getTournamentByName(String tournamentName) {
+	public Tournament getOrCreateTournamentByName(String tournamentName) {
 		try {
 			return (Tournament) em.createQuery("select t from Tournament t WHERE lower(t.name) = :tname").
 					setParameter("tname", tournamentName.toLowerCase()).
@@ -260,6 +261,40 @@ public class RegistrationDAOBean implements RegistrationDAO {
 			// Create new tournament with this name
 			return em.merge(new Tournament(tournamentName, false));
 		}
+	}
+
+
+	@Override
+	public Formation getFormationByName(String formation) {
+		try {
+			Formation f = (Formation) em.createQuery("select f from Formation f WHERE f.name=:formationName")
+				.setParameter("formationName", formation)
+				.getSingleResult();
+			//f.getUsedInGames().size();
+			return f;
+		} catch (NoResultException e) {
+			Formation f = em.merge(new Formation(formation));
+			//f.getUsedInGames().size();
+			return f;
+		}
+	}
+
+
+	@Override
+	public void saveGame(Game g) {
+		if(g.getFormation() != null && g.getFormation().getId() != null) {
+			Formation f = em.find(Formation.class, g.getFormation().getId());
+			g.setFormation(f);
+		} else {
+			g.setFormation(getFormationByName(g.getFormation().getName()));
+		}
+		em.persist(g);
+	}
+
+
+	@Override
+	public EntityManager getPersistenceUnit() {		
+		return em;
 	}
 	
 }

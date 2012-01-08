@@ -4,8 +4,11 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+
 import se.ifkgoteborg.stat.controller.adapter.SquadPlayer;
 import se.ifkgoteborg.stat.model.Club;
+import se.ifkgoteborg.stat.model.Formation;
 import se.ifkgoteborg.stat.model.FormationPosition;
 import se.ifkgoteborg.stat.model.Game;
 import se.ifkgoteborg.stat.model.Ground;
@@ -45,8 +48,14 @@ public interface RegistrationDAO {
 	public TournamentSeason getTournamentSeasonByName(String tournamentName,
 			int year);
 
-	public Tournament getTournamentByName(String tournamentName);
+	public Tournament getOrCreateTournamentByName(String tournamentName);
 
 	public List<Game> getGames(Long tournamentId, int year);
+
+	public Formation getFormationByName(String formation);
+
+	public void saveGame(Game g);
+
+	public EntityManager getPersistenceUnit();
 
 }

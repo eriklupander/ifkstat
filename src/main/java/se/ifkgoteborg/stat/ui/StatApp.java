@@ -1,13 +1,14 @@
 package se.ifkgoteborg.stat.ui;
 
+
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 
 import se.ifkgoteborg.stat.controller.RegistrationDAO;
 
 import com.vaadin.Application;
 import com.vaadin.terminal.ThemeResource;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TabSheet.SelectedTabChangeEvent;
 import com.vaadin.ui.TabSheet.SelectedTabChangeListener;
@@ -22,6 +23,9 @@ public class StatApp extends Application {
 	@Inject
     RegistrationDAO dao;
 	
+	@Inject
+	EntityManager em;
+	
 	private static final ThemeResource icon1 = new ThemeResource(
             "../sampler/icons/action_save.gif");
     private static final ThemeResource icon2 = new ThemeResource(
@@ -29,6 +33,7 @@ public class StatApp extends Application {
     private static final ThemeResource icon3 = new ThemeResource(
             "../sampler/icons/icon_info.gif");
     
+        
     PlayerTable playerTableView = null;    
     GameTable gameTableView = null;
 	
@@ -36,7 +41,7 @@ public class StatApp extends Application {
         Window main = new Window("IFK-statistik"); 
         setMainWindow(main);
                 
-        playerTableView = new PlayerTable(dao);
+        playerTableView = new PlayerTable(dao, em);
         gameTableView = new GameTable(dao);
         
         VerticalLayout l1 = new VerticalLayout();
@@ -76,7 +81,7 @@ public class StatApp extends Application {
                 }
             }
 		});
-        
+      
         main.addComponent(t); 
     }
 }

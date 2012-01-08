@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -38,10 +39,13 @@ public class Player {
 	private Integer squadNumber = -1;
 	private String biography;
 	
+	private Integer otherCompetitiveGames = 0;
+	private Integer otherPracticeGames = 0;
+	
 	@ManyToOne
 	private Position position;
 	
-	@OneToMany
+	@OneToMany(fetch=FetchType.EAGER)
 	private List<PlayedForClub> clubs = new ArrayList<PlayedForClub>();
 	
 	@Enumerated
@@ -133,6 +137,22 @@ public class Player {
 
 	public void setClubs(List<PlayedForClub> clubs) {
 		this.clubs = clubs;
+	}
+
+	public Integer getOtherCompetitiveGames() {
+		return otherCompetitiveGames;
+	}
+
+	public void setOtherCompetitiveGames(Integer otherCompetitiveGames) {
+		this.otherCompetitiveGames = otherCompetitiveGames;
+	}
+
+	public Integer getOtherPracticeGames() {
+		return otherPracticeGames;
+	}
+
+	public void setOtherPracticeGames(Integer otherPracticeGames) {
+		this.otherPracticeGames = otherPracticeGames;
 	}
 	
 	

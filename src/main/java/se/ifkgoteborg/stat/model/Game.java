@@ -60,6 +60,9 @@ public class Game {
 	@OneToMany(cascade=CascadeType.ALL)
 	private List<GameParticipation> gameParticipation = new ArrayList<GameParticipation>();
 	
+	@ManyToOne(cascade=CascadeType.PERSIST)
+	private Formation formation;
+	
 	private Integer homeFreekicks;
 	private Integer awayFreekicks;
 	
@@ -73,9 +76,6 @@ public class Game {
 	private Integer awayGoals;
 	private Integer homeGoalsHalftime;
 	private Integer awayGoalsHalftime;
-	
-	private String homeFormation;
-	private String awayFormation;
 	
 	public Calendar getDateOfGame() {
 		return dateOfGame;
@@ -101,18 +101,6 @@ public class Game {
 	public void setReferee(Referee referee) {
 		this.referee = referee;
 	}
-//	public List<Goal> getHomeGoals() {
-//		return homeGoals;
-//	}
-//	public void setHomeGoals(List<Goal> homeGoals) {
-//		this.homeGoals = homeGoals;
-//	}
-//	public List<Goal> getAwayGoals() {
-//		return awayGoals;
-//	}
-//	public void setAwayGoals(List<Goal> awayGoals) {
-//		this.awayGoals = awayGoals;
-//	}
 	public List<GameEvent> getEvents() {
 		return events;
 	}
@@ -162,22 +150,6 @@ public class Game {
 		this.gameSummary = gameSummary;
 	}
 
-	public String getHomeFormation() {
-		return homeFormation;
-	}
-
-	public void setHomeFormation(String homeFormation) {
-		this.homeFormation = homeFormation;
-	}
-
-	public String getAwayFormation() {
-		return awayFormation;
-	}
-
-	public void setAwayFormation(String awayFormation) {
-		this.awayFormation = awayFormation;
-	}
-
 	public Integer getHomeGoals() {
 		return homeGoals;
 	}
@@ -217,8 +189,14 @@ public class Game {
 	public void setGameParticipation(List<GameParticipation> gameParticipation) {
 		this.gameParticipation = gameParticipation;
 	}
-	
-	
+
+	public Formation getFormation() {
+		return formation;
+	}
+
+	public void setFormation(Formation formation) {
+		this.formation = formation;
+	}
 
 	public TournamentSeason getTournamentSeason() {
 		return tournamentSeason;
@@ -227,6 +205,8 @@ public class Game {
 	public void setTournamentSeason(TournamentSeason tournamentSeason) {
 		this.tournamentSeason = tournamentSeason;
 	}
+	
+	
 
 	@Transient
 	public String getResultStr() {

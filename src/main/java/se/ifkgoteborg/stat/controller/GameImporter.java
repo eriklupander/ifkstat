@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import se.ifkgoteborg.stat.model.Club;
+import se.ifkgoteborg.stat.model.Formation;
 import se.ifkgoteborg.stat.model.FormationPosition;
 import se.ifkgoteborg.stat.model.Game;
 import se.ifkgoteborg.stat.model.GameEvent;
@@ -134,11 +135,11 @@ public class GameImporter {
 
 			// default team formation
 			case 7:
-				if (homegame) {
-					g.setHomeFormation(cells[a]);
-				} else {
-					g.setAwayFormation(cells[a]);
-				}
+				String formation = cells[a].trim();
+				Formation f = dao.getFormationByName(formation);				
+				g.setFormation(f);
+				//f.getUsedInGames().add(g);
+				
 				break;
 
 			// The rest are always player position in game
@@ -239,7 +240,7 @@ public class GameImporter {
 			}
 		}
 		
-		dao.persist(g);
+		dao.saveGame(g);
 		
 
 		System.out.println("Imported game vs " + opponentClub.getName());

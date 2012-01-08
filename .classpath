@@ -25,6 +25,7 @@
   <classpathentry kind="var" path="M2_REPO/org/jboss/arquillian/test/arquillian-test-api/1.0.0.CR1/arquillian-test-api-1.0.0.CR1.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/jboss/arquillian/test/arquillian-test-impl-base/1.0.0.CR1/arquillian-test-impl-base-1.0.0.CR1.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/jboss/arquillian/test/arquillian-test-spi/1.0.0.CR1/arquillian-test-spi-1.0.0.CR1.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/vaadin/addon/beanvalidation-addon/1.0.0/beanvalidation-addon-1.0.0.jar"/>
   <classpathentry kind="var" path="M2_REPO/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar"/>
   <classpathentry kind="var" path="M2_REPO/commons-logging/commons-logging-api/1.1/commons-logging-api-1.1.jar"/>
   <classpathentry kind="var" path="M2_REPO/com/google/collections/google-collections/1.0/google-collections-1.0.jar"/>
@@ -46,6 +47,7 @@
   <classpathentry kind="var" path="M2_REPO/org/jboss/spec/javax/servlet/jstl/jboss-jstl-api_1.2_spec/1.0.1.Final/jboss-jstl-api_1.2_spec-1.0.1.Final.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/jboss/spec/javax/servlet/jboss-servlet-api_3.0_spec/1.0.0.Final/jboss-servlet-api_3.0_spec-1.0.0.Final.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/jboss/spec/javax/transaction/jboss-transaction-api_1.1_spec/1.0.0.Final/jboss-transaction-api_1.1_spec-1.0.0.Final.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/vaadin/addon/jpacontainer-addon-agpl-3.0/2.0.0-RC1/jpacontainer-addon-agpl-3.0-2.0.0-RC1.jar"/>
   <classpathentry kind="var" path="M2_REPO/junit/junit/4.8.1/junit-4.8.1.jar"/>
   <classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.14/log4j-1.2.14.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/apache/maven/maven-aether-provider/3.0.1/maven-aether-provider-3.0.1.jar"/>

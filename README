@@ -1,0 +1,8 @@
+How to build:
+
+mvn clean package jboss-as:deploy
+
+Don't forget to set %JBOSS_HOME% to your JBoss 7 home folder.
+Also, don't forget to set M2_REPO to c:\Users\[username]\.m2\repository (or similar) in Eclipse.
+
+Note that this software uses the Vaadin JPAContainer under AGPL license. The full source of this software is available on GITHUB: https://github.com/eriklupander/ifkstat

@@ -122,10 +122,15 @@ public class StatStartup {
 		Position p9 = em.merge(new Position("Anfallare", "FW", Side.RIGHT, PositionType.FORWARD));
 		Position p10 = em.merge(new Position("Anfallare", "FW", Side.LEFT, PositionType.FORWARD));		
 		Position p11 = em.merge(new Position("Avbytare", "AV", Side.CENTRAL, PositionType.SUBSTITUTE));
+		Position p12 = em.merge(new Position("Innermitt", "IM", Side.CENTRAL, PositionType.MIDFIELD));
+		Position p13 = em.merge(new Position("Innermitt (def)", "IM (D)", Side.CENTRAL, PositionType.MIDFIELD));
 		
-		Formation f442 = new Formation();
-		f442.setName("4-4-2");
+		Formation f442 = new Formation("4-4-2");
 		f442 = em.merge(f442);
+		Formation f4231 = new Formation("4-2-3-1");
+		f4231 = em.merge(f4231);
+		Formation f4141 = new Formation("4-1-4-1");
+		f4141 = em.merge(f4141);
 		
 		em.persist(new FormationPosition(1, f442, p0));
 		em.persist(new FormationPosition(2, f442, p1));
@@ -138,6 +143,30 @@ public class StatStartup {
 		em.persist(new FormationPosition(9, f442, p8));
 		em.persist(new FormationPosition(10, f442, p9));
 		em.persist(new FormationPosition(11, f442, p10));
+		
+		em.persist(new FormationPosition(1, f4231, p0));
+		em.persist(new FormationPosition(2, f4231, p1));
+		em.persist(new FormationPosition(3, f4231, p2));
+		em.persist(new FormationPosition(4, f4231, p3));
+		em.persist(new FormationPosition(5, f4231, p4));
+		em.persist(new FormationPosition(6, f4231, p5));
+		em.persist(new FormationPosition(7, f4231, p6));
+		em.persist(new FormationPosition(8, f4231, p12));
+		em.persist(new FormationPosition(9, f4231, p7));
+		em.persist(new FormationPosition(10, f4231, p8));
+		em.persist(new FormationPosition(11, f4231, p10));
+		
+		em.persist(new FormationPosition(1, f4141, p0));
+		em.persist(new FormationPosition(2, f4141, p1));
+		em.persist(new FormationPosition(3, f4141, p2));
+		em.persist(new FormationPosition(4, f4141, p3));
+		em.persist(new FormationPosition(5, f4141, p4));
+		em.persist(new FormationPosition(6, f4141, p12));
+		em.persist(new FormationPosition(7, f4141, p6));
+		em.persist(new FormationPosition(8, f4141, p7));
+		em.persist(new FormationPosition(9, f4141, p8));
+		em.persist(new FormationPosition(10, f4141, p8));
+		em.persist(new FormationPosition(11, f4141, p10));
 		
 		System.out.println("FINISHED setting up core data.");
 	}
