@@ -1,0 +1,8 @@
+#Sat Jan 07 14:47:00 CET 2012
+eclipse.preferences.version=1
+encoding//data/matcher_utf8.txt=UTF-8
+encoding//src/main/java/se/ifkgoteborg/stat/controller/GameImporter.java=UTF-8
+encoding//src/main/java/se/ifkgoteborg/stat/controller/StatStartup.java=UTF-8
+encoding//src/main/java/se/ifkgoteborg/stat/ui/GameDetailsView.java=UTF-8
+encoding//src/main/java/se/ifkgoteborg/stat/ui/ImportView.java=UTF-8
+encoding//src/main/java/se/ifkgoteborg/stat/ui/control/ComboBoxFactory.java=UTF-8

@@ -1,0 +1,34 @@
+2010
+1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	26	18	19	20	21	22	23	24	25	26	27	28	29	3	27	4	29	17	17	4	3	13	17	
+Kim Christensen	Karl Svensson	Nicklas Carlsson	Petter Björlund	Tuomo Turunen	Adam Johansson	Tobias Hysén	Thomas Olsson	Stefan Selakovic	Ragnar Sigurdsson	Robin Söder	Markus Sandberg	Gustav Svensson	Hjalmar Jonsson	Jakob Johansson	Erik Lund	William Atashkade	Pär Ericsson	Hannes Stiller	Alexander Faltsetas	Nicklas Bärkroth	Tobias Sana	Sebastian Eriksson	Mikael Dyrestam	Erik Dahlin	Niclas Andersén	Ali Selim	Theodor Elmar Bjarnason	Kamal Mustafa	Jonathan Azulay	Joel Allansson	David Johansson	Chris Mbamba	Fredrik Risp	Bruna da Silva Barbosa	Jeferson Anti Silho	Elfar Freyr Helgason	Hjörtur Logi Valgardsson	Andreas Drugge	Lawal Ismail
+####Allsvenskan	2010
+13/3	Kalmar FF	B	Fredriksskans	3-0	1-0	4 518	4-1-4-1	1	3					11••		7	4			6	5•		2	[11]	10		8			[10]					9												
+22/3	BK Häcken	H	Gamla Ullevi	0-1	0-0	11 706	4-1-4-1	1	3					11	[10]	7	4			6	5		2	[9]	10		8			[8]					9												
+29/3	Helsingborgs IF	B	Olympia	0-2	0-2	8 648	4-1-4-1	1	3				[3]	11		7	4			6	5		2	[9]	[10]		10			8					9												
+6/4	Djurgårdens IF	H	Gamla Ullevi	1-1	0-1	10 384	4-2-3-1	1					2	11	7	8	3			6	4	[11]•			9		[7]	[10]		5					10												
+11/4	IF Brommapojkarna	H	Gamla Ullevi	1-1	1-1	8 796	4-1-4-1	1					2		8	7	3			6	4	10	5		11•		[10]	9	[11]	[8]																	
+15/4	Trelleborgs FF	B	Vångavallen	1-2	0-2	3 007	4-1-4-1	1							[9]•	7	4	[11]		6	5	10	2		11		[7]		9	8											3						
+18/4	IF Elfsborg	H	Gamla Ullevi	5-1	2-1	13 487	4-1-4-1	1					2	11	[8]	7	4	[9]•		6	5•	10••	[2]					9		8•											3						
+24/4	Åtvidabergs FF	B	Kopparvallen	1-2	0-0	5 785	4-2-3-1	1		[3]			2	11	[6]	8	4	[11•]		6	5	9						10		7											3						
+29/4	Malmö FF	H	Gamla Ullevi	0-2	0-1	11 206	4-2-3-1	1					2		[7]	8	3	11		6	4	9	5		[10]		[11]	10		7																	
+3/5	Mjällby AIF	B	Strandvallen	0-0		5 526	4-2-3-1	1					2		6	8	3	11			4	7	5		9		[6]			10					[11]												
+6/5	AIK	H	Gamla Ullevi	4-0	1-0	12 020	4-2-3-1	1		[5]			2		9••		3	10•		[10]	4	6	5		11			[11]		7					8•												
+10/5	Gais	B	Gamla Ullevi	0-0		15 305	4-2-3-1	1		5			2		9	8	3	11			4	6			[11]		[6]			7					10												
+13/5	Örebro SK	H	Gamla Ullevi	0-0		10 264	4-2-3-1	1		5			2		9	8	3	10		6	4	[10]			11		[9]	[11]							7												
+16/5	Gefle IF	B	Strömvallen	0-0		4 701	4-2-3-1	1	3	5		[4]	2		9	8		11		[9]	4	10			[11]					7					6												
+17/7	Halmstads BK	H	Gamla Ullevi	3-0	1-0	10 426	4-2-3-1						2	11•	7	[10]	4•	8	1	3•	5	6				[7]		[8]		9					10												
+25/7	Halmstads BK	B	Örjans vall	0-1	0-1	8 368	4-2-3-1						2	11	7	[10]	4	10	1	3	5	6				[9]	[8]	8		9																	
+1/8	Kalmar FF	H	Gamla Ullevi	3-1	3-0	8 698	4-2-3-1						2	11••	[5]	8	4	10	1	3	[10]	6	5			9•	[8]								7												
+8/8	BK Häcken	B	Rambergsvallen	5-1	2-1	6 027	4-2-3-1						2	11	[6]	8•••	3		1	6	4	7	5		[10]	9•		[8]							10•												
+15/8	Helsingborgs IF	H	Gamla Ullevi	0-0		13 892	4-2-3-1						2	11	7	8	3		1		4	6	5			9	[8]	[10]		10		[7]															
+22/8	Djurgårdens IF	B	Råsunda	0-2	0-1	9 304	4-2-3-1						2	11		8	3			[7]	4	6	5			9			[5]	7		1			10												[8]
+29/8	AIK	B	Råsunda	2-1	1-0	12 465	4-2-3-1			4			2	11	6	8			1	3			5			9		[6]•		7					10•												
+13/9	Gais	H	Gamla Ullevi	2-1	1-0	17 112	4-2-3-1			4			2	11•	6	8	3		1		[8]	[9]	5			9•			[6]	7					10												
+19/9	Åtvidabergs FF	H	Gamla Ullevi	3-0	0-0	7 457	4-2-3-1			4			2	11•	6	8	3		1			9•	5				[6]		[9]	7					10•												
+22/9	IF Elfsborg	B	Borås Arena	1-1	1-0	15 499	4-2-3-1			4			2	11•	6	8	3		1			9	5			[10]	[6]			7					10												
+26/9	Malmö FF	B	Swedbank Stadion	1-2	0-1	18 125	4-2-3-1			4			2	11•	6	8	3		1			7	5			9	[6]		[7]						10												[9]
+3/10	Mjällby AIF	H	Gamla Ullevi	0-0		8 119	4-2-3-1						2	11	6		3		1		4	9				[9]	[7]	[6]	8	7			5		10												
+17/10	IF Brommapojkarna	B	Grimsta IP	2-1	1-1	2 660	4-2-3-1			4			2	11		8•	3		1		[8]	6	5	[6]•				[9]	9	7					10												
+25/10	Trelleborgs FF	H	Gamla Ullevi	1-2	1-0	7 044	4-2-3-1			4			2	11•		8	3		1			6	5	[9]			[6]	[10]	9	7					10												
+1/11	Örebro SK	B	Behrn Arena	1-2	0-0	9 531	4-4-2		[9]				2	11	[8]	6•	3		1		4	7	5						10	8		[1]			9												
+7/11	Gefle IF	H	Gamla Ullevi	2-2	2-0	6 731	4-4-2						2•	11		6	3	[9]	1		4	7	5				[6]	10	9•	8																	
