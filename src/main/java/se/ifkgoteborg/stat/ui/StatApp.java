@@ -34,6 +34,7 @@ public class StatApp extends Application {
             "../sampler/icons/icon_info.gif");
     
         
+   
     PlayerTable playerTableView = null;    
     GameTable gameTableView = null;
 	

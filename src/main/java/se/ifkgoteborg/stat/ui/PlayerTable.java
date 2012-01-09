@@ -10,9 +10,8 @@ import se.ifkgoteborg.stat.ui.editor.PlayerEditor;
 import se.ifkgoteborg.stat.ui.editor.PlayerEditor.EditorSavedEvent;
 import se.ifkgoteborg.stat.ui.editor.PlayerEditor.EditorSavedListener;
 
-import com.vaadin.addon.jpacontainer.JPAContainer;
-import com.vaadin.addon.jpacontainer.provider.MutableLocalEntityProvider;
 import com.vaadin.data.util.BeanItem;
+import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.filter.Like;
 import com.vaadin.data.util.filter.Or;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
@@ -32,7 +31,7 @@ import com.vaadin.ui.VerticalLayout;
 
 public class PlayerTable extends VerticalLayout {
 	
-	JPAContainer<Player> players;	
+	BeanItemContainer<Player> bic = new BeanItemContainer<Player>(Player.class);	
 
     Table table = new Table("ISO-3166 Country Codes and flags");
 
@@ -55,11 +54,6 @@ public class PlayerTable extends VerticalLayout {
     	
     	this.dao = dao;
 		this.em = em;
-    	
-    	players = new JPAContainer(Player.class); 
-    	MutableLocalEntityProvider<Player> ep = new MutableLocalEntityProvider<Player>(Player.class, em);
-    	ep.setEntitiesDetached(false);
-    	players.setEntityProvider(ep);
     	
     	addComponent(createToolbar());
         addComponent(table);
@@ -84,7 +78,7 @@ public class PlayerTable extends VerticalLayout {
         //table.setContainerDataSource(ExampleUtil.getISO3166Container());      
         
         loadPlayers();
-        table.setContainerDataSource(players);
+        table.setContainerDataSource(bic);
         
         // turn on column reordering and collapsing
         table.setColumnReorderingAllowed(true);
@@ -199,7 +193,7 @@ public class PlayerTable extends VerticalLayout {
                 personEditor.addListener(new EditorSavedListener() {
                     @Override
                     public void editorSaved(EditorSavedEvent event) {
-                        players.addEntity(newPersonItem.getBean());
+                        bic.addBean(newPersonItem.getBean());
                     }
                 });
                 getApplication().getMainWindow().addWindow(personEditor);
@@ -211,7 +205,7 @@ public class PlayerTable extends VerticalLayout {
 
             @Override
             public void buttonClick(ClickEvent event) {
-                players.removeItem(table.getValue());
+                bic.removeItem(table.getValue());
             }
         });
         deleteButton.setEnabled(false);
@@ -251,14 +245,14 @@ public class PlayerTable extends VerticalLayout {
 	}
 	
 	private void updateFilters() {
-        players.setApplyFiltersImmediately(false);
-        players.removeAllContainerFilters();
+        //bic.setApplyFiltersImmediately(false);
+        bic.removeAllContainerFilters();
        
         if (textFilter != null && !textFilter.equals("")) {
             Or or = new Or(new Like("name", textFilter + "%", false),
                     new Like("fullName", textFilter + "%", false));
-            players.addContainerFilter(or);
+            bic.addContainerFilter(or);
         }
-        players.applyFilters();
+        //bic.applyFilters();
     }
 }
