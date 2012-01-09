@@ -4,10 +4,11 @@ import se.ifkgoteborg.stat.controller.RegistrationDAO;
 import se.ifkgoteborg.stat.model.Game;
 import se.ifkgoteborg.stat.model.GameEvent;
 import se.ifkgoteborg.stat.model.GameParticipation;
+import se.ifkgoteborg.stat.ui.form.GameForm;
 
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.ui.Form;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.Table;
@@ -18,13 +19,14 @@ public class GameDetailsView extends VerticalLayout {
 
 	private final Game game;
 	private final RegistrationDAO dao;
+	private Button saveButton;
 
 	public GameDetailsView(Game game, RegistrationDAO dao) {
 		this.game = game;		
 		this.dao = dao;
 		this.setStyleName(Runo.PANEL_LIGHT);
 		
-		addComponent(new Label());
+		addComponent(new Label(""));
 		TabSheet t = new TabSheet();
         t.setHeight("100%");
         t.setWidth("100%");
@@ -74,21 +76,18 @@ public class GameDetailsView extends VerticalLayout {
 		t.setVisibleColumns(new String[]{"player.name","eventType"});
 		return t;
 	}
-
-	private Form getGameDetailsForm() {
-		final Form form = new Form();
+	
+	private GameForm getGameDetailsForm() {
+		
+		
+		BeanItem<Game> item = new BeanItem<Game>(game);
+		GameForm form = new GameForm(dao, item);
 		
 		 // Set form caption and description texts 
 		form.setCaption(game.getHomeTeam().getName() + " - " + game.getAwayTeam().getName() + " " + game.getResultStr());
-		form.setSizeFull();
-		form.getLayout().setMargin(true);
-		form.setImmediate(true); 
-		 // Create a bean item that is bound to the bean. 
-		 BeanItem item = new BeanItem(game);
-		 
-		 // Bind the bean item as the data source for the form. 
-		form.setItemDataSource(item);
 		
 		return form;
 	}
+	
+	
 }

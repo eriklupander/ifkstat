@@ -19,6 +19,7 @@ import se.ifkgoteborg.stat.model.Game;
 import se.ifkgoteborg.stat.model.Ground;
 import se.ifkgoteborg.stat.model.PlayedForClub;
 import se.ifkgoteborg.stat.model.Player;
+import se.ifkgoteborg.stat.model.Referee;
 import se.ifkgoteborg.stat.model.Tournament;
 import se.ifkgoteborg.stat.model.TournamentSeason;
 import se.ifkgoteborg.stat.util.DateFactory;
@@ -295,6 +296,28 @@ public class RegistrationDAOBean implements RegistrationDAO {
 	@Override
 	public EntityManager getPersistenceUnit() {		
 		return em;
+	}
+
+
+	@Override
+	public List<Formation> getFormations() {
+		return em.createQuery("select f from Formation f").getResultList();
+	}
+
+
+	@Override
+	public List<Club> getClubs() {
+		return em.createQuery("select c from Club c ORDER BY c.name").getResultList();
+	}
+	
+	@Override
+	public List<Ground> getGrounds() {
+		return em.createQuery("select g from Ground g ORDER BY g.name").getResultList();
+	}
+	
+	@Override
+	public List<Referee> getReferees() {
+		return em.createQuery("select r from Referee r ORDER BY r.name").getResultList();
 	}
 	
 }

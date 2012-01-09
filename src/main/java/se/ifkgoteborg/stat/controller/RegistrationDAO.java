@@ -13,6 +13,7 @@ import se.ifkgoteborg.stat.model.FormationPosition;
 import se.ifkgoteborg.stat.model.Game;
 import se.ifkgoteborg.stat.model.Ground;
 import se.ifkgoteborg.stat.model.Player;
+import se.ifkgoteborg.stat.model.Referee;
 import se.ifkgoteborg.stat.model.Tournament;
 import se.ifkgoteborg.stat.model.TournamentSeason;
 
@@ -57,5 +58,13 @@ public interface RegistrationDAO {
 	public void saveGame(Game g);
 
 	public EntityManager getPersistenceUnit();
+
+	public List<Formation> getFormations();
+
+	public List<Club> getClubs();
+
+	public List<Ground> getGrounds();
+
+	public List<Referee> getReferees();
 
 }

@@ -2,6 +2,7 @@ package se.ifkgoteborg.stat.model;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -79,6 +80,9 @@ public class Game {
 	
 	public Calendar getDateOfGame() {
 		return dateOfGame;
+	}
+	public Date getDateOfGameAsDate() {
+		return dateOfGame.getTime();
 	}
 	public void setDateOfGame(Calendar dateOfGame) {
 		this.dateOfGame = dateOfGame;

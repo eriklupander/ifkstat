@@ -111,7 +111,8 @@ public class GameImporter {
 					break;
 				}
 				System.out.println("Result text: " + result);
-				String[] parts = result.split("-");
+				result = result.replaceAll("[^\\d]", " ");
+				String[] parts = result.split(" ");
 				g.setHomeGoals(Integer.parseInt(parts[0]));
 				g.setAwayGoals(Integer.parseInt(parts[1]));
 				break;
@@ -121,7 +122,8 @@ public class GameImporter {
 				if(htResult == null || htResult.trim().length() == 0) {
 					break;
 				}
-				String[] htParts = htResult.split("-");
+				htResult = htResult.replaceAll("[^\\d]", " ");
+				String[] htParts = htResult.trim().split(" ");
 				g.setHomeGoalsHalftime(htParts[0] != null ? Integer.parseInt(htParts[0].replaceAll("[^\\d]",
 						"")) : 0);
 				g.setAwayGoalsHalftime(htParts[1] != null ?Integer.parseInt(htParts[1].replaceAll("[^\\d]",

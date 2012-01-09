@@ -1,0 +1,321 @@
+<class-diagram version="1.0.6" icons="true" automaticImage="PNG" always-add-relationships="false" 
+  generalizations="false" realizations="false" associations="true" dependencies="false" nesting-relationships="false">  
+  <class id="1" corner="BOTTOM_RIGHT" language="java" name="se.ifkgoteborg.stat.model.Game" project="ifkstat" 
+    file="/ifkstat/src/main/java/se/ifkgoteborg/stat/model/Game.java" binary="false">    
+    <position height="-1" width="-1" x="460" y="359"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="false">      
+      <attributes public="false" package="false" protected="false" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="2" corner="BOTTOM_RIGHT" language="java" name="se.ifkgoteborg.stat.model.GameParticipation" 
+    project="ifkstat" file="/ifkstat/src/main/java/se/ifkgoteborg/stat/model/GameParticipation.java" binary="false">    
+    <position height="-1" width="-1" x="818" y="359"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="false">      
+      <attributes public="false" package="false" protected="false" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="3" corner="BOTTOM_RIGHT" language="java" name="se.ifkgoteborg.stat.model.FormationPosition" 
+    project="ifkstat" file="/ifkstat/src/main/java/se/ifkgoteborg/stat/model/FormationPosition.java" binary="false">    
+    <position height="-1" width="-1" x="818" y="715"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="false">      
+      <attributes public="false" package="false" protected="false" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="4" corner="BOTTOM_RIGHT" language="java" name="se.ifkgoteborg.stat.model.Player" project="ifkstat" 
+    file="/ifkstat/src/main/java/se/ifkgoteborg/stat/model/Player.java" binary="false">    
+    <position height="-1" width="-1" x="1289" y="359"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="false">      
+      <attributes public="false" package="false" protected="false" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <enumeration id="5" corner="BOTTOM_RIGHT" language="java" name="se.ifkgoteborg.stat.model.enums.ParticipationType" 
+    project="ifkstat" file="/ifkstat/src/main/java/se/ifkgoteborg/stat/model/enums/ParticipationType.java" 
+    binary="false">    
+    <position height="-1" width="-1" x="817" y="213"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="false">      
+      <attributes public="false" package="false" protected="false" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </enumeration>  
+  <class id="6" corner="BOTTOM_RIGHT" language="java" name="se.ifkgoteborg.stat.model.TournamentSeason" 
+    project="ifkstat" file="/ifkstat/src/main/java/se/ifkgoteborg/stat/model/TournamentSeason.java" binary="false">    
+    <position height="-1" width="-1" x="177" y="359"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="false">      
+      <attributes public="false" package="false" protected="false" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="7" corner="BOTTOM_RIGHT" language="java" name="se.ifkgoteborg.stat.model.Tournament" project="ifkstat" 
+    file="/ifkstat/src/main/java/se/ifkgoteborg/stat/model/Tournament.java" binary="false">    
+    <position height="-1" width="-1" x="176" y="94"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="false">      
+      <attributes public="false" package="false" protected="false" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="8" corner="BOTTOM_RIGHT" language="java" name="se.ifkgoteborg.stat.model.GameEvent" project="ifkstat" 
+    file="/ifkstat/src/main/java/se/ifkgoteborg/stat/model/GameEvent.java" binary="false">    
+    <position height="-1" width="-1" x="817" y="75"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="false">      
+      <attributes public="false" package="false" protected="false" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="9" corner="BOTTOM_RIGHT" language="java" name="se.ifkgoteborg.stat.model.Ground" project="ifkstat" 
+    file="/ifkstat/src/main/java/se/ifkgoteborg/stat/model/Ground.java" binary="false">    
+    <position height="-1" width="-1" x="171" y="747"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="false">      
+      <attributes public="false" package="false" protected="false" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="10" corner="BOTTOM_RIGHT" language="java" name="se.ifkgoteborg.stat.model.Club" project="ifkstat" 
+    file="/ifkstat/src/main/java/se/ifkgoteborg/stat/model/Club.java" binary="false">    
+    <position height="-1" width="-1" x="460" y="855"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="false">      
+      <attributes public="false" package="false" protected="false" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="11" corner="BOTTOM_RIGHT" language="java" name="se.ifkgoteborg.stat.model.Position" project="ifkstat" 
+    file="/ifkstat/src/main/java/se/ifkgoteborg/stat/model/Position.java" binary="false">    
+    <position height="-1" width="-1" x="1059" y="535"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="false">      
+      <attributes public="false" package="false" protected="false" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class id="12" corner="BOTTOM_RIGHT" language="java" name="se.ifkgoteborg.stat.model.PlayedForClub" project="ifkstat" 
+    file="/ifkstat/src/main/java/se/ifkgoteborg/stat/model/PlayedForClub.java" binary="false">    
+    <position height="-1" width="-1" x="1289" y="855"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="false">      
+      <attributes public="false" package="false" protected="false" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <enumeration id="13" corner="BOTTOM_RIGHT" language="java" name="se.ifkgoteborg.stat.model.GameEvent.EventType" 
+    project="ifkstat" file="/ifkstat/src/main/java/se/ifkgoteborg/stat/model/GameEvent.java" binary="false">    
+    <position height="-1" width="-1" x="1051" y="75"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="false">      
+      <attributes public="false" package="false" protected="false" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </enumeration>  
+  <class id="14" corner="BOTTOM_RIGHT" language="java" name="se.ifkgoteborg.stat.model.Referee" project="ifkstat" 
+    file="/ifkstat/src/main/java/se/ifkgoteborg/stat/model/Referee.java" binary="false">    
+    <position height="-1" width="-1" x="460" y="99"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="false">      
+      <attributes public="false" package="false" protected="false" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <enumeration id="15" corner="BOTTOM_RIGHT" language="java" name="se.ifkgoteborg.stat.model.enums.PositionType" 
+    project="ifkstat" file="/ifkstat/src/main/java/se/ifkgoteborg/stat/model/enums/PositionType.java" binary="false">    
+    <position height="-1" width="-1" x="1059" y="699"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="false">      
+      <attributes public="false" package="false" protected="false" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </enumeration>  
+  <class id="16" corner="BOTTOM_RIGHT" language="java" name="se.ifkgoteborg.stat.model.Formation" project="ifkstat" 
+    file="/ifkstat/src/main/java/se/ifkgoteborg/stat/model/Formation.java" binary="false">    
+    <position height="-1" width="-1" x="613" y="715"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="false">      
+      <attributes public="false" package="false" protected="false" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <association id="17">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="18" name="position"/>      
+      <multiplicity id="19" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="20">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="21" name="homeTeam"/>      
+      <multiplicity id="22" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="23">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="24" name="awayTeam"/>      
+      <multiplicity id="25" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="26">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="27" name="gameParticipation"/>      
+      <multiplicity id="28" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="29">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="30" name="player"/>      
+      <multiplicity id="31" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="32">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="33" name="ground"/>      
+      <multiplicity id="34" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="35">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="36" name="games"/>      
+      <multiplicity id="37" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="38">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="39" name="game"/>      
+      <multiplicity id="40" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="41">    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="42" name="homeTeams"/>      
+      <multiplicity id="43" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="44">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="45" name="tournamentSeason"/>      
+      <multiplicity id="46" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="47">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="48" name="clubs"/>      
+      <multiplicity id="49" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="50">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="51" name="referee"/>      
+      <multiplicity id="52" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="53">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="54" name="position"/>      
+      <multiplicity id="55" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="56">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="57" name="tournament"/>      
+      <multiplicity id="58" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="59">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="60" name="club"/>      
+      <multiplicity id="61" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="62">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="63" name="player"/>      
+      <multiplicity id="64" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="65">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="66" name="formationPosition"/>      
+      <multiplicity id="67" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="68">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="69" name="events"/>      
+      <multiplicity id="70" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="71">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="72" name="positionType"/>      
+      <multiplicity id="73" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="74">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="75" name="formation"/>      
+      <multiplicity id="76" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="16" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="77">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="78" name="eventType"/>      
+      <multiplicity id="79" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="13" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="80">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="81" name="participationType"/>      
+      <multiplicity id="82" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="83">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="84" name="player"/>      
+      <multiplicity id="85" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="false">    
+    <attributes public="false" package="false" protected="false" private="true"/>    
+    <operations public="false" package="false" protected="false" private="false"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

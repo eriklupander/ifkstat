@@ -35,7 +35,7 @@ public class GameTable extends VerticalLayout {
 
     public GameTable(RegistrationDAO dao) {
     	
-    	this.dao = dao;
+    	this.dao = dao;    	
     	
     	final ComboBox tournamentComboBox = new ComboBoxFactory(dao).getTournamentComboBox();
     	 
@@ -55,12 +55,9 @@ public class GameTable extends VerticalLayout {
 
 					@Override
 					public void valueChange(ValueChangeEvent event) {
-						System.out.println("Selected tournament, loading seasons");
 						List<Game> games = GameTable.this.dao.getGames(t.getId(), (Integer) event.getProperty().getValue());
 						
 						// Populate game list...
-						
-						System.out.println("Got TournamentSeason, " + games.size() + " games");
 						beans.removeAllItems();
 
 						for (Game g : games) {
@@ -110,14 +107,7 @@ public class GameTable extends VerticalLayout {
         table.setColumnHeader("result", "Resultat");
         table.setColumnHeader("attendance", "Publiksiffra");
         table.setVisibleColumns(new String[]{"date","fixture","result","attendance"});
-        // Icons for column headers
-//        table.setColumnIcon(ExampleUtil.iso3166_PROPERTY_FLAG,
-//                new ThemeResource("../sampler/icons/action_save.gif"));
-//        table.setColumnIcon(ExampleUtil.iso3166_PROPERTY_NAME,
-//                new ThemeResource("../sampler/icons/icon_get_world.gif"));
-//        table.setColumnIcon(ExampleUtil.iso3166_PROPERTY_SHORT,
-//                new ThemeResource("../sampler/icons/page_code.gif"));
-
+  
         // Column alignment
         table.setColumnAlignment("Name",
                 Table.ALIGN_CENTER);
@@ -126,13 +116,11 @@ public class GameTable extends VerticalLayout {
         table.setColumnExpandRatio("Name", 1);
         table.setColumnWidth("Name", 270);
 
-        // Collapse one column - the user can make it visible again
-        //table.setColumnCollapsed(ExampleUtil.iso3166_PROPERTY_FLAG, true);
+      
 
         // show row header w/ icon
         table.setRowHeaderMode(Table.ROW_HEADER_MODE_ICON_ONLY);
-       // table.setItemIconPropertyId(ExampleUtil.iso3166_PROPERTY_FLAG);
-
+     
         // style generator
         table.setCellStyleGenerator(new CellStyleGenerator() {
             public String getStyle(Object itemId, Object propertyId) {
@@ -145,7 +133,6 @@ public class GameTable extends VerticalLayout {
                     // no style
                     return null;
                 }
-
             }
 
             
@@ -171,12 +158,5 @@ public class GameTable extends VerticalLayout {
 	public void refresh() {
 		
 	}
-    
-    
-//	public void loadGames() {
-//		List<Game> games = dao.getGames(2010);
-//		System.out.println("Loaded " + games.size() + " games.");
-//		
-//		
-//	}
+
 }

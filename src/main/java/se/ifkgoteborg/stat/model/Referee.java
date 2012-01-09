@@ -3,14 +3,22 @@ package se.ifkgoteborg.stat.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="referee")
 public class Referee {
 	@Id
 	@GeneratedValue
 	private Long id;
 
 	private String name;
+	
+	public Referee() {}
+	
+	public Referee(String name) {
+		this.name = name;
+	}
 	
 	public Long getId() {
 		return id;
