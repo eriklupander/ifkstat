@@ -4,11 +4,11 @@ import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.List;
 
-import se.ifkgoteborg.stat.controller.GameImporter;
-import se.ifkgoteborg.stat.controller.PlayerImporter;
 import se.ifkgoteborg.stat.controller.RegistrationDAO;
 import se.ifkgoteborg.stat.controller.adapter.SquadPlayer;
 import se.ifkgoteborg.stat.controller.upload.UploadReceiver;
+import se.ifkgoteborg.stat.importer.GameImporter;
+import se.ifkgoteborg.stat.importer.PlayerImporter;
 import se.ifkgoteborg.stat.ui.control.ComboBoxFactory;
 import se.ifkgoteborg.stat.util.StringUtil;
 

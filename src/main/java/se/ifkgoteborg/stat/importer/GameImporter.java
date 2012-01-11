@@ -1,4 +1,4 @@
-package se.ifkgoteborg.stat.controller;
+package se.ifkgoteborg.stat.importer;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,6 +9,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
+import se.ifkgoteborg.stat.controller.RegistrationDAO;
 import se.ifkgoteborg.stat.model.Club;
 import se.ifkgoteborg.stat.model.Formation;
 import se.ifkgoteborg.stat.model.FormationPosition;
