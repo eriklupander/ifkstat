@@ -18,7 +18,7 @@ public class DateFactory {
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 		
-		System.out.println("Returning date: " + sdf.format(cal.getTime()));
+		System.out.println("Returning date: " + sdf.format(cal.getTime()) + " input was: " + year + "/" + month + "/" + day);
 		
 		return cal;
 	}

@@ -23,7 +23,7 @@ public class PlayerImporter {
 				}
 				SquadPlayer sp = new SquadPlayer();
 				
-				if(numArr[a] != null && numArr[a].trim().length() > 0) {
+				if(numArr.length > a && numArr[a] != null && numArr[a].trim().length() > 0) {
 					sp.nr = Integer.parseInt(numArr[a].trim());
 				} else {
 					sp.nr = -1;
@@ -33,7 +33,9 @@ public class PlayerImporter {
 				sp.index = a;
 				players.add(sp);
 			} catch (Exception e) {
-				System.err.println("An exception occured importing player ID: "  + a);
+				System.err.println("An exception occured importing player ID: "  + a + " Message: " + e.getMessage());
+				e.printStackTrace();
+				throw new RuntimeException(e.getMessage());
 			}
 		}
 

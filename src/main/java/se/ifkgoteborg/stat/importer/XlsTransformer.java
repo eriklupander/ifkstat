@@ -3,12 +3,15 @@ package se.ifkgoteborg.stat.importer;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -16,15 +19,26 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 
 
-
 public class XlsTransformer {
 
 	private static final String ROOT_FOLDER = "F:\\Dropbox\\Statistik till webben";
 	private static final String GOAL_TOKEN = "•";
+	private static final String N = "IFK statistik";
 	private static final int PLAYERS_STARTINDEX = 8;
+	private static final int MAX_CELL = 36;
 
 	private StringBuilder buf;
 	private StringBuilder players;
+	
+	private static final List<String> blockList = new ArrayList<String>();
+	static {
+		blockList.add(N + " 1904");
+		blockList.add(N + " 1905");
+		blockList.add(N + " 1906");
+		blockList.add(N + " 1907");
+		blockList.add(N + " 1908n");
+		blockList.add(N + " 1909n");		
+	}
 	
 	private static final NumberFormat nf = NumberFormat.getIntegerInstance();
 
@@ -41,10 +55,22 @@ public class XlsTransformer {
 
 		processDirectory(rootFolder);
 		
-		System.out.println("Total file:\n" + buf.toString());
+		//System.out.println("Total file:\n" + buf.toString());
+		File f = new File("c:\\java\\workspace\\ifkstat\\data\\master.txt");
+		try {
+			
+			FileOutputStream fos = new FileOutputStream(f);
+			OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
+			osw.write(buf.toString());
+			osw.close();
+			fos.close();
+		} catch (IOException e) {			
+			e.printStackTrace();
+		}
 	}
 
 	private void processDirectory(File folder) {
+		
 		//System.out.println("Processing directory" + folder.getAbsolutePath());
 		for (File f : folder.listFiles()) {
 			if (f.isDirectory()) {
@@ -57,7 +83,11 @@ public class XlsTransformer {
 	}
 
 	private void processFile(File f) {
-		//System.out.println("Processing file:" + f.getName());
+		System.out.println("Processing file:" + f.getName());
+		if(inBlockList(f.getName())) {
+			return;
+		}
+		
 		String season =  f.getName().replaceAll("[^\\d]", " ").trim();
 		buf.append("$$$$" + season + "\n");
 		
@@ -82,11 +112,12 @@ public class XlsTransformer {
 			// First, read player numbers. (probably not present)
 			int index = PLAYERS_STARTINDEX;
 			HSSFCell cell = playersRow.getCell(index);
+			short lastCellNum = playersRow.getLastCellNum();
 			String cellData = cell.toString();
-			while(cellData != null && cellData.trim().length() > 0) {				
+			
+			while(index < lastCellNum) {				
 				buf.append("\t");
-				cell = playersRow.getCell(++index);
-				cellData = cell.toString();				
+				++index;
 			}
 			buf.append("\n");
 			
@@ -95,10 +126,12 @@ public class XlsTransformer {
 			cell = playersRow.getCell(index);
 			cellData = cell.toString();
 			int maxIndex = 0;
-			while(cellData != null && cellData.trim().length() > 0) {				
+			while(index < lastCellNum && index < MAX_CELL) {				
 				buf.append(cellData.trim() + "\t");
 				cell = playersRow.getCell(++index);
-				cellData = cell.toString();
+				if(cell != null) {
+					cellData = cell.toString();
+				}
 				maxIndex++;
 			}
 			buf.append("\n");
@@ -116,7 +149,9 @@ public class XlsTransformer {
 			}
 			
 		} catch (Exception e) {
+			System.out.println("Error parsing season: " + season + " : " + e.getMessage());
 			e.printStackTrace();
+			throw new RuntimeException(e.getMessage());
 		} finally {
 			if(inputStream != null) {
 				try { inputStream.close(); } catch (IOException e) {}
@@ -124,10 +159,28 @@ public class XlsTransformer {
 		}
 	}
 
+	private boolean inBlockList(String name) {
+		return blockList.contains(name);
+	}
+
 	private int readTournament(HSSFSheet sheet, int maxIndex, int startRow) {
 		HSSFRow tournamentRow = sheet.getRow(startRow);
 		HSSFCell tournamentCell = tournamentRow.getCell(1);
-		buf.append("####" + tournamentCell.toString() + "\n");
+		
+		// Try to find digit, e.g. season
+		int index = tournamentCell.toString().indexOf("19");
+		if(index == -1) {
+			index = tournamentCell.toString().indexOf("20");
+		}
+		
+		if(index > -1) {
+			buf.append("####" + tournamentCell.toString().substring(0, index - 1));
+			buf.append("\t" + tournamentCell.toString().substring(index));			
+		} else {
+			buf.append("####" + tournamentCell.toString());
+		}
+		
+		buf.append("\n");
 		int rowIndex = startRow+1;
 		
 		do {

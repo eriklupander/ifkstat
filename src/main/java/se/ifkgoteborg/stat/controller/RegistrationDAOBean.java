@@ -20,6 +20,7 @@ import se.ifkgoteborg.stat.model.Ground;
 import se.ifkgoteborg.stat.model.PlayedForClub;
 import se.ifkgoteborg.stat.model.Player;
 import se.ifkgoteborg.stat.model.Referee;
+import se.ifkgoteborg.stat.model.Season;
 import se.ifkgoteborg.stat.model.Tournament;
 import se.ifkgoteborg.stat.model.TournamentSeason;
 import se.ifkgoteborg.stat.util.DateFactory;
@@ -93,7 +94,9 @@ public class RegistrationDAOBean implements RegistrationDAO {
 
 
 	@Override
-	public void importPlayers(List<SquadPlayer> players, int year) {
+	public void importPlayers(List<SquadPlayer> players, String season) {
+		
+		Season s = getOrCreateSeason(season.trim());
 		
 		Club club = getDefaultClub();
 		
@@ -112,8 +115,8 @@ public class RegistrationDAOBean implements RegistrationDAO {
 				PlayedForClub pfc = new PlayedForClub();
 				pfc.setClub(club);
 				pfc.setPlayer(p);
-				pfc.setFromDate(DateFactory.get(year, 0, 1));
-				pfc.setToDate(DateFactory.get(year+1, 0, 1));
+				pfc.setFromDate(DateFactory.get(s.getStartYear(), 0, 1));
+				pfc.setToDate(DateFactory.get(s.getEndYear(), 0, 1));
 				pfc.setSquadNr(sp.nr);
 				pfc.setImportIndex(sp.index);
 				
@@ -141,9 +144,11 @@ public class RegistrationDAOBean implements RegistrationDAO {
 
 
 	@Override
-	public Map<Integer, Player> loadSquad(int year) {
-		Calendar fromDate = DateFactory.get(year, 0, 1);
-		Calendar toDate = DateFactory.get(year+1, 0, 1);
+	public Map<Integer, Player> loadSquad(String season) {
+		Season s = getOrCreateSeason(season);
+		
+		Calendar fromDate = DateFactory.get(s.getStartYear(), 0, 1);
+		Calendar toDate = DateFactory.get(s.getEndYear(), 0, 1);
 		
 		List<Object[]> resultList = em.createQuery("select p, pfc.importIndex from PlayedForClub pfc JOIN pfc.player p WHERE pfc.fromDate < :toDate AND pfc.toDate > :fromDate")
 			.setParameter("fromDate", fromDate)
@@ -179,8 +184,9 @@ public class RegistrationDAOBean implements RegistrationDAO {
 	}
 	
 	@Override
-	public List<Game> getGames(Long tournamentId, int year) {
-		Calendar start = DateFactory.get(year, 0, 1);
+	public List<Game> getGames(Long tournamentId, String season) {
+		Season s = getOrCreateSeason(season);
+		Calendar start = DateFactory.get(s.getStartYear(), 0, 1);
 		
 		return em.createQuery("select g from Game g WHERE g.tournamentSeason.start = :start AND g.tournamentSeason.tournament.id = :tournamentId")
 			.setParameter("start", start)
@@ -231,19 +237,23 @@ public class RegistrationDAOBean implements RegistrationDAO {
 
 	@Override
 	public TournamentSeason getTournamentSeasonByName(String tournamentName,
-			int year) {
-		System.out.println("ENTER - getTournamentSeasonByName(" + tournamentName + ", " + year + ")");
-		Calendar date = DateFactory.get(year, 0, 1);
-		System.out.println("Date: " + date.getTime().toString());
+			String seasonName) {
+		System.out.println("ENTER - getTournamentSeasonByName(" + tournamentName + ", " + seasonName + ")");
+		
 		TournamentSeason ts;
 		try {
-			ts = (TournamentSeason) em.createQuery("select ts from TournamentSeason ts WHERE lower(ts.tournament.name)=:tname AND ts.start=:date")
+			ts = (TournamentSeason) em.createQuery("select ts from TournamentSeason ts WHERE lower(ts.tournament.name)=:tname AND ts.season.name=:season")
 				.setParameter("tname", tournamentName.toLowerCase())
-				.setParameter("date", date)
+				.setParameter("season", seasonName)
 				.getSingleResult();
 		} catch (NoResultException e) {
+			Season season = getOrCreateSeason(seasonName);
 			Tournament t = getOrCreateTournamentByName(tournamentName);
-			ts = em.merge(new TournamentSeason(t, date));
+			ts = new TournamentSeason();
+			ts.setTournament(t);
+			ts.setSeason(season);
+			ts.setStart(DateFactory.get(season.getStartYear(), 0, 1));
+			ts = em.merge(ts);
 		}
 		
 		
@@ -251,6 +261,18 @@ public class RegistrationDAOBean implements RegistrationDAO {
 		
 		return ts;
 	}
+
+	private Season getOrCreateSeason(String season) {
+		try {
+			return (Season) em.createQuery("select s from Season s WHERE lower(s.name) = :sname").
+					setParameter("sname", season.toLowerCase().trim()).
+					getSingleResult();
+		} catch (NoResultException e) {
+			// Create new tournament with this name
+			return em.merge(new Season(season));
+		}
+	}
+
 
 	@Override
 	public Tournament getOrCreateTournamentByName(String tournamentName) {

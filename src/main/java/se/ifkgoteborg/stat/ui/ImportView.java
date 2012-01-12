@@ -1,21 +1,11 @@
 package se.ifkgoteborg.stat.ui;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Calendar;
-import java.util.List;
 
 import se.ifkgoteborg.stat.controller.RegistrationDAO;
-import se.ifkgoteborg.stat.controller.adapter.SquadPlayer;
 import se.ifkgoteborg.stat.controller.upload.UploadReceiver;
-import se.ifkgoteborg.stat.importer.GameImporter;
-import se.ifkgoteborg.stat.importer.PlayerImporter;
-import se.ifkgoteborg.stat.ui.control.ComboBoxFactory;
-import se.ifkgoteborg.stat.util.StringUtil;
+import se.ifkgoteborg.stat.importer.MasterImporter;
 
-import com.vaadin.data.Property.ValueChangeEvent;
-import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.ui.AbstractSelect.Filtering;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Upload;
 import com.vaadin.ui.Upload.FinishedEvent;
@@ -58,32 +48,9 @@ public class ImportView extends VerticalLayout {
                 System.out.println("Uploaded bytes: " + receiver.getUploadedFile().size());
 
                 String data = readFile();
-                Integer year = Integer.parseInt(StringUtil.getLines(data, 0, 1).trim());
-                String playerData = StringUtil.getLines(data, 1, 3);
                 
-                List<SquadPlayer> players = new PlayerImporter().importPlayers(playerData);
-                ImportView.this.dao.importPlayers(players, year);
-             
-                String gamesData = StringUtil.getLines(data, 3);
-                
-                // Split by ####
-                String[] tournaments = gamesData.split("####");
-                for(String dataSet : tournaments) {
-                	if(dataSet.trim().length() == 0) {
-                		continue;
-                	}
-                	// First row tournament name
-                	String tournamentNameAndStartingYear = StringUtil.getLines(dataSet, 0, 1);
-                	String tournamentData = StringUtil.getLines(dataSet, 1);
-                	
-                	String [] parts = tournamentNameAndStartingYear.split("\t");
-                	String tournamentName = parts[0];                	
-                	Integer tournamentSeason = Integer.parseInt(parts[1]);
-                	
-                	new GameImporter(ImportView.this.dao).importSeason(tournamentData, tournamentSeason, ImportView.this.dao.loadSquad(year), tournamentName);          
-                }
-                
-                      
+                new MasterImporter(ImportView.this.dao).importMasterFile(data);
+                                      
                 result.setValue("File uploaded");
             }
         });       

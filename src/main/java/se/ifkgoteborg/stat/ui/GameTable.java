@@ -55,7 +55,7 @@ public class GameTable extends VerticalLayout {
 
 					@Override
 					public void valueChange(ValueChangeEvent event) {
-						List<Game> games = GameTable.this.dao.getGames(t.getId(), (Integer) event.getProperty().getValue());
+						List<Game> games = GameTable.this.dao.getGames(t.getId(),  event.getProperty().getValue().toString());
 						
 						// Populate game list...
 						beans.removeAllItems();

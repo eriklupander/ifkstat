@@ -29,6 +29,10 @@ public class TournamentSeason {
 	
 	@OneToMany
 	private List<Game> games = new ArrayList<Game>();
+	
+	// Can be either a "pure" year such as 1993, or a cross-season string such as 1992/1993.
+	@ManyToOne
+	private Season season;
 		
 	public TournamentSeason() {}
 	
@@ -67,6 +71,14 @@ public class TournamentSeason {
 
 	public void setGames(List<Game> games) {
 		this.games = games;
+	}
+
+	public Season getSeason() {
+		return season;
+	}
+
+	public void setSeason(Season season) {
+		this.season = season;
 	}
 	
 	

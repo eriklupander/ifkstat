@@ -52,16 +52,22 @@ public class GameImporter {
 	 *            Integer is INDEX during this season.
 	 * @param tournamentName 
 	 */
-	public void importSeason(String data, int year, Map<Integer, Player> players, String tournamentName) {
+	public void importTournamentSeason(String data, String season, Map<Integer, Player> players, String tournamentName) {
+		System.out.println("ENTER - importTournamentSeason(" +  data + ", " + season + ", ...players..., " +  tournamentName + ")");
+		
 		String[] games = data.split("\n");
-		TournamentSeason ts = dao.getTournamentSeasonByName(tournamentName, year);
+		TournamentSeason ts = dao.getTournamentSeasonByName(tournamentName, season);
 		for (String game : games) {
-			importGame(game, year, players, ts);
+			importGame(game, players, ts);
 		}
 	}
 
-	private void importGame(String dataRow, int year,
-			Map<Integer, Player> players, TournamentSeason ts) {
+	private void importGame(String dataRow, Map<Integer, Player> players, TournamentSeason ts) {
+		
+		Integer year = ts.getStart().get(Calendar.YEAR);
+		System.out.println("Import game of season: " + year);
+
+		
 		String[] cells = dataRow.split("\t");
 
 		Game g = new Game();
@@ -74,13 +80,14 @@ public class GameImporter {
 		List<Integer> substitutedPositions = new ArrayList();
 		
 		for (int a = 0; a < cells.length; a++) {
-			System.out.println("INDEX: " + a + " DATA: " + cells[a]);
+			//System.out.println("INDEX: " + a + " DATA: " + cells[a]);
+			
 			switch (a) {
 
 			// Date
 			case 0:
 				try {
-					Date parsedDate = sdf.parse(year + "/" + cells[a].trim());
+					Date parsedDate = sdf.parse(year + "/" + cells[a].trim().replaceAll("\\.", "/"));
 					Calendar c = new GregorianCalendar();
 					c.setTime(parsedDate);
 					g.setDateOfGame(c);
@@ -108,14 +115,21 @@ public class GameImporter {
 			// Result
 			case 4:
 				String result = cells[a];
-				if(result == null || result.trim().length() == 0) {
+				if(result == null || result.trim().length() == 0 || result.trim().toLowerCase().startsWith("w")) {
 					break;
 				}
-				System.out.println("Result text: " + result);
+				
 				result = result.replaceAll("[^\\d]", " ");
 				String[] parts = result.split(" ");
-				g.setHomeGoals(Integer.parseInt(parts[0]));
-				g.setAwayGoals(Integer.parseInt(parts[1]));
+				
+				// IFK:s mål står alltid först, vänd ifall ifk har bortamatch.
+				if(homegame) {
+					g.setHomeGoals(Integer.parseInt(parts[0]));
+					g.setAwayGoals(Integer.parseInt(parts[1]));
+				} else {
+					g.setAwayGoals(Integer.parseInt(parts[0]));
+					g.setHomeGoals(Integer.parseInt(parts[1]));
+				}
 				break;
 			// Halftime result
 			case 5:
@@ -153,9 +167,13 @@ public class GameImporter {
 				}
 				// OK, player did participate. Get player of current index,
 				// start building GameParticipation list.
-				String data = cells[a].trim();
+				String data = cells[a].trim().replaceAll("[^\\d]", "");
 				
-				int positionId = Integer.parseInt(data.replaceAll("[^\\d]", ""));
+				if(data.trim().length() == 0) {
+					System.out.println("WARNING: unknown cell data: " + cells[a]);
+					break;
+				}
+				int positionId = Integer.parseInt(data);
 				int goalsScored = 0;
 				
 				// Some years use a "raised" integer after the number instead of the * to mark goals.
@@ -218,6 +236,7 @@ public class GameImporter {
 				break;
 
 			}
+			
 
 		}
 

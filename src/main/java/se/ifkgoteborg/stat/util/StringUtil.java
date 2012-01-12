@@ -21,7 +21,7 @@ public class StringUtil {
 			buf.append(rows[a]).append("\n");
 		}
 		if(buf.length() > 0) {
-			buf.setLength(buf.length() - 2);
+			buf.setLength(buf.length() - 1);
 		}
 		return buf.toString();
 	}

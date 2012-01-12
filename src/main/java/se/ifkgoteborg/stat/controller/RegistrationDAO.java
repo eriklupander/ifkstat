@@ -27,13 +27,13 @@ public interface RegistrationDAO {
 
 	public List<Player> getAllPlayers();
 
-	public void importPlayers(List<SquadPlayer> players, int year);
+	public void importPlayers(List<SquadPlayer> players, String season);
 
 	public void persist(Object o);
 
 	public Club getDefaultClub();
 
-	public Map<Integer, Player> loadSquad(int year);
+	public Map<Integer, Player> loadSquad(String season);
 
 	public List<Game> getGames(int year);
 
@@ -47,11 +47,11 @@ public interface RegistrationDAO {
 	public List<TournamentSeason> getTournamentSeasons(Long tournamentId);
 
 	public TournamentSeason getTournamentSeasonByName(String tournamentName,
-			int year);
+			String season);
 
 	public Tournament getOrCreateTournamentByName(String tournamentName);
 
-	public List<Game> getGames(Long tournamentId, int year);
+	public List<Game> getGames(Long tournamentId, String season);
 
 	public Formation getFormationByName(String formation);
 
