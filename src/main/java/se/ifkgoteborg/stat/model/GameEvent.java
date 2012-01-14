@@ -24,6 +24,9 @@ public class GameEvent {
 	@ManyToOne
 	private Player player;
 	
+	@ManyToOne
+	private Game game;
+	
 	public Long getId() {
 		return id;
 	}
@@ -49,6 +52,12 @@ public class GameEvent {
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
-	
-	
+
+	public Game getGame() {
+		return game;
+	}
+
+	public void setGame(Game game) {
+		this.game = game;
+	}
 }

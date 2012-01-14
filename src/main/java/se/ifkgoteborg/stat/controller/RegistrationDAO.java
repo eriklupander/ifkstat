@@ -1,6 +1,6 @@
 package se.ifkgoteborg.stat.controller;
 
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +23,7 @@ public interface RegistrationDAO {
 
 	public Club getOrCreateClub(String name);
 
-	public Player getOrCreatePlayer(String name, Calendar dateOfBirth);
+	public Player getOrCreatePlayer(String name, Date dateOfBirth);
 
 	public List<Player> getAllPlayers();
 

@@ -1,4 +1,4 @@
-package se.ifkgoteborg.stat.ui;
+package se.ifkgoteborg.stat.ui.wrapper;
 
 import se.ifkgoteborg.stat.model.Game;
 import se.ifkgoteborg.stat.util.DateFactory;
@@ -20,7 +20,9 @@ public class GameTableWrapper {
 		setFixture(homeTeam + "-" + awayTeam);
 		setResult(g.getHomeGoals() + "-" + g.getAwayGoals() + " (" + g.getHomeGoalsHalftime() + "-" + g.getAwayGoalsHalftime() + ")");
 		if(g.getDateOfGame() != null) {
-			setDate(DateFactory.format(g.getDateOfGame().getTime()));
+			setDate(DateFactory.format(g.getDateOfGame()));
+		} else {
+			date = "N/A";
 		}
 		setAttendance(g.getAttendance());
 	}

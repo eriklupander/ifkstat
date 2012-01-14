@@ -3,9 +3,7 @@ package se.ifkgoteborg.stat.importer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +14,7 @@ import se.ifkgoteborg.stat.model.FormationPosition;
 import se.ifkgoteborg.stat.model.Game;
 import se.ifkgoteborg.stat.model.GameEvent;
 import se.ifkgoteborg.stat.model.GameEvent.EventType;
+import se.ifkgoteborg.stat.model.GameNote;
 import se.ifkgoteborg.stat.model.GameParticipation;
 import se.ifkgoteborg.stat.model.Player;
 import se.ifkgoteborg.stat.model.TournamentSeason;
@@ -53,18 +52,26 @@ public class GameImporter {
 	 * @param tournamentName 
 	 */
 	public void importTournamentSeason(String data, String season, Map<Integer, Player> players, String tournamentName) {
-		System.out.println("ENTER - importTournamentSeason(" +  data + ", " + season + ", ...players..., " +  tournamentName + ")");
+		System.out.println("ENTER - importTournamentSeason: Season: " + season + ", Tournament name: " +  tournamentName);
 		
 		String[] games = data.split("\n");
 		TournamentSeason ts = dao.getTournamentSeasonByName(tournamentName, season);
+		int offset = 0;
+		Date dateOfLastGame = null;
 		for (String game : games) {
-			importGame(game, players, ts);
+			dateOfLastGame = importGame(game, players, ts, dateOfLastGame);
 		}
 	}
 
-	private void importGame(String dataRow, Map<Integer, Player> players, TournamentSeason ts) {
+	private Date importGame(String dataRow, Map<Integer, Player> players, TournamentSeason ts, Date dateOfLastGame) {
 		
-		Integer year = ts.getStart().get(Calendar.YEAR);
+		Integer year = null;
+		if(dateOfLastGame == null) {
+			year = ts.getStart().getYear()+1900;
+		} else {
+			 year = dateOfLastGame.getYear()+1900;
+		}
+		
 		System.out.println("Import game of season: " + year);
 
 		
@@ -88,10 +95,16 @@ public class GameImporter {
 			case 0:
 				try {
 					Date parsedDate = sdf.parse(year + "/" + cells[a].trim().replaceAll("\\.", "/"));
-					Calendar c = new GregorianCalendar();
-					c.setTime(parsedDate);
-					g.setDateOfGame(c);
-					System.out.println(sdf2.format(parsedDate));
+					
+					if(dateOfLastGame != null) {
+						// Check if month of this game is < than last game. Then we have switched year
+						if(parsedDate.getMonth() < dateOfLastGame.getMonth()) {
+							parsedDate.setYear(parsedDate.getYear()+1);
+						}
+					}
+					
+					g.setDateOfGame(parsedDate);
+					
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
@@ -103,9 +116,13 @@ public class GameImporter {
 				opponentClub = dao.getOrCreateClub(cells[a]);
 				break;
 
-			// Home or Away (H/B)
+			// Home or Away (H/B) N=Neutral
 			case 2:
 				homegame = "H".equals(cells[a].trim());
+				if("N".equals(cells[a].trim())) {
+					homegame = true;
+					g.getGameNotes().add(new GameNote(g, "Neutral plan"));
+				}
 				break;
 			// Arena / ground
 			case 3:
@@ -186,7 +203,7 @@ public class GameImporter {
 				}
 
 				Player player = players.get(new Integer(a - OFFSET));
-
+				System.out.println("Got player: " + player.getName());
 				// Add a participation
 				GameParticipation gp = new GameParticipation();
 				gp.setPlayer(player);
@@ -195,7 +212,7 @@ public class GameImporter {
 				//gp.setPlayerNumber(player.getSquadNumber());
 				gp.setFormationPosition(getFormationPosition("4-4-2", positionId));
 				g.getGameParticipation().add(gp);
-				
+				//player.getGames().add(gp);
 				// Check for special characters
 				if (data.indexOf(GOAL_TOKEN) > -1) {
 					// How many?
@@ -266,6 +283,8 @@ public class GameImporter {
 		
 
 		System.out.println("Imported game vs " + opponentClub.getName());
+		
+		return g.getDateOfGame();
 	}
 
 	private FormationPosition getFormationPosition(String formationName, int positionId) {

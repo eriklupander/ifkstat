@@ -1,11 +1,10 @@
 package se.ifkgoteborg.stat.model;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -23,13 +22,12 @@ public class Player {
 	@Id
 	@GeneratedValue
 	private Long id;
-
 	
 	private String name;
 	private String fullName;
 	
 	@Temporal(TemporalType.DATE)
-	private Calendar dateOfBirth;
+	private Date dateOfBirth;
 	
 	@ManyToOne
 	private Country nationality;
@@ -37,7 +35,7 @@ public class Player {
 	private Integer weight;
 	
 	private Integer squadNumber = -1;
-	private String biography;
+	private String biography = "";
 	
 	private Integer otherCompetitiveGames = 0;
 	private Integer otherPracticeGames = 0;
@@ -45,11 +43,11 @@ public class Player {
 	@ManyToOne
 	private Position position;
 	
-	@OneToMany(fetch=FetchType.EAGER)
+	@OneToMany(fetch=FetchType.EAGER, mappedBy="player")
 	private List<PlayedForClub> clubs = new ArrayList<PlayedForClub>();
 	
-	@Enumerated
-	private Gender gender;
+	@OneToMany(mappedBy="player")
+	private List<GameParticipation> games = new ArrayList<GameParticipation>();
 	
 	public Long getId() {
 		return id;
@@ -71,10 +69,10 @@ public class Player {
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
 	}
-	public Calendar getDateOfBirth() {
+	public Date getDateOfBirth() {
 		return dateOfBirth;
 	}
-	public void setDateOfBirth(Calendar dateOfBirth) {
+	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 	public Country getNationality() {
@@ -100,15 +98,6 @@ public class Player {
 	}
 	public void setBiography(String biography) {
 		this.biography = biography;
-	}
-	
-
-	public Gender getGender() {
-		return gender;
-	}
-
-	public void setGender(Gender gender) {
-		this.gender = gender;
 	}
 	
 
@@ -157,6 +146,16 @@ public class Player {
 	
 	public String toString() {
 		return this.name;
+	}
+	
+	
+
+	public List<GameParticipation> getGames() {
+		return games;
+	}
+
+	public void setGames(List<GameParticipation> games) {
+		this.games = games;
 	}
 
 	@Override

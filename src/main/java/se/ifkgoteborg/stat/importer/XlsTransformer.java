@@ -173,7 +173,7 @@ public class XlsTransformer {
 			index = tournamentCell.toString().indexOf("20");
 		}
 		
-		if(index > -1) {
+		if(index > 0) {
 			buf.append("####" + tournamentCell.toString().substring(0, index - 1));
 			buf.append("\t" + tournamentCell.toString().substring(index));			
 		} else {
@@ -279,8 +279,16 @@ public class XlsTransformer {
 		return nf.format(gameRow.getCell(cellIndex).getNumericCellValue()).replaceAll("[^\\d]", "").trim();
 	}
 
-	private boolean rowHasData(HSSFSheet sheet, int i) {
-		return !isEmpty(sheet.getRow(i).getCell(1));
+	private boolean rowHasData(HSSFSheet sheet, int row) {
+		if(sheet.getRow(row) == null) {
+			return false;
+		}
+		try {
+			return !isEmpty(sheet.getRow(row).getCell(1));
+		} catch (Exception e) {
+			System.err.println("Error checking rowHasData for row: " + row);
+			throw new RuntimeException(e);
+		}
 	}
 
 	private boolean isEmpty(HSSFCell cell) {

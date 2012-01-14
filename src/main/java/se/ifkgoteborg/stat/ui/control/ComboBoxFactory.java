@@ -1,6 +1,6 @@
 package se.ifkgoteborg.stat.ui.control;
 
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import se.ifkgoteborg.stat.controller.RegistrationDAO;
@@ -36,19 +36,7 @@ public class ComboBoxFactory {
 	}
 
 
-	public ComboBox getSeasonComboBox() {
-		ComboBox l = new ComboBox("Välj säsong");
-		Calendar c = Calendar.getInstance();
-		
-		for (int i = 1904; i < c.get(Calendar.YEAR); i++) {
-            l.addItem(new String("" + i));
-        }
-		
-		l.setFilteringMode(Filtering.FILTERINGMODE_OFF);
-        l.setImmediate(true);
-        
-        return l;
-	}
+	
 	
 	public ComboBox getSeasonComboBox(Long tournamentId) {
 		ComboBox l = new ComboBox("Välj säsong");
@@ -56,7 +44,7 @@ public class ComboBoxFactory {
 		List<TournamentSeason> tournamentSeasons = dao.getTournamentSeasons(tournamentId);
 		
 		for (TournamentSeason ts : tournamentSeasons) {
-            l.addItem(ts.getStart().get(Calendar.YEAR));
+            l.addItem(ts);
         }
 		
 		l.setFilteringMode(Filtering.FILTERINGMODE_OFF);

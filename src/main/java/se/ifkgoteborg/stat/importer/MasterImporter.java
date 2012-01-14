@@ -1,6 +1,8 @@
 package se.ifkgoteborg.stat.importer;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import se.ifkgoteborg.stat.controller.RegistrationDAO;
 import se.ifkgoteborg.stat.controller.adapter.SquadPlayer;
@@ -58,6 +60,10 @@ public class MasterImporter {
         	
         	String [] parts = tournamentNameAndStartingYear.split("\t");
         	String tournamentName = parts[0];
+        	
+        	// Clean everything after digits from tournament name.
+        	tournamentName = cleanTournamentName(tournamentName);
+        	
         	String tournamentSeason = null;
         	if(parts.length == 1) {
         		tournamentSeason = "" + season;
@@ -70,8 +76,23 @@ public class MasterImporter {
         	}
         	 
         	String tournamentData = StringUtil.getLines(dataSet, 1);
-        	new GameImporter(dao).importTournamentSeason(tournamentData, tournamentSeason, dao.loadSquad(season), tournamentName);          
+        	new GameImporter(dao).importTournamentSeason(tournamentData, tournamentSeason.trim(), dao.loadSquad(season), tournamentName.trim());          
         }
+	}
+
+	String cleanTournamentName(String tn) {
+		try {
+			Pattern p = Pattern.compile("[\\d]{2}");
+			Matcher matcher = p.matcher(tn);
+			if(matcher.find()) {
+				int index = matcher.start();
+				return tn.substring(0, index - 1);
+			}
+			return tn;
+		} catch (Exception e) {
+			System.err.println("Error parsing tournament name: " + tn + ". Message: " + e.getMessage());
+			throw new RuntimeException(e.getMessage());
+		}
 	}
 
 }

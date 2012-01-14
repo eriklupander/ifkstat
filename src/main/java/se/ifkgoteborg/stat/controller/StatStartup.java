@@ -5,33 +5,45 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 
 import se.ifkgoteborg.stat.model.Club;
 import se.ifkgoteborg.stat.model.Country;
 import se.ifkgoteborg.stat.model.Formation;
 import se.ifkgoteborg.stat.model.FormationPosition;
-import se.ifkgoteborg.stat.model.Gender;
 import se.ifkgoteborg.stat.model.Ground;
-import se.ifkgoteborg.stat.model.PlayedForClub;
-import se.ifkgoteborg.stat.model.Player;
 import se.ifkgoteborg.stat.model.Position;
+import se.ifkgoteborg.stat.model.Setting;
 import se.ifkgoteborg.stat.model.Tournament;
 import se.ifkgoteborg.stat.model.enums.PositionType;
 import se.ifkgoteborg.stat.model.enums.Side;
-import se.ifkgoteborg.stat.util.DateFactory;
 
 @Startup
 @Singleton
 public class StatStartup {
 
+	private static final String INIT_DATA_RUN = "init.data.run";
 	@Inject
-	EntityManager em;
-	
+	EntityManager em;	
 	
 	@PostConstruct
 	public void init() {
 		
 		System.out.println("ENTER - init() of Stat");
+		
+		boolean runInitData = true;
+		
+		try {
+			Setting s = (Setting) em.createQuery("select s from Setting s WHERE s.key=:key").setParameter("key", INIT_DATA_RUN).getSingleResult();
+			if("1".equals(s.getValue())) {
+				runInitData = false;
+			}
+		} catch (NoResultException e) {
+			
+		}
+		
+		if(!runInitData)
+			return;
 		
 		Tournament t1 = em.merge(new Tournament("Allsvenskan", false));
 		Tournament t2 = em.merge(new Tournament("Svenska Cupen", false));
@@ -59,56 +71,55 @@ public class StatStartup {
 		ifkgbg.setCity("Göteborg");
 		ifkgbg.setCountry(sweden);
 		ifkgbg.setDefaultClub(true);
-		//ifkgbg.setFoundedDate(Calendar.get)
+		//ifkgbg.setFoundedDate(Date.get)
 		
 		ifkgbg = em.merge(ifkgbg);
 		
 		Ground gullevi = new Ground();
 		gullevi.setName("Gamla Ullevi");
 		gullevi.setMaxCapacity(18500);
-		gullevi.getHomeTeams().add(ifkgbg);
 		
 		gullevi = em.merge(gullevi);
-		
-		
-		Player pl = new Player();
-		pl.setFullName("Mamadou Diallo");
-		pl.setName("Big Mama");
-		pl.setGender(Gender.MALE);
-		pl.setLength(191);
-		pl.setWeight(100);
-		pl.setNationality(senegal);
-		
-		PlayedForClub pfc = new PlayedForClub();
-		pfc.setClub(ifkgbg);
-		pfc.setFromDate(DateFactory.get(2003,3,25));
-		pfc.setToDate(DateFactory.get(2003,11,31));
-		
-		pfc = em.merge(pfc);
-		
-		pl.getClubs().add(pfc);
-		
-		pl = em.merge(pl);
-		
-		Player pl2 = new Player();
-		pl2.setFullName("Marino");
-		pl2.setName("Rahmberg");
-		pl2.setGender(Gender.MALE);
-		pl2.setLength(179);
-		pl2.setWeight(71);
-		pl2.setNationality(sweden);
-		
-		PlayedForClub pfc2 = new PlayedForClub();
-		pfc2.setClub(ifkgbg);
-		pfc2.setFromDate(DateFactory.get(2002,7,25));
-		pfc2.setToDate(DateFactory.get(2003,11,31));
-		
-		pfc2 = em.merge(pfc2);
-		
-		pl2.getClubs().add(pfc2);
-		
-		pl2 = em.merge(pl2);
-		
+//		
+//		
+//		Player pl = new Player();
+//		pl.setFullName("Mamadou Diallo");
+//		pl.setName("Big Mama");
+//		pl.setGender(Gender.MALE);
+//		pl.setLength(191);
+//		pl.setWeight(100);
+//		pl.setNationality(senegal);
+//		
+//		PlayedForClub pfc = new PlayedForClub();
+//		pfc.setClub(ifkgbg);
+//		pfc.setFromDate(DateFactory.get(2003,3,25));
+//		pfc.setToDate(DateFactory.get(2003,11,31));
+//		
+//		pfc = em.merge(pfc);
+//		
+//		pl.getClubs().add(pfc);
+//		
+//		pl = em.merge(pl);
+//		
+//		Player pl2 = new Player();
+//		pl2.setFullName("Marino");
+//		pl2.setName("Rahmberg");
+//		pl2.setGender(Gender.MALE);
+//		pl2.setLength(179);
+//		pl2.setWeight(71);
+//		pl2.setNationality(sweden);
+//		
+//		PlayedForClub pfc2 = new PlayedForClub();
+//		pfc2.setClub(ifkgbg);
+//		pfc2.setFromDate(DateFactory.get(2002,7,25));
+//		pfc2.setToDate(DateFactory.get(2003,11,31));
+//		
+//		pfc2 = em.merge(pfc2);
+//		
+//		pl2.getClubs().add(pfc2);
+//		
+//		pl2 = em.merge(pl2);
+//		
 		// Positioner f�r 4-4-2
 		Position mv = em.merge(new Position("Målvakt", "MV", Side.CENTRAL, PositionType.GOALKEEPER));
 		Position hb = em.merge(new Position("Högerback", "HB", Side.RIGHT, PositionType.DEFENDER));
@@ -237,6 +248,10 @@ public class StatStartup {
 		em.persist(new FormationPosition(9, f235, c));
 		em.persist(new FormationPosition(10, f235, vi));
 		em.persist(new FormationPosition(11, f235, vy));
+		
+		// Write setting flag
+		Setting settingsInitialized = new Setting(INIT_DATA_RUN, "1");
+		em.persist(settingsInitialized);
 		
 		System.out.println("FINISHED setting up core data.");
 	}

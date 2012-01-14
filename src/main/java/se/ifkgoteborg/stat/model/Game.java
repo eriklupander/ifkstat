@@ -1,7 +1,7 @@
 package se.ifkgoteborg.stat.model;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.Date;
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class Game {
 	}
 
 	@Temporal(TemporalType.DATE)
-	private Calendar dateOfGame;
+	private Date dateOfGame;
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	private TournamentSeason tournamentSeason;
@@ -55,36 +55,36 @@ public class Game {
 //	@OneToMany
 //	private List<Goal> awayGoals;
 	
-	@OneToMany(cascade=CascadeType.ALL)
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="game")
 	private List<GameEvent> events = new ArrayList<GameEvent>();
 	
-	@OneToMany(cascade=CascadeType.ALL)
+	@OneToMany(cascade=CascadeType.ALL, mappedBy="game")
 	private List<GameParticipation> gameParticipation = new ArrayList<GameParticipation>();
 	
 	@ManyToOne(cascade=CascadeType.PERSIST)
 	private Formation formation;
 	
-	private Integer homeFreekicks;
-	private Integer awayFreekicks;
+	@OneToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE}, mappedBy="game")
+	private List<GameNote> gameNotes = new ArrayList<GameNote>();
 	
-	private Integer homeCorners;
-	private Integer awayCorners;
+	private Integer homeFreekicks = 0;
+	private Integer awayFreekicks = 0;
+	
+	private Integer homeCorners = 0;
+	private Integer awayCorners = 0;
 	
 	private Integer attendance;
 	
-	private String gameSummary;
-	private Integer homeGoals;
-	private Integer awayGoals;
-	private Integer homeGoalsHalftime;
-	private Integer awayGoalsHalftime;
+	private String gameSummary = "";
+	private Integer homeGoals = 0;
+	private Integer awayGoals = 0;
+	private Integer homeGoalsHalftime = 0;
+	private Integer awayGoalsHalftime = 0;
 	
-	public Calendar getDateOfGame() {
+	public Date getDateOfGame() {
 		return dateOfGame;
-	}
-	public Date getDateOfGameAsDate() {
-		return dateOfGame.getTime();
-	}
-	public void setDateOfGame(Calendar dateOfGame) {
+	}	
+	public void setDateOfGame(Date dateOfGame) {
 		this.dateOfGame = dateOfGame;
 	}
 	public Club getHomeTeam() {
@@ -210,7 +210,14 @@ public class Game {
 		this.tournamentSeason = tournamentSeason;
 	}
 	
-	
+
+	public List<GameNote> getGameNotes() {
+		return gameNotes;
+	}
+
+	public void setGameNotes(List<GameNote> gameNotes) {
+		this.gameNotes = gameNotes;
+	}
 
 	@Transient
 	public String getResultStr() {

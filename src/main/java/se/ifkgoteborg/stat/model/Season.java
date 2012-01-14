@@ -1,9 +1,15 @@
 package se.ifkgoteborg.stat.model;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import se.ifkgoteborg.stat.util.DateFactory;
 
 @Entity
 @Table(name="season")
@@ -13,35 +19,29 @@ public class Season {
 	@GeneratedValue
 	private Long id;
 	
-	private int startYear;
+	@Temporal(value=TemporalType.DATE)
+	private Date startYear;
 	
-	private int endYear;
+	@Temporal(value=TemporalType.DATE)
+	private Date endYear;
 	
 	private String name;
 	
 	private Season() {}
 	
-	public Season(String name) {
+	public Season(String name, int startYearInt, int endYearInt) {
+		if(startYearInt < 1900 || endYearInt < 1900) {
+			throw new IllegalArgumentException("Cannot create Season instance, supplied year was < 1900. Season name: " + name + ". Start year: " + startYear + " endYear: " + endYear);
+		}
 		System.out.println("creating new season based on name: " + name);
 		this.name = name;
-		if(name.indexOf("/") > -1) {
-			String[] parts = name.split("/");
-			if(parts.length > 0)
-				if(parts[0].trim().length() == 2) {
-					parts[0] = "19" + parts[0].trim();
-				}
-				
-				startYear = Integer.parseInt(parts[0].trim());
-			if(parts.length > 1) {
-				endYear = Integer.parseInt(parts[0].substring(0, 2) + "" + parts[1].trim());
-			} else {
-				endYear = startYear;
-			}
-		} else {
-			startYear = Integer.parseInt(name.trim());
-			endYear = startYear;
-		}
+		
+		setStartYear(DateFactory.get(startYearInt, 0, 1));
+		setEndYear(DateFactory.get(endYearInt, 11, 31));
+
 	}
+
+	
 
 	public Long getId() {
 		return id;
@@ -51,19 +51,21 @@ public class Season {
 		this.id = id;
 	}
 
-	public int getStartYear() {
+	
+
+	public Date getStartYear() {
 		return startYear;
 	}
 
-	public void setStartYear(int startYear) {
+	public void setStartYear(Date startYear) {
 		this.startYear = startYear;
 	}
 
-	public int getEndYear() {
+	public Date getEndYear() {
 		return endYear;
 	}
 
-	public void setEndYear(int endYear) {
+	public void setEndYear(Date endYear) {
 		this.endYear = endYear;
 	}
 

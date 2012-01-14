@@ -43,7 +43,7 @@
   </enumeration>  
   <class id="6" corner="BOTTOM_RIGHT" language="java" name="se.ifkgoteborg.stat.model.TournamentSeason" 
     project="ifkstat" file="/ifkstat/src/main/java/se/ifkgoteborg/stat/model/TournamentSeason.java" binary="false">    
-    <position height="-1" width="-1" x="177" y="359"/>    
+    <position height="-1" width="-1" x="178" y="359"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="false">      
       <attributes public="false" package="false" protected="false" private="true"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
@@ -51,7 +51,7 @@
   </class>  
   <class id="7" corner="BOTTOM_RIGHT" language="java" name="se.ifkgoteborg.stat.model.Tournament" project="ifkstat" 
     file="/ifkstat/src/main/java/se/ifkgoteborg/stat/model/Tournament.java" binary="false">    
-    <position height="-1" width="-1" x="176" y="94"/>    
+    <position height="-1" width="-1" x="177" y="94"/>    
     <display autosize="true" package="true" initial-value="false" signature="true" visibility="false">      
       <attributes public="false" package="false" protected="false" private="true"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
@@ -129,188 +129,204 @@
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>  
   </class>  
-  <association id="17">    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="18" name="position"/>      
-      <multiplicity id="19" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="11" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="20">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="21" name="homeTeam"/>      
-      <multiplicity id="22" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="23">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="24" name="awayTeam"/>      
-      <multiplicity id="25" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="26">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="27" name="gameParticipation"/>      
-      <multiplicity id="28" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="2" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="29">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="30" name="player"/>      
-      <multiplicity id="31" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="32">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="33" name="ground"/>      
-      <multiplicity id="34" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="9" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="35">    
-    <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="36" name="games"/>      
-      <multiplicity id="37" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="1" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="38">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="39" name="game"/>      
-      <multiplicity id="40" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="1" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="41">    
-    <end type="SOURCE" refId="9" navigable="false">      
-      <attribute id="42" name="homeTeams"/>      
-      <multiplicity id="43" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="44">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="45" name="tournamentSeason"/>      
-      <multiplicity id="46" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="47">    
+  <class id="17" corner="BOTTOM_RIGHT" language="java" name="se.ifkgoteborg.stat.model.Season" project="ifkstat" 
+    file="/ifkstat/src/main/java/se/ifkgoteborg/stat/model/Season.java" binary="false">    
+    <position height="-1" width="-1" x="178" y="558"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="false">      
+      <attributes public="false" package="false" protected="false" private="true"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <association id="18">    
     <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="48" name="clubs"/>      
-      <multiplicity id="49" minimum="0" maximum="2147483647"/>    
+      <attribute id="19" name="clubs"/>      
+      <multiplicity id="20" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="12" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="50">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="51" name="referee"/>      
-      <multiplicity id="52" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="14" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="53">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="54" name="position"/>      
-      <multiplicity id="55" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="11" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="56">    
-    <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="57" name="tournament"/>      
-      <multiplicity id="58" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="7" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="59">    
-    <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="60" name="club"/>      
-      <multiplicity id="61" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="62">    
-    <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="63" name="player"/>      
-      <multiplicity id="64" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="65">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="66" name="formationPosition"/>      
-      <multiplicity id="67" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="68">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="69" name="events"/>      
-      <multiplicity id="70" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="8" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="71">    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="72" name="positionType"/>      
-      <multiplicity id="73" minimum="0" maximum="1"/>    
-    </end>    
-    <end type="TARGET" refId="15" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="74">    
+  <association id="21">    
     <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="75" name="formation"/>      
-      <multiplicity id="76" minimum="0" maximum="1"/>    
+      <attribute id="22" name="formation"/>      
+      <multiplicity id="23" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="16" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="77">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="78" name="eventType"/>      
-      <multiplicity id="79" minimum="0" maximum="1"/>    
+  <association id="24">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="25" name="formationPosition"/>      
+      <multiplicity id="26" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="13" navigable="true"/>    
+    <end type="TARGET" refId="3" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="80">    
+  <association id="27">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="28" name="referee"/>      
+      <multiplicity id="29" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="14" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="30">    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="31" name="homeTeams"/>      
+      <multiplicity id="32" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="33">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="34" name="player"/>      
+      <multiplicity id="35" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="36">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="37" name="awayTeam"/>      
+      <multiplicity id="38" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="39">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="40" name="season"/>      
+      <multiplicity id="41" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="17" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="42">    
     <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="81" name="participationType"/>      
-      <multiplicity id="82" minimum="0" maximum="1"/>    
+      <attribute id="43" name="game"/>      
+      <multiplicity id="44" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="45">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="46" name="ground"/>      
+      <multiplicity id="47" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="48">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="49" name="player"/>      
+      <multiplicity id="50" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="51">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="52" name="player"/>      
+      <multiplicity id="53" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="54">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="55" name="games"/>      
+      <multiplicity id="56" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="57">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="58" name="participationType"/>      
+      <multiplicity id="59" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="5" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="83">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="84" name="player"/>      
-      <multiplicity id="85" minimum="0" maximum="1"/>    
+  <association id="60">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="61" name="positionType"/>      
+      <multiplicity id="62" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="63">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="64" name="eventType"/>      
+      <multiplicity id="65" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="13" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="66">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="67" name="tournament"/>      
+      <multiplicity id="68" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="7" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="69">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="70" name="gameParticipation"/>      
+      <multiplicity id="71" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="72">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="73" name="club"/>      
+      <multiplicity id="74" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="75">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="76" name="position"/>      
+      <multiplicity id="77" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="78">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="79" name="tournamentSeason"/>      
+      <multiplicity id="80" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="6" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="81">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="82" name="events"/>      
+      <multiplicity id="83" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="84">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="85" name="position"/>      
+      <multiplicity id="86" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="11" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="87">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="88" name="homeTeam"/>      
+      <multiplicity id="89" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="false">    

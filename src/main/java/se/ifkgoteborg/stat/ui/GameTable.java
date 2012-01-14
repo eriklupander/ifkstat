@@ -8,6 +8,7 @@ import se.ifkgoteborg.stat.model.Game;
 import se.ifkgoteborg.stat.model.Tournament;
 import se.ifkgoteborg.stat.model.TournamentSeason;
 import se.ifkgoteborg.stat.ui.control.ComboBoxFactory;
+import se.ifkgoteborg.stat.ui.wrapper.GameTableWrapper;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -32,12 +33,13 @@ public class GameTable extends VerticalLayout {
     RegistrationDAO dao;
     HorizontalLayout hl = new HorizontalLayout();
     ComboBox seasonComboBox;
-
+    ComboBox tournamentComboBox;
+    
     public GameTable(RegistrationDAO dao) {
     	
     	this.dao = dao;    	
     	
-    	final ComboBox tournamentComboBox = new ComboBoxFactory(dao).getTournamentComboBox();
+    	tournamentComboBox = new ComboBoxFactory(dao).getTournamentComboBox();
     	 
     	
     	tournamentComboBox.addListener(new ValueChangeListener() {
@@ -156,7 +158,10 @@ public class GameTable extends VerticalLayout {
     }
 
 	public void refresh() {
-		
+		if(tournamentComboBox != null)
+			tournamentComboBox = new ComboBoxFactory(dao).getTournamentComboBox();
+		if(seasonComboBox != null)
+			seasonComboBox.setVisible(false);
 	}
 
 }

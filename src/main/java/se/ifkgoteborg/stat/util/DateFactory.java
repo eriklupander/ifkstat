@@ -9,7 +9,7 @@ public class DateFactory {
 	
 	private static SimpleDateFormat sdf = new SimpleDateFormat("MM/dd yyyy");
 	
-	public static Calendar get(int year, int month, int day) {
+	public static Date get(int year, int month, int day) {
 		GregorianCalendar cal = new GregorianCalendar();
 		cal.clear();
 		cal.set(year, month, day);
@@ -20,7 +20,7 @@ public class DateFactory {
 		
 		System.out.println("Returning date: " + sdf.format(cal.getTime()) + " input was: " + year + "/" + month + "/" + day);
 		
-		return cal;
+		return cal.getTime();
 	}
 
 	public static String format(Date date) {

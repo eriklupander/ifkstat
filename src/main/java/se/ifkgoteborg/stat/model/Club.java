@@ -1,6 +1,6 @@
 package se.ifkgoteborg.stat.model;
 
-import java.util.Calendar;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,9 +9,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name="club")
+@Table(name="club", uniqueConstraints=@UniqueConstraint(columnNames="name"))
 public class Club {
 	
 	@Id
@@ -28,7 +29,7 @@ public class Club {
 	private Country country;
 	
 	@Temporal(value=TemporalType.DATE)
-	private Calendar foundedDate;
+	private Date foundedDate;
 	
 	public Long getId() {
 		return id;
@@ -50,10 +51,10 @@ public class Club {
 	public void setCity(String city) {
 		this.city = city;
 	}
-	public Calendar getFoundedDate() {
+	public Date getFoundedDate() {
 		return foundedDate;
 	}
-	public void setFoundedDate(Calendar foundedDate) {
+	public void setFoundedDate(Date foundedDate) {
 		this.foundedDate = foundedDate;
 	}
 

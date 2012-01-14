@@ -1,14 +1,10 @@
 package se.ifkgoteborg.stat.model;
 
-import java.util.Calendar;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 @Table(name="player_club")
@@ -23,12 +19,9 @@ public class PlayedForClub {
 	
 	@ManyToOne
 	private Club club;
-	
-	@Temporal(TemporalType.DATE)
-	private Calendar fromDate;
-	
-	@Temporal(TemporalType.DATE)
-	private Calendar toDate;
+
+	@ManyToOne
+	private Season season;
 	
 	private Integer squadNr;
 	private Integer importIndex;
@@ -52,17 +45,13 @@ public class PlayedForClub {
 	public void setClub(Club club) {
 		this.club = club;
 	}
-	public Calendar getFromDate() {
-		return fromDate;
+
+	public Season getSeason() {
+		return season;
 	}
-	public void setFromDate(Calendar fromDate) {
-		this.fromDate = fromDate;
-	}
-	public Calendar getToDate() {
-		return toDate;
-	}
-	public void setToDate(Calendar toDate) {
-		this.toDate = toDate;
+
+	public void setSeason(Season season) {
+		this.season = season;
 	}
 
 	public Integer getSquadNr() {

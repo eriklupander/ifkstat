@@ -1,6 +1,6 @@
 package se.ifkgoteborg.stat.controller;
 
-import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,25 +54,28 @@ public class RegistrationDAOBean implements RegistrationDAO {
 	public Club getOrCreateClub(String name) {
 		
 		try {
-			return (Club) em.createQuery("select g from Club g WHERE g.name=:name").setParameter("name", name).getSingleResult();
+			return (Club) em.createQuery("select g from Club g WHERE lower(g.name)=:name").setParameter("name", name.trim().toLowerCase()).getSingleResult();
 		} catch(NoResultException nre) {
 			Club g = new Club();
-			g.setName(name);
-			return em.merge(g);
+			g.setName(name.trim());
+			Club c = em.merge(g);
+			em.flush();
+			return c;
 		}
 	}
 	
 	/* (non-Javadoc)
-	 * @see se.ifkgoteborg.stat.controller.RegistrationDAO#getOrCreatePlayer(java.lang.String, java.util.Calendar)
+	 * @see se.ifkgoteborg.stat.controller.RegistrationDAO#getOrCreatePlayer(java.lang.String, java.util.Date)
 	 */
 	@Override
-	public Player getOrCreatePlayer(String name, Calendar dateOfBirth) {
+	public Player getOrCreatePlayer(String name, Date dateOfBirth) {
 		
 		try {
-			return (Player) em.createQuery("select g from Player g WHERE g.name=:name AND g.dateOfBirth=:dateOfBirth")
-					.setParameter("name", name)
-					.setParameter("dateOfBirth", dateOfBirth)
+			Player p = (Player) em.createQuery("select p from Player p WHERE lower(p.name)=:name")
+					.setParameter("name", name.trim().toString())
 					.getSingleResult();
+			p.getGames().size();
+			return p;
 		} catch(NoResultException nre) {
 			Player g = new Player();
 			g.setName(name);
@@ -101,31 +104,34 @@ public class RegistrationDAOBean implements RegistrationDAO {
 		Club club = getDefaultClub();
 		
 		for(SquadPlayer sp : players) {
+			Player p = null;
 			try {
-				Player p = (Player) em.createQuery("select g from Player g WHERE g.name=:name")
-				.setParameter("name", sp.name)
+				p = (Player) em.createQuery("select g from Player g WHERE lower(g.name)=:name")
+				.setParameter("name", sp.name.trim().toLowerCase())
 				.getSingleResult();
+				
 			} catch (NoResultException e) {
 				// If not found, create...
-				Player p = new Player();
+				p = new Player();
 				p.setName(sp.name);
 				p.setSquadNumber(sp.nr);
-				em.persist(p);
+				p = em.merge(p);
 				
-				PlayedForClub pfc = new PlayedForClub();
-				pfc.setClub(club);
-				pfc.setPlayer(p);
-				pfc.setFromDate(DateFactory.get(s.getStartYear(), 0, 1));
-				pfc.setToDate(DateFactory.get(s.getEndYear(), 0, 1));
-				pfc.setSquadNr(sp.nr);
-				pfc.setImportIndex(sp.index);
 				
-				pfc = em.merge(pfc);
-				
-				p.getClubs().add(pfc);
-				
-				System.out.println("Created player " + sp.name);
 			}
+			PlayedForClub pfc = new PlayedForClub();
+			pfc.setClub(club);
+			pfc.setPlayer(p);
+			pfc.setSeason(s);
+			pfc.setSquadNr(sp.nr);
+			pfc.setImportIndex(sp.index);
+			
+			pfc = em.merge(pfc);
+			
+			p.getClubs().add(pfc);
+			
+			System.out.println("Created player " + sp.name);
+			em.flush();
 		}
 	}
 
@@ -147,12 +153,11 @@ public class RegistrationDAOBean implements RegistrationDAO {
 	public Map<Integer, Player> loadSquad(String season) {
 		Season s = getOrCreateSeason(season);
 		
-		Calendar fromDate = DateFactory.get(s.getStartYear(), 0, 1);
-		Calendar toDate = DateFactory.get(s.getEndYear(), 0, 1);
+		Date fromDate = s.getStartYear();
+		Date toDate = s.getEndYear();
 		
-		List<Object[]> resultList = em.createQuery("select p, pfc.importIndex from PlayedForClub pfc JOIN pfc.player p WHERE pfc.fromDate < :toDate AND pfc.toDate > :fromDate")
-			.setParameter("fromDate", fromDate)
-			.setParameter("toDate", toDate)
+		List<Object[]> resultList = em.createQuery("select p, pfc.importIndex from PlayedForClub pfc JOIN pfc.player p WHERE pfc.season.id = :s")
+			.setParameter("s", s.getId())			
 			.getResultList();
 		
 		Map<Integer, Player> map = new HashMap<Integer, Player>();
@@ -162,14 +167,15 @@ public class RegistrationDAOBean implements RegistrationDAO {
 			Integer index = (Integer) o[1];
 			map.put(index, p);
 		}
+		System.out.println("Loaded squad for season: " + season + ". Got " + map.size() + " players");
 		return map;
 	}
 
 
 	@Override
 	public List<Game> getGames(int year) {
-		Calendar fromDate = DateFactory.get(year, 0, 1);
-		Calendar toDate = DateFactory.get(year+1, 0, 1);
+		Date fromDate = DateFactory.get(year, 0, 1);
+		Date toDate = DateFactory.get(year+1, 0, 1);
 		
 		List<Game> resultList = em.createQuery("select g from Game g").getResultList(); // WHERE g.dateOfGame >= :fromDate AND g.dateOfGame < :toDate")
 //			.setParameter("fromDate", fromDate)
@@ -186,7 +192,7 @@ public class RegistrationDAOBean implements RegistrationDAO {
 	@Override
 	public List<Game> getGames(Long tournamentId, String season) {
 		Season s = getOrCreateSeason(season);
-		Calendar start = DateFactory.get(s.getStartYear(), 0, 1);
+		Date start = s.getStartYear();
 		
 		return em.createQuery("select g from Game g WHERE g.tournamentSeason.start = :start AND g.tournamentSeason.tournament.id = :tournamentId")
 			.setParameter("start", start)
@@ -249,10 +255,10 @@ public class RegistrationDAOBean implements RegistrationDAO {
 		} catch (NoResultException e) {
 			Season season = getOrCreateSeason(seasonName);
 			Tournament t = getOrCreateTournamentByName(tournamentName);
-			ts = new TournamentSeason();
-			ts.setTournament(t);
+			ts = new TournamentSeason(t, season.getStartYear(), season.getEndYear());
+			
 			ts.setSeason(season);
-			ts.setStart(DateFactory.get(season.getStartYear(), 0, 1));
+			ts.setStart(season.getStartYear());
 			ts = em.merge(ts);
 		}
 		
@@ -268,9 +274,33 @@ public class RegistrationDAOBean implements RegistrationDAO {
 					setParameter("sname", season.toLowerCase().trim()).
 					getSingleResult();
 		} catch (NoResultException e) {
-			// Create new tournament with this name
-			return em.merge(new Season(season));
+			// Create new tournament with this name			
+			return createSeasonFromString(season); 
 		}
+	}
+	
+	private Season createSeasonFromString(String seasonName) {
+		int startYear;
+		int endYear;
+		if(seasonName.trim().indexOf("/") > -1) {
+			String[] parts = seasonName.trim().split("/");
+			if(parts.length > 0)
+				if(parts[0].trim().length() == 2) {
+					parts[0] = "19" + parts[0].trim();
+				}
+				
+				startYear = Integer.parseInt(parts[0].trim());
+			if(parts.length > 1) {
+				endYear = Integer.parseInt(parts[0].substring(0, 2) + "" + parts[1].trim());
+			} else {
+				endYear = startYear;
+			}
+		} else {
+			startYear = Integer.parseInt(seasonName.trim());
+			endYear = startYear;
+		}
+		
+		return em.merge(new Season(seasonName, startYear, endYear));
 	}
 
 
@@ -278,7 +308,7 @@ public class RegistrationDAOBean implements RegistrationDAO {
 	public Tournament getOrCreateTournamentByName(String tournamentName) {
 		try {
 			return (Tournament) em.createQuery("select t from Tournament t WHERE lower(t.name) = :tname").
-					setParameter("tname", tournamentName.toLowerCase()).
+					setParameter("tname", tournamentName.toLowerCase().trim()).
 					getSingleResult();
 		} catch (NoResultException e) {
 			// Create new tournament with this name

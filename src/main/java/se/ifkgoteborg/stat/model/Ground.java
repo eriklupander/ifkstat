@@ -1,7 +1,7 @@
 package se.ifkgoteborg.stat.model;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -24,11 +24,8 @@ public class Ground {
 	private Integer maxCapacity;
 	
 	@Temporal(TemporalType.DATE)
-	private Calendar dateOfConstruction;
-	
-	@OneToMany
-	private List<Club> homeTeams = new ArrayList<Club>();
-	
+	private Date dateOfConstruction;
+		
 	public Long getId() {
 		return id;
 	}
@@ -54,23 +51,13 @@ public class Ground {
 		this.maxCapacity = maxCapacity;
 	}
 
-	public Calendar getDateOfConstruction() {
+	public Date getDateOfConstruction() {
 		return dateOfConstruction;
 	}
 
-	public void setDateOfConstruction(Calendar dateOfConstruction) {
+	public void setDateOfConstruction(Date dateOfConstruction) {
 		this.dateOfConstruction = dateOfConstruction;
 	}
-
-	public List<Club> getHomeTeams() {
-		return homeTeams;
-	}
-
-	public void setHomeTeams(List<Club> homeTeams) {
-		this.homeTeams = homeTeams;
-	}
-
-	
 	
 	@Override
 	public int hashCode() {

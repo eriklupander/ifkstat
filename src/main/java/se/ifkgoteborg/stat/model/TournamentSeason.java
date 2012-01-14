@@ -1,7 +1,7 @@
 package se.ifkgoteborg.stat.model;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -25,20 +25,33 @@ public class TournamentSeason {
 	private Tournament tournament;
 	
 	@Temporal(value=TemporalType.DATE)
-	private Calendar start;
+	private Date start;
 	
-	@OneToMany
+	@OneToMany(mappedBy="tournamentSeason")
 	private List<Game> games = new ArrayList<Game>();
 	
 	// Can be either a "pure" year such as 1993, or a cross-season string such as 1992/1993.
 	@ManyToOne
 	private Season season;
-		
-	public TournamentSeason() {}
 	
-	public TournamentSeason(Tournament tournament, Calendar date) {
+	/**
+	 * This should be just the year or year/year combo. Eg. 1993 or 1992/1993.
+	 */
+	private String seasonName;
+		
+	private TournamentSeason() {}
+	
+	public TournamentSeason(Tournament tournament, Date startDate, Date endDate) {
 		this.tournament = tournament;
-		this.start = date;
+		this.start = startDate;
+		
+		int sYear = startDate.getYear()+1900;
+		int eYear = endDate.getYear()+1900;
+		if(sYear == eYear) {
+			setSeasonName("" + sYear);
+		} else {
+			setSeasonName(sYear + "/" + eYear);
+		}
 	}
 
 	public Long getId() {
@@ -57,11 +70,11 @@ public class TournamentSeason {
 		this.tournament = tournament;
 	}
 
-	public Calendar getStart() {
+	public Date getStart() {
 		return start;
 	}
 
-	public void setStart(Calendar start) {
+	public void setStart(Date start) {
 		this.start = start;
 	}
 
@@ -80,6 +93,16 @@ public class TournamentSeason {
 	public void setSeason(Season season) {
 		this.season = season;
 	}
+
+	public String getSeasonName() {
+		return seasonName;
+	}
+
+	public void setSeasonName(String seasonName) {
+		this.seasonName = seasonName;
+	}
 	
-	
+	public String toString() {
+		return this.seasonName;
+	}
 }

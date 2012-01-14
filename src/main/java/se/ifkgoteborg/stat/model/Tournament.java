@@ -3,8 +3,11 @@ package se.ifkgoteborg.stat.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
+@Table(name="tournament", uniqueConstraints={@UniqueConstraint(columnNames="name")})
 public class Tournament {
 	
 	@Id
@@ -15,7 +18,7 @@ public class Tournament {
 	
 	private boolean yearOverlapping = false;
 	
-	public Tournament() {
+	private Tournament() {
 		
 	}
 	
