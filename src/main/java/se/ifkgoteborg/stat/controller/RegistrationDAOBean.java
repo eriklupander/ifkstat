@@ -19,10 +19,12 @@ import se.ifkgoteborg.stat.model.Game;
 import se.ifkgoteborg.stat.model.Ground;
 import se.ifkgoteborg.stat.model.PlayedForClub;
 import se.ifkgoteborg.stat.model.Player;
+import se.ifkgoteborg.stat.model.Position;
 import se.ifkgoteborg.stat.model.Referee;
 import se.ifkgoteborg.stat.model.Season;
 import se.ifkgoteborg.stat.model.Tournament;
 import se.ifkgoteborg.stat.model.TournamentSeason;
+import se.ifkgoteborg.stat.model.enums.PositionType;
 import se.ifkgoteborg.stat.util.DateFactory;
 
 @Stateless
@@ -91,6 +93,11 @@ public class RegistrationDAOBean implements RegistrationDAO {
 		System.out.println("Is EM null?: " + (em == null));
 		Query q = em.createQuery("select p from Player p");
 		List<Player> l = q.getResultList();
+		for(Player p : l) {
+			p.getGames().size();
+			p.getClubs().size();
+			
+		}
 		System.out.println("Returning " + l.size() + " players");
 		return l;
 	}
@@ -385,6 +392,30 @@ public class RegistrationDAOBean implements RegistrationDAO {
 	@Override
 	public List<Referee> getReferees() {
 		return em.createQuery("select r from Referee r ORDER BY r.name").getResultList();
+	}
+
+
+	@Override
+	public void savePlayer(Player player) {
+		em.persist(player);
+	}
+
+
+	@Override
+	public Player updatePlayer(Player player) {
+		return em.merge(player);
+	}
+
+
+	@Override
+	public List<Position> getPositions() {
+		return em.createQuery("select p from Position p ORDER BY p.name").getResultList();
+	}
+
+
+	@Override
+	public List<PositionType> getPositionTypes() {
+		return em.createQuery("select p from PositionType p ORDER BY p.name").getResultList();
 	}
 	
 }

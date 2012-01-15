@@ -41,7 +41,7 @@ public class GameForm extends Form {
 		fields.add("dateOfGameAsDate");
 		fields.add("gameSummary");
 	
-		setCaption("Personal details");
+		setCaption("Matchfakta");
 
 		// Create our layout (3x3 GridLayout)
 		ourLayout = new GridLayout(2, 8);

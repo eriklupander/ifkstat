@@ -5,6 +5,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import se.ifkgoteborg.stat.model.enums.PositionType;
@@ -25,7 +26,7 @@ public class Position {
 	@Enumerated(value=EnumType.STRING)
 	private Side side;
 
-	@Enumerated(value=EnumType.STRING)
+	@ManyToOne
 	private PositionType positionType;
 	
 	public Position() {}

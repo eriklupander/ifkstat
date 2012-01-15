@@ -112,41 +112,46 @@ public class StatStartup {
 //		
 //		pl2 = em.merge(pl2);
 //		
+		
+		PositionType gk = new PositionType("Målvakt");
+		PositionType def = new PositionType("Försvarare");
+		PositionType mid = new PositionType("Mittfältare");
+		PositionType forw = new PositionType("Anfallare");
+		
 		// Positioner f�r 4-4-2
-		Position mv = em.merge(new Position("Målvakt", "MV", Side.CENTRAL, PositionType.GOALKEEPER));
-		Position hb = em.merge(new Position("Högerback", "HB", Side.RIGHT, PositionType.DEFENDER));
-		Position mb1 = em.merge(new Position("Mittback", "MB", Side.RIGHT, PositionType.DEFENDER));
-		Position mb2 = em.merge(new Position("Mittback", "MB", Side.LEFT, PositionType.DEFENDER));
-		Position vb = em.merge(new Position("Vänsterback", "VB", Side.LEFT, PositionType.DEFENDER));
-		Position hy = em.merge(new Position("Högerytter", "HY", Side.RIGHT, PositionType.MIDFIELD));
-		Position im1 = em.merge(new Position("Innermitt", "IM", Side.RIGHT, PositionType.MIDFIELD));
-		Position im2 = em.merge(new Position("Innermitt", "IM", Side.LEFT, PositionType.MIDFIELD));
-		Position im1_c = em.merge(new Position("Innermitt", "IM", Side.CENTRAL, PositionType.MIDFIELD));
+		Position mv = em.merge(new Position("Målvakt", "MV", Side.CENTRAL, gk));
+		Position hb = em.merge(new Position("Högerback", "HB", Side.RIGHT, def));
+		Position mb1 = em.merge(new Position("Mittback", "MB", Side.RIGHT, def));
+		Position mb2 = em.merge(new Position("Mittback", "MB", Side.LEFT, def));
+		Position vb = em.merge(new Position("Vänsterback", "VB", Side.LEFT, def));
+		Position hy = em.merge(new Position("Högerytter", "HY", Side.RIGHT, mid));
+		Position im1 = em.merge(new Position("Innermitt", "IM", Side.RIGHT, mid));
+		Position im2 = em.merge(new Position("Innermitt", "IM", Side.LEFT, mid));
+		Position im1_c = em.merge(new Position("Innermitt", "IM", Side.CENTRAL, mid));
 		
-		Position im1d_r = em.merge(new Position("Innermitt (def)", "IM (D)", Side.RIGHT, PositionType.MIDFIELD));
-		Position im2d_l = em.merge(new Position("Innermitt (def)", "IM (D)", Side.LEFT, PositionType.MIDFIELD));
-		Position im1d_c = em.merge(new Position("Innermitt (def)", "IM (D)", Side.CENTRAL, PositionType.MIDFIELD));
+		Position im1d_r = em.merge(new Position("Innermitt (def)", "IM (D)", Side.RIGHT, mid));
+		Position im2d_l = em.merge(new Position("Innermitt (def)", "IM (D)", Side.LEFT, mid));
+		Position im1d_c = em.merge(new Position("Innermitt (def)", "IM (D)", Side.CENTRAL, mid));
 		
-		Position im1o = em.merge(new Position("Innermitt (off)", "IM (O)", Side.CENTRAL, PositionType.MIDFIELD));
+		Position im1o = em.merge(new Position("Innermitt (off)", "IM (O)", Side.CENTRAL, mid));
 		
-		Position vy = em.merge(new Position("Vänsterytter", "VY", Side.LEFT, PositionType.MIDFIELD));
+		Position vy = em.merge(new Position("Vänsterytter", "VY", Side.LEFT, mid));
 		
-		Position fw1 = em.merge(new Position("Anfallare", "FW", Side.RIGHT, PositionType.FORWARD));
-		Position fw2 = em.merge(new Position("Anfallare", "FW", Side.LEFT, PositionType.FORWARD));
+		Position fw1 = em.merge(new Position("Anfallare", "FW", Side.RIGHT, forw));
+		Position fw2 = em.merge(new Position("Anfallare", "FW", Side.LEFT, forw));
 		
-		Position fw1_c = em.merge(new Position("Anfallare", "FW", Side.CENTRAL, PositionType.FORWARD));
+		Position fw1_c = em.merge(new Position("Anfallare", "FW", Side.CENTRAL, forw));
 		
-		Position p11 = em.merge(new Position("Avbytare", "AV", Side.CENTRAL, PositionType.SUBSTITUTE));
-		Position p12 = em.merge(new Position("Innermitt", "IM", Side.CENTRAL, PositionType.MIDFIELD));
+		Position p12 = em.merge(new Position("Innermitt", "IM", Side.CENTRAL, mid));
 		
 		
-		Position hh = em.merge(new Position("Högerhalv", "HH", Side.RIGHT, PositionType.MIDFIELD));
-		Position ch = em.merge(new Position("Centerhalv", "CH", Side.CENTRAL, PositionType.MIDFIELD));
-		Position vh = em.merge(new Position("Vänsterhalv", "VH", Side.LEFT, PositionType.MIDFIELD));
+		Position hh = em.merge(new Position("Högerhalv", "HH", Side.RIGHT, mid));
+		Position ch = em.merge(new Position("Centerhalv", "CH", Side.CENTRAL, mid));
+		Position vh = em.merge(new Position("Vänsterhalv", "VH", Side.LEFT, mid));
 		
-		Position hi = em.merge(new Position("Högerinner", "HI", Side.RIGHT, PositionType.FORWARD));
-		Position c = em.merge(new Position("Center", "CE", Side.CENTRAL, PositionType.FORWARD));
-		Position vi = em.merge(new Position("Vänsterinner", "VI", Side.LEFT, PositionType.FORWARD));
+		Position hi = em.merge(new Position("Högerinner", "HI", Side.RIGHT, forw));
+		Position c = em.merge(new Position("Center", "CE", Side.CENTRAL, forw));
+		Position vi = em.merge(new Position("Vänsterinner", "VI", Side.LEFT, forw));
 			
 
 		

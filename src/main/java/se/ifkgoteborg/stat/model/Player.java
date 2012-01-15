@@ -14,6 +14,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import se.ifkgoteborg.stat.model.enums.PositionType;
+
 
 @Entity
 @Table(name="player")
@@ -40,8 +42,13 @@ public class Player {
 	private Integer otherCompetitiveGames = 0;
 	private Integer otherPracticeGames = 0;
 	
+	private String motherClub;
+	private String playedForClubs;
+	
+	private String imageUrl;
+	
 	@ManyToOne
-	private Position position;
+	private PositionType positionType;
 	
 	@OneToMany(fetch=FetchType.EAGER, mappedBy="player")
 	private List<PlayedForClub> clubs = new ArrayList<PlayedForClub>();
@@ -112,12 +119,13 @@ public class Player {
 		this.squadNumber = squadNumber;
 	}
 
-	public Position getPosition() {
-		return position;
+	
+	public PositionType getPositionType() {
+		return positionType;
 	}
 
-	public void setPosition(Position position) {
-		this.position = position;
+	public void setPositionType(PositionType positionType) {
+		this.positionType = positionType;
 	}
 
 	public List<PlayedForClub> getClubs() {
@@ -149,6 +157,30 @@ public class Player {
 	}
 	
 	
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
+	public String getMotherClub() {
+		return motherClub;
+	}
+
+	public void setMotherClub(String motherClub) {
+		this.motherClub = motherClub;
+	}
+
+	public String getPlayedForClubs() {
+		return playedForClubs;
+	}
+
+	public void setPlayedForClubs(String playedForClubs) {
+		this.playedForClubs = playedForClubs;
+	}
 
 	public List<GameParticipation> getGames() {
 		return games;

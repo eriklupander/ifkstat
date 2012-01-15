@@ -13,9 +13,11 @@ import se.ifkgoteborg.stat.model.FormationPosition;
 import se.ifkgoteborg.stat.model.Game;
 import se.ifkgoteborg.stat.model.Ground;
 import se.ifkgoteborg.stat.model.Player;
+import se.ifkgoteborg.stat.model.Position;
 import se.ifkgoteborg.stat.model.Referee;
 import se.ifkgoteborg.stat.model.Tournament;
 import se.ifkgoteborg.stat.model.TournamentSeason;
+import se.ifkgoteborg.stat.model.enums.PositionType;
 
 public interface RegistrationDAO {
 
@@ -68,5 +70,13 @@ public interface RegistrationDAO {
 	public List<Referee> getReferees();
 
 	public Game updateGame(Game detachedGame);
+
+	public void savePlayer(Player bean);
+
+	public Player updatePlayer(Player bean);
+
+	public List<Position> getPositions();
+
+	public List<PositionType> getPositionTypes();
 
 }

@@ -1,6 +1,7 @@
 package se.ifkgoteborg.stat.ui;
 
 import java.util.HashSet;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 
@@ -33,7 +34,7 @@ public class PlayerTable extends VerticalLayout {
 	
 	BeanItemContainer<Player> bic = new BeanItemContainer<Player>(Player.class);	
 
-    Table table = new Table("ISO-3166 Country Codes and flags");
+    Table table = new Table("Spelarförteckning");
 
     HashSet<Object> markedRows = new HashSet<Object>();
     
@@ -75,11 +76,20 @@ public class PlayerTable extends VerticalLayout {
         table.setImmediate(true); // react at once when something is selected
 
         // connect data source
-        //table.setContainerDataSource(ExampleUtil.getISO3166Container());      
+       // table.setContainerDataSource(ExampleUtil.getISO3166Container());      
         
         loadPlayers();
+        
         table.setContainerDataSource(bic);
         
+        //bic.addNestedContainerProperty("nationality.name");
+
+        table.setColumnHeader("name", "Namn");
+        //table.setColumnHeader("nationality.name", "Nationalitet");
+        table.setColumnHeader("length", "Längd");
+        table.setColumnHeader("weight", "Vikt");
+        
+        table.setVisibleColumns(fields);
         // turn on column reordering and collapsing
         table.setColumnReorderingAllowed(true);
         table.setColumnCollapsingAllowed(true);
@@ -147,36 +157,27 @@ public class PlayerTable extends VerticalLayout {
             public void itemClick(ItemClickEvent event) {
                 if (event.isDoubleClick()) {
                     table.select(event.getItemId());
+                    
+                    PlayerEditor personEditor = new PlayerEditor(event.getItem(), PlayerTable.this.dao);
+                    personEditor.addListener(new EditorSavedListener() {
+                        @Override
+                        public void editorSaved(EditorSavedEvent event) {
+                            //bic.addBean(newPersonItem.getBean());
+                        	PlayerTable.this.dao.updatePlayer((Player) ((BeanItem) event.getSavedItem()).getBean());
+                        }
+                    });
+                    getApplication().getMainWindow().addWindow(personEditor);
                 }
             }
         });
     }
     
-    private static final String[] fields = new String[]{"squadNumber", "name", "fullName", "country", "height", "weight"};
+    private static final String[] fields = new String[]{"name", "length", "weight"};
 
 	public void loadPlayers() {
-//		List<Player> players = dao.getAllPlayers();
-//		
-//		ic.removeAllItems();
-//		
-//		for (String p : fields) {
-//            ic.addContainerProperty(p, String.class, "");
-//        }
-//
-//		for (Player p : players) {
-//            try {
-//				Object id = ic.addItem();
-//				ic.getContainerProperty(id, "squadNumber").setValue("#" + (p.getSquadNumber()  != null ? p.getSquadNumber() : ""));
-//				ic.getContainerProperty(id, "name").setValue(p.getName());
-//				ic.getContainerProperty(id, "fullName").setValue(p.getFullName());
-//				ic.getContainerProperty(id, "country").setValue(p.getNationality().getName());
-//				ic.getContainerProperty(id, "height").setValue(p.getLength() + " cm");
-//				ic.getContainerProperty(id, "weight").setValue(p.getWeight() + " kg");
-//			} catch (Exception e) {
-//				System.out.println("Error reading player: " + e.getMessage());
-//			}
-//        }
-//		
+		List<Player> players = dao.getAllPlayers();
+		bic.removeAllItems();
+		bic.addAll(players);
 	}
 
 
@@ -187,13 +188,13 @@ public class PlayerTable extends VerticalLayout {
 
             @Override
             public void buttonClick(ClickEvent event) {
-                final BeanItem<Player> newPersonItem = new BeanItem<Player>(
-                        new Player());
-                PlayerEditor personEditor = new PlayerEditor(newPersonItem);
+               
+                PlayerEditor personEditor = new PlayerEditor(new BeanItem<Player>(new Player()), PlayerTable.this.dao);
                 personEditor.addListener(new EditorSavedListener() {
                     @Override
                     public void editorSaved(EditorSavedEvent event) {
-                        bic.addBean(newPersonItem.getBean());
+//                        bic.addBean(newPersonItem.getBean());
+//                        dao.savePlayer(newPersonItem.getBean());
                     }
                 });
                 getApplication().getMainWindow().addWindow(personEditor);
@@ -216,8 +217,8 @@ public class PlayerTable extends VerticalLayout {
             @Override
             public void buttonClick(ClickEvent event) {
                 getApplication().getMainWindow().addWindow(
-                        new PlayerEditor(table.getItem(table
-                                .getValue())));
+                        new PlayerEditor(
+                        		table.getItem(table.getValue()), PlayerTable.this.dao));
             }
         });
         editButton.setEnabled(false);
@@ -245,14 +246,13 @@ public class PlayerTable extends VerticalLayout {
 	}
 	
 	private void updateFilters() {
-        //bic.setApplyFiltersImmediately(false);
+
         bic.removeAllContainerFilters();
        
         if (textFilter != null && !textFilter.equals("")) {
-            Or or = new Or(new Like("name", textFilter + "%", false),
-                    new Like("fullName", textFilter + "%", false));
+            Or or = new Or(new Like("name", "%" + textFilter + "%", false));
             bic.addContainerFilter(or);
         }
-        //bic.applyFilters();
+        
     }
 }
