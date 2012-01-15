@@ -38,4 +38,19 @@ public class StringUtil {
 		return buf.toString();
 	}
 
+	public static int parseSeasonStringToStartYear(String seasonName) {
+		seasonName = seasonName.replaceAll(" ", "/");
+		if(seasonName.trim().indexOf("/") > -1) {
+			String[] parts = seasonName.trim().split("/");
+			if(parts.length > 0)
+				if(parts[0].trim().length() == 2) {
+					parts[0] = "19" + parts[0].trim();
+				}
+				
+				return Integer.parseInt(parts[0].trim());
+		} else {
+			return Integer.parseInt(seasonName.trim());
+		}
+	}
+
 }

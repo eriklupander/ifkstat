@@ -1,4 +1,4 @@
-package se.ifkgoteborg.stat.importer;
+package se.ifkgoteborg.stat.importer.transformer;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,6 +17,8 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+
+import se.ifkgoteborg.stat.util.StringUtil;
 
 
 public class XlsTransformer {
@@ -89,6 +91,7 @@ public class XlsTransformer {
 		}
 		
 		String season =  f.getName().replaceAll("[^\\d]", " ").trim();
+		int startYear = StringUtil.parseSeasonStringToStartYear(season);
 		buf.append("$$$$" + season + "\n");
 		
 		InputStream inputStream = null;
@@ -139,10 +142,10 @@ public class XlsTransformer {
 			// Börja läsa ut turneringar, radindex 6
 			
 			
-			int lastRow = readTournament(sheet, maxIndex, 4);
+			int lastRow = readTournament(sheet, maxIndex, 4, startYear);
 			while(lastRow < sheet.getLastRowNum()) {
 				if(rowHasData(sheet, lastRow)) {
-					lastRow = readTournament(sheet, maxIndex, lastRow);
+					lastRow = readTournament(sheet, maxIndex, lastRow, startYear);
 				} else {
 					lastRow++;
 				}
@@ -163,7 +166,7 @@ public class XlsTransformer {
 		return blockList.contains(name);
 	}
 
-	private int readTournament(HSSFSheet sheet, int maxIndex, int startRow) {
+	private int readTournament(HSSFSheet sheet, int maxIndex, int startRow, int startYear) {
 		HSSFRow tournamentRow = sheet.getRow(startRow);
 		HSSFCell tournamentCell = tournamentRow.getCell(1);
 		
@@ -185,18 +188,18 @@ public class XlsTransformer {
 		
 		do {
 			
-			rowIndex = readGame(sheet, maxIndex, rowIndex);
+			rowIndex = readGame(sheet, maxIndex, rowIndex, startYear);
 		} while(rowHasData(sheet, rowIndex));
 		
 		return rowIndex;
 	}
 
-	private int readGame(HSSFSheet sheet, int maxIndex, int rowIndex) {
+	private int readGame(HSSFSheet sheet, int maxIndex, int rowIndex, int startYear) {
 		HSSFRow gameRow = sheet.getRow(rowIndex);
 		int cellIndex = 1;
 		
 		do {
-			cellIndex = readCell(gameRow, cellIndex);
+			cellIndex = readCell(gameRow, cellIndex, startYear);
 		} while(cellIndex < (maxIndex+PLAYERS_STARTINDEX));
 		
 		buf.append("\n");
@@ -206,7 +209,7 @@ public class XlsTransformer {
 
 	
 	
-	private int readCell(HSSFRow gameRow, int cellIndex) {
+	private int readCell(HSSFRow gameRow, int cellIndex, int startYear) {
 		int numOfGoals = 0;
 		if(cellIndex > 8) {			
 			// Check formatting for goals for all player indexes
@@ -215,7 +218,12 @@ public class XlsTransformer {
 			
 		if(cellIndex == 7) {
 			buf.append(formatNumberCell(gameRow, cellIndex) + "\t");
-			buf.append("4-4-2\t");
+			
+			if(startYear < 2004) {
+				buf.append(getFormationByYear(startYear));
+			} else {
+				buf.append("XXXX\t");
+			}
 		} else {
 			if(gameRow.getCell(cellIndex) != null) {
 				writeOpponentTeam(gameRow, cellIndex);				
@@ -230,6 +238,15 @@ public class XlsTransformer {
 		
 		cellIndex++;
 		return cellIndex;
+	}
+
+	private String getFormationByYear(int year) {
+		 
+		if(year < 1971) {
+			return "2-3-5\t";
+		} else {
+			return "4-4-2\t";
+		}
 	}
 
 	private void writeGoals(int numOfGoals) {

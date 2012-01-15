@@ -159,7 +159,7 @@ public class GameTable extends VerticalLayout {
 
 	public void refresh() {
 		if(tournamentComboBox != null)
-			tournamentComboBox = new ComboBoxFactory(dao).getTournamentComboBox();
+			tournamentComboBox.setContainerDataSource(new ComboBoxFactory(dao).getTournamentDataSource());
 		if(seasonComboBox != null)
 			seasonComboBox.setVisible(false);
 	}

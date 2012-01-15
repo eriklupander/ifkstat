@@ -18,6 +18,8 @@ public class MasterImporter {
 
 	public void importMasterFile(String data) {
 		
+		long start = System.currentTimeMillis();
+		
 		// Split per season:
 		String[] seasons = data.split("\\$\\$\\$\\$");
 		System.out.println("Number of seasons: " + seasons.length);
@@ -28,7 +30,10 @@ public class MasterImporter {
 			}
 		}
 		
-		
+		System.out.println("Import finished in " + (System.currentTimeMillis() - start) + " ms.");
+		System.out.println("Goals imported: " + GameImporter.goalsImported);
+		System.out.println("Subst in imported: " + GameImporter.subInImported);
+		System.out.println("Subst out imported: " + GameImporter.subOutImported);
 	}
 
 	private void parseSeason(String data) {

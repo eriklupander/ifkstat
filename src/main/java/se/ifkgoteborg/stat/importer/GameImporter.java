@@ -24,6 +24,11 @@ import se.ifkgoteborg.stat.util.StringUtil;
 
 
 public class GameImporter {
+	
+	public static int goalsImported = 0;
+	public static int subInImported = 0;
+	public static int subOutImported = 0;
+
 
 	private static final SimpleDateFormat sdf = new SimpleDateFormat(
 			"yyyy/dd/MM");
@@ -184,13 +189,13 @@ public class GameImporter {
 				}
 				// OK, player did participate. Get player of current index,
 				// start building GameParticipation list.
-				String data = cells[a].trim().replaceAll("[^\\d]", "");
-				
-				if(data.trim().length() == 0) {
+				String cleanedCellData = cells[a].trim().replaceAll("[^\\d]", "");
+				String rawData = cells[a].trim();
+				if(cleanedCellData.trim().length() == 0) {
 					System.out.println("WARNING: unknown cell data: " + cells[a]);
 					break;
 				}
-				int positionId = Integer.parseInt(data);
+				int positionId = Integer.parseInt(cleanedCellData);
 				int goalsScored = 0;
 				
 				// Some years use a "raised" integer after the number instead of the * to mark goals.
@@ -203,27 +208,29 @@ public class GameImporter {
 				}
 
 				Player player = players.get(new Integer(a - OFFSET));
-				System.out.println("Got player: " + player.getName());
+				
 				// Add a participation
 				GameParticipation gp = new GameParticipation();
 				gp.setPlayer(player);
 				gp.setGame(g);
 				gp.setPositionId(positionId);
 				//gp.setPlayerNumber(player.getSquadNumber());
-				gp.setFormationPosition(getFormationPosition("4-4-2", positionId));
+				gp.setFormationPosition(getFormationPosition(g.getFormation().getName(), positionId));
 				g.getGameParticipation().add(gp);
-				//player.getGames().add(gp);
+				
 				// Check for special characters
-				if (data.indexOf(GOAL_TOKEN) > -1) {
+				if (rawData.indexOf(GOAL_TOKEN) > -1) {
 					// How many?
-					int numberOfGoals = StringUtil.countOccurrences(data,
+					int numberOfGoals = StringUtil.countOccurrences(rawData,
 							GOAL_TOKEN);
 					for (int i = 0; i < numberOfGoals; i++) {
 						// Add a GameEvent instance for each goal.
 						GameEvent event = new GameEvent();
 						event.setEventType(EventType.GOAL);
 						event.setPlayer(player);
+						event.setGame(g);
 						g.getEvents().add(event);
+						goalsImported++;
 					}
 				} else if(goalsScored > 0) {
 					for (int i = 0; i < goalsScored; i++) {
@@ -231,19 +238,22 @@ public class GameImporter {
 						GameEvent event = new GameEvent();
 						event.setEventType(EventType.GOAL);
 						event.setPlayer(player);
+						event.setGame(g);
 						g.getEvents().add(event);
+						goalsImported++;
 					}
 				}
-				if (data.indexOf(SUBST_TOKEN) > -1 || data.indexOf(SUBST_TOKEN_ALT) > -1) {
+				if (rawData.indexOf(SUBST_TOKEN) > -1 || rawData.indexOf(SUBST_TOKEN_ALT) > -1) {
 					// For a subst, check which POSITION the number refers to
 					// and add a subst IN event
 					GameEvent event = new GameEvent();
 					event.setPlayer(player);
 					event.setEventType(EventType.SUBSTITUTION_IN);
+					event.setGame(g);
 					g.getEvents().add(event);
 					
 					gp.setParticipationType(ParticipationType.SUBSTITUTE_IN);
-					
+					subInImported++;
 					// Add ID to list so we can post-process and set the SUBST_OUT properly
 					substitutedPositions.add(positionId);
 					
@@ -273,7 +283,9 @@ public class GameImporter {
 					GameEvent ge = new GameEvent();
 					ge.setEventType(EventType.SUBSTITUTION_OUT);
 					ge.setPlayer(gp.getPlayer());
+					ge.setGame(g);
 					g.getEvents().add(ge);
+					subOutImported++;
 					break;
 				}
 			}

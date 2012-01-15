@@ -67,4 +67,6 @@ public interface RegistrationDAO {
 
 	public List<Referee> getReferees();
 
+	public Game updateGame(Game detachedGame);
+
 }

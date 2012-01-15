@@ -1,12 +1,16 @@
 package se.ifkgoteborg.stat.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="game_event")
 public class GameEvent {
 
 	public enum EventType {
@@ -17,14 +21,14 @@ public class GameEvent {
 	@GeneratedValue
 	private Long id;
 	
-	@Enumerated
+	@Enumerated(value=EnumType.STRING)
 	private EventType eventType;
 	private Integer gameMinute;
 	
 	@ManyToOne
 	private Player player;
 	
-	@ManyToOne
+	@ManyToOne(cascade={CascadeType.PERSIST, CascadeType.MERGE})
 	private Game game;
 	
 	public Long getId() {

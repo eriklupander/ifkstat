@@ -55,7 +55,7 @@ public class GameDetailsView extends VerticalLayout {
         t.setColumnHeader("formationPosition.position.name", "Position");
         t.setColumnHeader("participationType.name", "Notering");
 
-        t.setVisibleColumns(new String[]{"player.squadNumber", "player.name"}); // ,"formationPosition.position.name", "participationType.name"
+        t.setVisibleColumns(new String[]{"player.squadNumber", "player.name","formationPosition.position.name", "participationType.name"});
 		return t;
 	}
 	

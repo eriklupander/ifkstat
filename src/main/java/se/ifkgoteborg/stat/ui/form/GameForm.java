@@ -6,6 +6,7 @@ import java.util.HashSet;
 import se.ifkgoteborg.stat.controller.RegistrationDAO;
 import se.ifkgoteborg.stat.model.Game;
 
+import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Field;
@@ -68,6 +69,12 @@ public class GameForm extends Form {
 	            public void buttonClick(ClickEvent event) {
 	                // Save...
 	            	System.out.println("Saved clicked...");
+	            	commit();
+	            	// Get item from form.	        
+	            	Item item = getItemDataSource();	            	
+	            	BeanItem<Game> bi = (BeanItem<Game>) item;	            	
+	            	Game g = bi.getBean();	            	
+	            	dao.updateGame(g);
 	            }
 	        });
 		ourLayout.addComponent(saveButton, 1, 6);

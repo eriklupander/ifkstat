@@ -275,11 +275,11 @@ public class RegistrationDAOBean implements RegistrationDAO {
 					getSingleResult();
 		} catch (NoResultException e) {
 			// Create new tournament with this name			
-			return createSeasonFromString(season); 
+			return em.merge(createSeasonFromString(season)); 
 		}
 	}
 	
-	private Season createSeasonFromString(String seasonName) {
+	Season createSeasonFromString(String seasonName) {
 		int startYear;
 		int endYear;
 		if(seasonName.trim().indexOf("/") > -1) {
@@ -291,7 +291,11 @@ public class RegistrationDAOBean implements RegistrationDAO {
 				
 				startYear = Integer.parseInt(parts[0].trim());
 			if(parts.length > 1) {
-				endYear = Integer.parseInt(parts[0].substring(0, 2) + "" + parts[1].trim());
+				if(parts[1].trim().length() < 3) {
+					endYear = Integer.parseInt(parts[0].substring(0, 2) + "" + parts[1].trim());
+				} else {
+					endYear = Integer.parseInt(parts[1].trim());
+				}
 			} else {
 				endYear = startYear;
 			}
@@ -300,7 +304,7 @@ public class RegistrationDAOBean implements RegistrationDAO {
 			endYear = startYear;
 		}
 		
-		return em.merge(new Season(seasonName, startYear, endYear));
+		return new Season(seasonName, startYear, endYear);
 	}
 
 
@@ -342,6 +346,17 @@ public class RegistrationDAOBean implements RegistrationDAO {
 			g.setFormation(getFormationByName(g.getFormation().getName()));
 		}
 		em.persist(g);
+	}
+	
+	@Override
+	public Game updateGame(Game detachedGame) {
+		
+		if(detachedGame.getReferee() != null && detachedGame.getReferee().getId() == null) {
+			Referee ref = em.merge(detachedGame.getReferee());
+			detachedGame.setReferee(ref);
+		}
+		
+		return em.merge(detachedGame);
 	}
 
 

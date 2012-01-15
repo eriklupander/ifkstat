@@ -1,12 +1,12 @@
 package se.ifkgoteborg.stat.ui.control;
 
-import java.util.Date;
 import java.util.List;
 
 import se.ifkgoteborg.stat.controller.RegistrationDAO;
 import se.ifkgoteborg.stat.model.Tournament;
 import se.ifkgoteborg.stat.model.TournamentSeason;
 
+import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.ui.AbstractSelect.Filtering;
 import com.vaadin.ui.ComboBox;
 
@@ -51,5 +51,15 @@ public class ComboBoxFactory {
         l.setImmediate(true);
         
         return l;
+	}
+
+
+	public IndexedContainer getTournamentDataSource() {
+		IndexedContainer ic = new IndexedContainer();
+		List<Tournament> tournaments = dao.getTournaments();
+		for (int i = 0; i < tournaments.size(); i++) {
+	        ic.addItem(tournaments.get(i).getName());
+	    }
+		return ic;
 	}
 }

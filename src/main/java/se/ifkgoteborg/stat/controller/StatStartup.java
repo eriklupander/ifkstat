@@ -44,15 +44,7 @@ public class StatStartup {
 		
 		if(!runInitData)
 			return;
-		
-		Tournament t1 = em.merge(new Tournament("Allsvenskan", false));
-		Tournament t2 = em.merge(new Tournament("Svenska Cupen", false));
-		Tournament t3 = em.merge(new Tournament("Champions League", true));
-		Tournament t4 = em.merge(new Tournament("UEFA cupen", true));
-		Tournament t5 = em.merge(new Tournament("Cupvinnarcupen", true));
-		Tournament t6 = em.merge(new Tournament("UEFA Euro League", true));
-		Tournament t7 = em.merge(new Tournament("Royal League", true));
-		Tournament t8 = em.merge(new Tournament("Träningsmatch", false));
+	
 		
 		// TODO add "is init" check
 	
