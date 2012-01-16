@@ -3,7 +3,7 @@ package se.ifkgoteborg.stat.ui.form;
 import java.util.List;
 
 import se.ifkgoteborg.stat.controller.RegistrationDAO;
-import se.ifkgoteborg.stat.model.enums.PositionType;
+import se.ifkgoteborg.stat.model.PositionType;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
@@ -49,7 +49,7 @@ private static final long serialVersionUID = 1L;
         } else if("dateOfBirth".equals(propertyId)) {
         	Property itemProperty = item.getItemProperty(propertyId);
         	
-        	PopupDateField datetime = new PopupDateField("Fˆdelsedatum");
+        	PopupDateField datetime = new PopupDateField("F√∂delsedatum");
         	datetime.setResolution(PopupDateField.RESOLUTION_DAY);
         	datetime.setValue(item.getItemProperty(propertyId).getValue());
         	datetime.setRequired(false);
@@ -71,10 +71,10 @@ private static final long serialVersionUID = 1L;
 			return "Namn";
 		}
 		if("fullName".equals(propertyId)) {
-			return "Fullst‰ndigt namn";
+			return "Fullst√§ndigt namn";
 		}
 		if("length".equals(propertyId)) {
-			return "L‰ngd";
+			return "L√§ngd";
 		}
 		if("weight".equals(propertyId)) {
 			return "Vikt";
@@ -83,13 +83,13 @@ private static final long serialVersionUID = 1L;
 			return "Moderklubb";
 		}
 		if("playedForClubs".equals(propertyId)) {
-			return "÷vriga klubbar";
+			return "√ñvriga klubbar";
 		}
 		if("otherCompetitiveGames".equals(propertyId)) {
-			return "÷vriga t‰vlingsmatcher";
+			return "√ñvriga t√§vlingsmatcher";
 		}
 		if("otherPracticeGames".equals(propertyId)) {
-			return "÷vriga v‰nskapsmatcher";
+			return "√ñvriga v√§nskapsmatcher";
 		}
 		return "";
 	}

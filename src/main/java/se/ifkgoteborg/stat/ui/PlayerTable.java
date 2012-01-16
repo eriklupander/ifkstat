@@ -34,7 +34,7 @@ public class PlayerTable extends VerticalLayout {
 	
 	BeanItemContainer<Player> bic = new BeanItemContainer<Player>(Player.class);	
 
-    Table table = new Table("Spelarförteckning");
+    Table table = new Table("SpelarfÃ¶rteckning");
 
     HashSet<Object> markedRows = new HashSet<Object>();
     
@@ -86,7 +86,7 @@ public class PlayerTable extends VerticalLayout {
 
         table.setColumnHeader("name", "Namn");
         //table.setColumnHeader("nationality.name", "Nationalitet");
-        table.setColumnHeader("length", "Längd");
+        table.setColumnHeader("length", "LÃ¤ngd");
         table.setColumnHeader("weight", "Vikt");
         
         table.setVisibleColumns(fields);

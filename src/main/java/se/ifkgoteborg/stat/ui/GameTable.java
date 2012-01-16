@@ -47,6 +47,9 @@ public class GameTable extends VerticalLayout {
 			@Override
 			public void valueChange(ValueChangeEvent event) {
 				String tournamentName = (String) event.getProperty().getValue();
+				if(tournamentName == null)
+					return;
+				
 				final Tournament t = GameTable.this.dao.getOrCreateTournamentByName(tournamentName);
 				System.out.println("Loaded tournament " + t.getName());
 				if(hl.getComponentCount() > 1) {

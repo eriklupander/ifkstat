@@ -20,11 +20,11 @@ public class PlayerEditor extends Window  {
 		this.dao = dao;
 		
 		PlayerForm form = new PlayerForm(dao, player);
-		setWidth(600, UNITS_PIXELS);
+		setWidth(700, UNITS_PIXELS);
 		this.caption =  (String) player.getItemProperty("name").getValue();
 		 // Set form caption and description texts 
 		setCaption(caption);
-		addComponent(form);
+		addComponent(form);		
 	}
 
 	/**

@@ -20,11 +20,11 @@ import se.ifkgoteborg.stat.model.Ground;
 import se.ifkgoteborg.stat.model.PlayedForClub;
 import se.ifkgoteborg.stat.model.Player;
 import se.ifkgoteborg.stat.model.Position;
+import se.ifkgoteborg.stat.model.PositionType;
 import se.ifkgoteborg.stat.model.Referee;
 import se.ifkgoteborg.stat.model.Season;
 import se.ifkgoteborg.stat.model.Tournament;
 import se.ifkgoteborg.stat.model.TournamentSeason;
-import se.ifkgoteborg.stat.model.enums.PositionType;
 import se.ifkgoteborg.stat.util.DateFactory;
 
 @Stateless
@@ -352,7 +352,20 @@ public class RegistrationDAOBean implements RegistrationDAO {
 		} else {
 			g.setFormation(getFormationByName(g.getFormation().getName()));
 		}
-		em.persist(g);
+		
+		// Check if game exists (by date)
+		try {
+			Game dbG = (Game) em.createQuery("select g from Game g WHERE g.dateOfGame=:date")
+				.setParameter("date", g.getDateOfGame())
+				.getSingleResult();
+			
+			// OOPS! Game already exists. Skip.
+		} catch (NoResultException e) {
+			// No previous game that day. Persist
+			em.persist(g);
+		}
+		
+		
 	}
 	
 	@Override

@@ -8,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import se.ifkgoteborg.stat.model.enums.PositionType;
 import se.ifkgoteborg.stat.model.enums.Side;
 
 @Entity

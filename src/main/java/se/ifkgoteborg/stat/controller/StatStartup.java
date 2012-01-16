@@ -13,9 +13,9 @@ import se.ifkgoteborg.stat.model.Formation;
 import se.ifkgoteborg.stat.model.FormationPosition;
 import se.ifkgoteborg.stat.model.Ground;
 import se.ifkgoteborg.stat.model.Position;
+import se.ifkgoteborg.stat.model.PositionType;
 import se.ifkgoteborg.stat.model.Setting;
 import se.ifkgoteborg.stat.model.Tournament;
-import se.ifkgoteborg.stat.model.enums.PositionType;
 import se.ifkgoteborg.stat.model.enums.Side;
 
 @Startup
@@ -113,10 +113,10 @@ public class StatStartup {
 //		pl2 = em.merge(pl2);
 //		
 		
-		PositionType gk = new PositionType("Målvakt");
-		PositionType def = new PositionType("Försvarare");
-		PositionType mid = new PositionType("Mittfältare");
-		PositionType forw = new PositionType("Anfallare");
+		PositionType gk = em.merge(new PositionType("Målvakt"));
+		PositionType def = em.merge(new PositionType("Försvarare"));
+		PositionType mid = em.merge(new PositionType("Mittfältare"));
+		PositionType forw = em.merge(new PositionType("Anfallare"));
 		
 		// Positioner f�r 4-4-2
 		Position mv = em.merge(new Position("Målvakt", "MV", Side.CENTRAL, gk));

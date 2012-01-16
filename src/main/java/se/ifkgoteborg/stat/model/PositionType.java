@@ -1,8 +1,12 @@
-package se.ifkgoteborg.stat.model.enums;
+package se.ifkgoteborg.stat.model;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -14,6 +18,11 @@ public class PositionType {
 	private Long id;
 	
 	private String name;
+	
+	@OneToMany(mappedBy="positionType")
+	private List<Position> positions = new ArrayList<Position>();
+	
+	private PositionType() {}
 
 	public PositionType(String name) {
 		this.name = name;		
@@ -33,6 +42,16 @@ public class PositionType {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	
+
+	public List<Position> getPositions() {
+		return positions;
+	}
+
+	public void setPositions(List<Position> positions) {
+		this.positions = positions;
 	}
 
 	@Override
