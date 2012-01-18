@@ -12,10 +12,12 @@ import se.ifkgoteborg.stat.model.Formation;
 import se.ifkgoteborg.stat.model.FormationPosition;
 import se.ifkgoteborg.stat.model.Game;
 import se.ifkgoteborg.stat.model.Ground;
+import se.ifkgoteborg.stat.model.PlayedForClub;
 import se.ifkgoteborg.stat.model.Player;
 import se.ifkgoteborg.stat.model.Position;
 import se.ifkgoteborg.stat.model.PositionType;
 import se.ifkgoteborg.stat.model.Referee;
+import se.ifkgoteborg.stat.model.Season;
 import se.ifkgoteborg.stat.model.Tournament;
 import se.ifkgoteborg.stat.model.TournamentSeason;
 
@@ -78,5 +80,9 @@ public interface RegistrationDAO {
 	public List<Position> getPositions();
 
 	public List<PositionType> getPositionTypes();
+
+	public List<Season> getSeasons();
+
+	public void removePlayedForClub(PlayedForClub selectedItem);
 
 }

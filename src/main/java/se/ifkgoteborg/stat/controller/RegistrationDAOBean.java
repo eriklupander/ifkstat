@@ -430,5 +430,27 @@ public class RegistrationDAOBean implements RegistrationDAO {
 	public List<PositionType> getPositionTypes() {
 		return em.createQuery("select p from PositionType p ORDER BY p.name").getResultList();
 	}
+
+
+	@Override
+	public List<Season> getSeasons() {
+		List<Season> resultList = em.createQuery("select s from Season s ORDER BY s.name DESC").getResultList();
+		
+		for(Season s : resultList) {
+			s.getSquad().size();
+		}
+		return resultList;
+	}
+
+
+	@Override
+	public void removePlayedForClub(PlayedForClub selectedItem) {
+		if(selectedItem == null || selectedItem.getId() == null) {
+			return;
+		}
+		PlayedForClub pfc = em.find(PlayedForClub.class, selectedItem.getId());
+		em.remove(pfc);
+		em.flush();
+	}
 	
 }

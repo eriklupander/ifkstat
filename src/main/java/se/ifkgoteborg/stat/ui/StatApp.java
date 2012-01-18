@@ -32,7 +32,8 @@ public class StatApp extends Application {
             "../sampler/icons/comment_yellow.gif");
     private static final ThemeResource icon3 = new ThemeResource(
             "../sampler/icons/icon_info.gif");
-    
+    private static final ThemeResource icon4 = new ThemeResource(
+            "../sampler/icons/icon_info.gif");
         
    
     PlayerTable playerTableView = null;    
@@ -45,25 +46,30 @@ public class StatApp extends Application {
         playerTableView = new PlayerTable(dao, em);
         gameTableView = new GameTable(dao);
         
-        VerticalLayout l1 = new VerticalLayout();
-        l1.setMargin(true);
-        l1.addComponent(playerTableView);
+        VerticalLayout playerTab = new VerticalLayout();
+        playerTab.setMargin(true);
+        playerTab.addComponent(playerTableView);
         // Tab 2 content
-        VerticalLayout l2 = new VerticalLayout();
-        l2.setMargin(true);
-        l2.addComponent(gameTableView);
+        VerticalLayout gamesTab = new VerticalLayout();
+        gamesTab.setMargin(true);
+        gamesTab.addComponent(gameTableView);
         // Tab 3 content
-        VerticalLayout l3 = new VerticalLayout();
-        l3.setMargin(true);
-        l3.addComponent(new ImportView(dao));
+        VerticalLayout importTab = new VerticalLayout();
+        importTab.setMargin(true);
+        importTab.addComponent(new ImportView(dao));
+        // Season content
+        VerticalLayout seasonTab = new VerticalLayout();
+        seasonTab.setMargin(true);
+        seasonTab.addComponent(new SeasonView(dao));
         
 
         TabSheet t = new TabSheet();
         t.setHeight("100%");
         t.setWidth("100%");
-        t.addTab(l1, "Spelare", icon1);
-        t.addTab(l2, "Matcher", icon2);
-        t.addTab(l3, "Import", icon3);
+        t.addTab(playerTab, "Spelare", icon1);
+        t.addTab(gamesTab, "Matcher", icon2);
+        t.addTab(seasonTab, "Säsonger", icon4);
+        t.addTab(importTab, "Import", icon3);
       
         t.addListener(new SelectedTabChangeListener()  {
 			

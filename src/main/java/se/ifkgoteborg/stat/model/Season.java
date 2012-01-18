@@ -1,10 +1,13 @@
 package se.ifkgoteborg.stat.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -26,6 +29,9 @@ public class Season {
 	private Date endYear;
 	
 	private String name;
+	
+	@OneToMany(mappedBy="season")
+	private List<PlayedForClub> squad = new ArrayList<PlayedForClub>();
 	
 	private Season() {}
 	
@@ -76,6 +82,16 @@ public class Season {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
+
+	public List<PlayedForClub> getSquad() {
+		return squad;
+	}
+
+	public void setSquad(List<PlayedForClub> squad) {
+		this.squad = squad;
+	}
+
+	public String toString() {
+		return this.name;
+	}
 }
