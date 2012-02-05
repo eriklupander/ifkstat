@@ -22,10 +22,7 @@ public class StatApp extends Application {
 	
 	@Inject
     RegistrationDAO dao;
-	
-	@Inject
-	EntityManager em;
-	
+		
 	private static final ThemeResource icon1 = new ThemeResource(
             "../sampler/icons/action_save.gif");
     private static final ThemeResource icon2 = new ThemeResource(
@@ -36,15 +33,16 @@ public class StatApp extends Application {
             "../sampler/icons/icon_info.gif");
         
    
-    PlayerTable playerTableView = null;    
-    GameTable gameTableView = null;
+    PlayerView playerTableView = null;    
+    GameView gameTableView = null;
+    SeasonView seasonView = null;
 	
 	public void init() { 
         Window main = new Window("IFK-statistik"); 
         setMainWindow(main);
                 
-        playerTableView = new PlayerTable(dao, em);
-        gameTableView = new GameTable(dao);
+        playerTableView = new PlayerView(dao);
+        gameTableView = new GameView(dao);
         
         VerticalLayout playerTab = new VerticalLayout();
         playerTab.setMargin(true);
@@ -52,15 +50,16 @@ public class StatApp extends Application {
         // Tab 2 content
         VerticalLayout gamesTab = new VerticalLayout();
         gamesTab.setMargin(true);
-        gamesTab.addComponent(gameTableView);
+        gamesTab.addComponent(gameTableView);        
         // Tab 3 content
         VerticalLayout importTab = new VerticalLayout();
         importTab.setMargin(true);
         importTab.addComponent(new ImportView(dao));
         // Season content
+        seasonView = new SeasonView(dao);
         VerticalLayout seasonTab = new VerticalLayout();
         seasonTab.setMargin(true);
-        seasonTab.addComponent(new SeasonView(dao));
+        seasonTab.addComponent(seasonView);
         
 
         TabSheet t = new TabSheet();
@@ -84,6 +83,9 @@ public class StatApp extends Application {
                     }
                     if(tab.getCaption().equals("Matcher")) {
                     	gameTableView.refresh();
+                    }
+                    if(tab.getCaption().equals("Säsonger")) {
+                    	seasonView.refresh();
                     }
                 }
             }

@@ -21,7 +21,7 @@ public class PlayedForClub {
 	private Club club;
 
 	@ManyToOne
-	private Season season;
+	private SquadSeason season;
 	
 	private Integer squadNr;
 	private Integer importIndex;
@@ -46,11 +46,11 @@ public class PlayedForClub {
 		this.club = club;
 	}
 
-	public Season getSeason() {
+	public SquadSeason getSeason() {
 		return season;
 	}
 
-	public void setSeason(Season season) {
+	public void setSeason(SquadSeason season) {
 		this.season = season;
 	}
 

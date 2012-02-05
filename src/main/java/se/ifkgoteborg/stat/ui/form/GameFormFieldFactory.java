@@ -43,10 +43,9 @@ public class GameFormFieldFactory implements FormFieldFactory {
             return new TextField("Hemmamål");
         } else if ("awayGoals".equals(pid)) {
             return new TextField("Bortamål");
-        } else if("dateOfGameAsDate".equals(pid)) {
+        } else if("dateOfGame".equals(pid)) {
         	Property itemProperty = item.getItemProperty(propertyId);
-        	System.out.println(itemProperty.toString());
-        	System.out.println("Clazz: "  + itemProperty.getValue().getClass());
+
         	PopupDateField datetime = new PopupDateField("Matchdatum");
         	datetime.setResolution(PopupDateField.RESOLUTION_DAY);
         	datetime.setValue(item.getItemProperty(propertyId).getValue());

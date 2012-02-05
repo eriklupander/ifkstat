@@ -21,22 +21,10 @@ public class ImportView extends VerticalLayout {
 
 	private final RegistrationDAO dao;
 
-//	private boolean seasonSet = false;
-//	private boolean tournamentSet = false;
-//
-	//protected Integer season;
-//	protected String tournamentName;
-
     public ImportView(RegistrationDAO dao) {
     	this.dao = dao;
 		upload.setReceiver(receiver);
 
-//		addComponent(new Label("Turnering"));
-//		addComponent(getTournamentComboBox());
-//		
-//		addComponent(new Label("Säsong"));
-//		addComponent(getSeasonComboBox());
-		
 		addComponent(new Label("Säsongsfil"));
         addComponent(upload);
         addComponent(result);
@@ -56,38 +44,7 @@ public class ImportView extends VerticalLayout {
         });       
 
     }
-        
-    
 
-//	private ComboBox getSeasonComboBox() {
-//		ComboBox l = new ComboBoxFactory(dao).getSeasonComboBox();
-//		
-//        l.addListener(new ValueChangeListener() {
-//			
-//			@Override
-//			public void valueChange(ValueChangeEvent event) {
-//				seasonSet = true;
-//				season = Integer.parseInt( (String) event.getProperty().getValue());
-//				upload.setEnabled(seasonSet && tournamentSet);
-//			}
-//		});
-//		return l;
-//	}
-//
-//	private ComboBox getTournamentComboBox() {
-//		ComboBox l = new ComboBoxFactory(dao).getTournamentComboBox();
-//        l.addListener(new ValueChangeListener() {
-//			
-//			@Override
-//			public void valueChange(ValueChangeEvent event) {
-//				tournamentSet = true;
-//				tournamentName = (String) event.getProperty().getValue();
-//				upload.setEnabled(seasonSet && tournamentSet);
-//			}
-//		});
-//        
-//        return l;
-//	}
 
 	private String readFile() {
 		String file;

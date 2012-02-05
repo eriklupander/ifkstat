@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 import se.ifkgoteborg.stat.controller.RegistrationDAO;
 import se.ifkgoteborg.stat.controller.adapter.SquadPlayer;
+import se.ifkgoteborg.stat.model.SquadSeason;
 import se.ifkgoteborg.stat.util.StringUtil;
 
 public class MasterImporter {
@@ -49,7 +50,7 @@ public class MasterImporter {
         
         List<SquadPlayer> players = new PlayerImporter().importPlayers(playerData);
         
-        dao.importPlayers(players, season);
+        SquadSeason squadSeason = dao.importPlayers(players, season);
      
         String gamesData = StringUtil.getLines(data, 3);
         
@@ -81,7 +82,7 @@ public class MasterImporter {
         	}
         	 
         	String tournamentData = StringUtil.getLines(dataSet, 1);
-        	new GameImporter(dao).importTournamentSeason(tournamentData, tournamentSeason.trim(), dao.loadSquad(season), tournamentName.trim());          
+        	new GameImporter(dao).importTournamentSeason(tournamentData, tournamentSeason.trim(), dao.loadSquad(season), tournamentName.trim(), squadSeason);          
         }
 	}
 

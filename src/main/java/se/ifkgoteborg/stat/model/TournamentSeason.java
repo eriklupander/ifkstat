@@ -32,7 +32,7 @@ public class TournamentSeason {
 	
 	// Can be either a "pure" year such as 1993, or a cross-season string such as 1992/1993.
 	@ManyToOne
-	private Season season;
+	private SquadSeason season;
 	
 	/**
 	 * This should be just the year or year/year combo. Eg. 1993 or 1992/1993.
@@ -86,11 +86,11 @@ public class TournamentSeason {
 		this.games = games;
 	}
 
-	public Season getSeason() {
+	public SquadSeason getSeason() {
 		return season;
 	}
 
-	public void setSeason(Season season) {
+	public void setSeason(SquadSeason season) {
 		this.season = season;
 	}
 

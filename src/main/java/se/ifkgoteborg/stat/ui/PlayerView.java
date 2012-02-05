@@ -30,7 +30,7 @@ import com.vaadin.ui.Table.CellStyleGenerator;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
-public class PlayerTable extends VerticalLayout {
+public class PlayerView extends VerticalLayout {
 	
 	BeanItemContainer<Player> bic = new BeanItemContainer<Player>(Player.class);	
 
@@ -47,15 +47,10 @@ public class PlayerTable extends VerticalLayout {
     
     private String textFilter;
 
-	private EntityManager em;
-    
-    
-
-    public PlayerTable(RegistrationDAO dao, EntityManager em) {
+    public PlayerView(RegistrationDAO dao) {
     	
     	this.dao = dao;
-		this.em = em;
-    	
+		
     	addComponent(createToolbar());
         addComponent(table);
 
@@ -139,31 +134,18 @@ public class PlayerTable extends VerticalLayout {
 
         });
 
-        // listen for valueChange, a.k.a 'select' and update the label
-//        table.addListener(new Table.ValueChangeListener() {
-//            public void valueChange(ValueChangeEvent event) {
-//                // in multiselect mode, a Set of itemIds is returned,
-//                // in singleselect mode the itemId is returned directly
-//                Set<?> value = (Set<?>) event.getProperty().getValue();
-//                if (null == value || value.size() == 0) {
-//                    selected.setValue("No selection");
-//                } else {
-//                    selected.setValue("Selected: " + table.getValue());
-//                }
-//            }
-//        });
         table.addListener(new ItemClickListener() {
             @Override
             public void itemClick(ItemClickEvent event) {
                 if (event.isDoubleClick()) {
                     table.select(event.getItemId());
                     
-                    PlayerEditor personEditor = new PlayerEditor(event.getItem(), PlayerTable.this.dao);
+                    PlayerEditor personEditor = new PlayerEditor(event.getItem(), PlayerView.this.dao);
                     personEditor.addListener(new EditorSavedListener() {
                         @Override
                         public void editorSaved(EditorSavedEvent event) {
                             //bic.addBean(newPersonItem.getBean());
-                        	PlayerTable.this.dao.updatePlayer((Player) ((BeanItem) event.getSavedItem()).getBean());
+                        	PlayerView.this.dao.updatePlayer((Player) ((BeanItem) event.getSavedItem()).getBean());
                         }
                     });
                     getApplication().getMainWindow().addWindow(personEditor);
@@ -189,7 +171,7 @@ public class PlayerTable extends VerticalLayout {
             @Override
             public void buttonClick(ClickEvent event) {
                
-                PlayerEditor personEditor = new PlayerEditor(new BeanItem<Player>(new Player()), PlayerTable.this.dao);
+                PlayerEditor personEditor = new PlayerEditor(new BeanItem<Player>(new Player()), PlayerView.this.dao);
                 personEditor.addListener(new EditorSavedListener() {
                     @Override
                     public void editorSaved(EditorSavedEvent event) {
@@ -218,7 +200,7 @@ public class PlayerTable extends VerticalLayout {
             public void buttonClick(ClickEvent event) {
                 getApplication().getMainWindow().addWindow(
                         new PlayerEditor(
-                        		table.getItem(table.getValue()), PlayerTable.this.dao));
+                        		table.getItem(table.getValue()), PlayerView.this.dao));
             }
         });
         editButton.setEnabled(false);

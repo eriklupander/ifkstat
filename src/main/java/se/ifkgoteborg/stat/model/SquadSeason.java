@@ -15,8 +15,8 @@ import javax.persistence.TemporalType;
 import se.ifkgoteborg.stat.util.DateFactory;
 
 @Entity
-@Table(name="season")
-public class Season {
+@Table(name="squad_season")
+public class SquadSeason {
 
 	@Id
 	@GeneratedValue
@@ -33,9 +33,9 @@ public class Season {
 	@OneToMany(mappedBy="season")
 	private List<PlayedForClub> squad = new ArrayList<PlayedForClub>();
 	
-	private Season() {}
+	private SquadSeason() {}
 	
-	public Season(String name, int startYearInt, int endYearInt) {
+	public SquadSeason(String name, int startYearInt, int endYearInt) {
 		if(startYearInt < 1900 || endYearInt < 1900) {
 			throw new IllegalArgumentException("Cannot create Season instance, supplied year was < 1900. Season name: " + name + ". Start year: " + startYear + " endYear: " + endYear);
 		}

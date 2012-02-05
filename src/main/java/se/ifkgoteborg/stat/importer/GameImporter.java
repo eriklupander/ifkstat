@@ -17,6 +17,7 @@ import se.ifkgoteborg.stat.model.GameEvent.EventType;
 import se.ifkgoteborg.stat.model.GameNote;
 import se.ifkgoteborg.stat.model.GameParticipation;
 import se.ifkgoteborg.stat.model.Player;
+import se.ifkgoteborg.stat.model.SquadSeason;
 import se.ifkgoteborg.stat.model.TournamentSeason;
 import se.ifkgoteborg.stat.model.enums.ParticipationType;
 import se.ifkgoteborg.stat.util.StringUtil;
@@ -55,12 +56,13 @@ public class GameImporter {
 	 * @param players
 	 *            Integer is INDEX during this season.
 	 * @param tournamentName 
+	 * @param squadSeason 
 	 */
-	public void importTournamentSeason(String data, String season, Map<Integer, Player> players, String tournamentName) {
+	public void importTournamentSeason(String data, String season, Map<Integer, Player> players, String tournamentName, SquadSeason squadSeason) {
 		System.out.println("ENTER - importTournamentSeason: Season: " + season + ", Tournament name: " +  tournamentName);
 		
 		String[] games = data.split("\n");
-		TournamentSeason ts = dao.getTournamentSeasonByName(tournamentName, season);
+		TournamentSeason ts = dao.getTournamentSeasonByName(tournamentName, squadSeason);
 		int offset = 0;
 		Date dateOfLastGame = null;
 		for (String game : games) {
@@ -79,7 +81,6 @@ public class GameImporter {
 		
 		System.out.println("Import game of season: " + year);
 
-		
 		String[] cells = dataRow.split("\t");
 
 		Game g = new Game();

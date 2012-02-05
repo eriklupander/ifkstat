@@ -6,42 +6,43 @@ import java.util.List;
 import se.ifkgoteborg.stat.controller.RegistrationDAO;
 import se.ifkgoteborg.stat.model.Game;
 import se.ifkgoteborg.stat.model.Tournament;
-import se.ifkgoteborg.stat.model.TournamentSeason;
 import se.ifkgoteborg.stat.ui.control.ComboBoxFactory;
+import se.ifkgoteborg.stat.ui.editor.GameEditor;
 import se.ifkgoteborg.stat.ui.wrapper.GameTableWrapper;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.event.ItemClickEvent;
+import com.vaadin.event.ItemClickEvent.ItemClickListener;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Table.CellStyleGenerator;
 import com.vaadin.ui.VerticalLayout;
 
-public class GameTable extends VerticalLayout {
+public class GameView extends VerticalLayout {
 	
 	BeanItemContainer<GameTableWrapper> beans =
 		    new BeanItemContainer<GameTableWrapper>(GameTableWrapper.class);
 
     Table table = new Table("");
-    //Panel panel = null;
-    GameDetailsView gameDetailsView = null;
     HashSet<Object> markedRows = new HashSet<Object>();
     
     RegistrationDAO dao;
     HorizontalLayout hl = new HorizontalLayout();
+   // HorizontalLayout buttons = new HorizontalLayout();
     ComboBox seasonComboBox;
     ComboBox tournamentComboBox;
     
-    public GameTable(RegistrationDAO dao) {
+    public GameView(RegistrationDAO dao) {
     	
     	this.dao = dao;    	
     	
     	tournamentComboBox = new ComboBoxFactory(dao).getTournamentComboBox();
-    	 
-    	
     	tournamentComboBox.addListener(new ValueChangeListener() {
 			
 			@Override
@@ -50,17 +51,17 @@ public class GameTable extends VerticalLayout {
 				if(tournamentName == null)
 					return;
 				
-				final Tournament t = GameTable.this.dao.getOrCreateTournamentByName(tournamentName);
+				final Tournament t = GameView.this.dao.getOrCreateTournamentByName(tournamentName);
 				System.out.println("Loaded tournament " + t.getName());
 				if(hl.getComponentCount() > 1) {
 					hl.removeComponent(hl.getComponent(1));
 				}
-				seasonComboBox = new ComboBoxFactory(GameTable.this.dao).getSeasonComboBox(t.getId());
+				seasonComboBox = new ComboBoxFactory(GameView.this.dao).getSeasonComboBox(t.getId());
 				seasonComboBox.addListener(new ValueChangeListener() {
 
 					@Override
 					public void valueChange(ValueChangeEvent event) {
-						List<Game> games = GameTable.this.dao.getGames(t.getId(),  event.getProperty().getValue().toString());
+						List<Game> games = GameView.this.dao.getGames(t.getId(),  event.getProperty().getValue().toString());
 						
 						// Populate game list...
 						beans.removeAllItems();
@@ -70,7 +71,32 @@ public class GameTable extends VerticalLayout {
 				        }
 						
 						if(getComponentCount() < 2) {
-							addComponent(table, 1);
+							HorizontalLayout buttons = new HorizontalLayout();
+							Button addBtn = new Button("Lägg till match");
+							Button removeBtn = new Button("Ta bort match");
+							buttons.addComponent(addBtn);
+							addBtn.addListener(new Button.ClickListener() {
+								
+								@Override
+								public void buttonClick(ClickEvent event) {
+									GameEditor ge = new GameEditor(new Game(), GameView.this.dao);
+						            getApplication().getMainWindow().addWindow(ge);
+								}
+							});
+							
+							removeBtn.addListener(new Button.ClickListener() {
+								
+								@Override
+								public void buttonClick(ClickEvent event) {
+									beans.removeItem(table.getValue());									
+								}
+							});
+							
+							buttons.removeComponent(removeBtn);
+							VerticalLayout tableAndBtns = new VerticalLayout();
+							tableAndBtns.addComponent(buttons);
+							tableAndBtns.addComponent(table);
+							addComponent(tableAndBtns, 1);
 						}
 					}
 					
@@ -91,7 +117,7 @@ public class GameTable extends VerticalLayout {
 
         // size
         table.setWidth("100%");
-        table.setHeight("170px");
+        table.setHeight("400px");
 
         // selectable
         table.setSelectable(true);
@@ -144,18 +170,19 @@ public class GameTable extends VerticalLayout {
         });
         
         // listen for valueChange, a.k.a 'select'
-        table.addListener(new Table.ValueChangeListener() {
-            public void valueChange(ValueChangeEvent event) {
+        table.addListener(new ItemClickListener() {
+            @Override
+            public void itemClick(ItemClickEvent event) {
+                if (event.isDoubleClick()) {
+                    table.select(event.getItemId());
                
-            	GameTableWrapper gtw = (GameTableWrapper) event.getProperty().getValue();
-                
-            	Game g = GameTable.this.dao.getGame(gtw.getId());
-            	
-               if(gameDetailsView != null) {
-            	   GameTable.this.removeComponent(gameDetailsView);
-               }            	
-            	gameDetailsView = new GameDetailsView(g, GameTable.this.dao);
-            	addComponent(gameDetailsView);
+	            	BeanItem<GameTableWrapper> gtw = (BeanItem<GameTableWrapper>) event.getItem();
+	                
+	            	Game g = GameView.this.dao.getGame(gtw.getBean().getId());
+	            	                      	
+	               GameEditor ge = new GameEditor(g, GameView.this.dao);
+	               getApplication().getMainWindow().addWindow(ge);
+	            }
             }
         });
     }

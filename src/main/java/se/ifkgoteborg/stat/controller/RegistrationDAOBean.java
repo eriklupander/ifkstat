@@ -22,7 +22,7 @@ import se.ifkgoteborg.stat.model.Player;
 import se.ifkgoteborg.stat.model.Position;
 import se.ifkgoteborg.stat.model.PositionType;
 import se.ifkgoteborg.stat.model.Referee;
-import se.ifkgoteborg.stat.model.Season;
+import se.ifkgoteborg.stat.model.SquadSeason;
 import se.ifkgoteborg.stat.model.Tournament;
 import se.ifkgoteborg.stat.model.TournamentSeason;
 import se.ifkgoteborg.stat.util.DateFactory;
@@ -104,9 +104,9 @@ public class RegistrationDAOBean implements RegistrationDAO {
 
 
 	@Override
-	public void importPlayers(List<SquadPlayer> players, String season) {
+	public SquadSeason importPlayers(List<SquadPlayer> players, String season) {
 		
-		Season s = getOrCreateSeason(season.trim());
+		SquadSeason s = getOrCreateSquadSeason(season.trim());
 		
 		Club club = getDefaultClub();
 		
@@ -140,6 +140,7 @@ public class RegistrationDAOBean implements RegistrationDAO {
 			System.out.println("Created player " + sp.name);
 			em.flush();
 		}
+		return s;
 	}
 
 
@@ -158,7 +159,7 @@ public class RegistrationDAOBean implements RegistrationDAO {
 
 	@Override
 	public Map<Integer, Player> loadSquad(String season) {
-		Season s = getOrCreateSeason(season);
+		SquadSeason s = getOrCreateSquadSeason(season);
 		
 		Date fromDate = s.getStartYear();
 		Date toDate = s.getEndYear();
@@ -198,7 +199,7 @@ public class RegistrationDAOBean implements RegistrationDAO {
 	
 	@Override
 	public List<Game> getGames(Long tournamentId, String season) {
-		Season s = getOrCreateSeason(season);
+		SquadSeason s = getOrCreateSquadSeason(season);
 		Date start = s.getStartYear();
 		
 		return em.createQuery("select g from Game g WHERE g.tournamentSeason.start = :start AND g.tournamentSeason.tournament.id = :tournamentId")
@@ -242,7 +243,7 @@ public class RegistrationDAOBean implements RegistrationDAO {
 	@Override
 	public List<TournamentSeason> getTournamentSeasons(Long tournamentId) {
 		System.out.println("ENTER - getTournamentSeasons(" + tournamentId  + ")");
-		return em.createQuery("select ts from TournamentSeason ts WHERE ts.tournament.id=:tournamentId ORDER BY ts.start")
+		return em.createQuery("select ts from TournamentSeason ts WHERE ts.tournament.id=:tournamentId ORDER BY ts.start DESC")
 				.setParameter("tournamentId", tournamentId)
 				.getResultList();
 	}
@@ -250,17 +251,19 @@ public class RegistrationDAOBean implements RegistrationDAO {
 
 	@Override
 	public TournamentSeason getTournamentSeasonByName(String tournamentName,
-			String seasonName) {
-		System.out.println("ENTER - getTournamentSeasonByName(" + tournamentName + ", " + seasonName + ")");
+			SquadSeason season) {
+		System.out.println("ENTER - getTournamentSeasonByName(" + tournamentName + ", " + season.getName() + ")");
+		
+		
 		
 		TournamentSeason ts;
 		try {
-			ts = (TournamentSeason) em.createQuery("select ts from TournamentSeason ts WHERE lower(ts.tournament.name)=:tname AND ts.season.name=:season")
+			ts = (TournamentSeason) em.createQuery("select ts from TournamentSeason ts WHERE lower(ts.tournament.name)=:tname AND ts.season.id=:seasonId")
 				.setParameter("tname", tournamentName.toLowerCase())
-				.setParameter("season", seasonName)
+				.setParameter("seasonId", season.getId())
 				.getSingleResult();
 		} catch (NoResultException e) {
-			Season season = getOrCreateSeason(seasonName);
+			
 			Tournament t = getOrCreateTournamentByName(tournamentName);
 			ts = new TournamentSeason(t, season.getStartYear(), season.getEndYear());
 			
@@ -275,9 +278,9 @@ public class RegistrationDAOBean implements RegistrationDAO {
 		return ts;
 	}
 
-	private Season getOrCreateSeason(String season) {
+	private SquadSeason getOrCreateSquadSeason(String season) {
 		try {
-			return (Season) em.createQuery("select s from Season s WHERE lower(s.name) = :sname").
+			return (SquadSeason) em.createQuery("select s from SquadSeason s WHERE lower(s.name) = :sname").
 					setParameter("sname", season.toLowerCase().trim()).
 					getSingleResult();
 		} catch (NoResultException e) {
@@ -286,7 +289,18 @@ public class RegistrationDAOBean implements RegistrationDAO {
 		}
 	}
 	
-	Season createSeasonFromString(String seasonName) {
+	private SquadSeason getOrCreateTournamentSeason(String season) {
+		try {
+			return (SquadSeason) em.createQuery("select s from TournamentSeason s WHERE lower(s.name) = :sname").
+					setParameter("sname", season.toLowerCase().trim()).
+					getSingleResult();
+		} catch (NoResultException e) {
+			// Create new tournament with this name			
+			return em.merge(createSeasonFromString(season)); 
+		}
+	}
+	
+	SquadSeason createSeasonFromString(String seasonName) {
 		int startYear;
 		int endYear;
 		if(seasonName.trim().indexOf("/") > -1) {
@@ -311,7 +325,7 @@ public class RegistrationDAOBean implements RegistrationDAO {
 			endYear = startYear;
 		}
 		
-		return new Season(seasonName, startYear, endYear);
+		return new SquadSeason(seasonName, startYear, endYear);
 	}
 
 
@@ -433,10 +447,10 @@ public class RegistrationDAOBean implements RegistrationDAO {
 
 
 	@Override
-	public List<Season> getSeasons() {
-		List<Season> resultList = em.createQuery("select s from Season s ORDER BY s.name DESC").getResultList();
+	public List<SquadSeason> getSeasons() {
+		List<SquadSeason> resultList = em.createQuery("select s from SquadSeason s ORDER BY s.endYear DESC").getResultList();
 		
-		for(Season s : resultList) {
+		for(SquadSeason s : resultList) {
 			s.getSquad().size();
 		}
 		return resultList;
@@ -451,6 +465,33 @@ public class RegistrationDAOBean implements RegistrationDAO {
 		PlayedForClub pfc = em.find(PlayedForClub.class, selectedItem.getId());
 		em.remove(pfc);
 		em.flush();
+	}
+
+
+	@Override
+	public void updatePlayerSeason(PlayedForClub pfc) {
+		em.merge(pfc);
+	}
+	
+	@Override
+	public void createPlayerSeason(PlayedForClub pfc) {
+		em.persist(pfc);
+	}
+
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Player> getAllPlayersShallow() {
+		//return em.createQuery("select p from Player p ORDER BY p.name").getResultList();
+		return em.createNamedQuery("allPlayers").getResultList();
+	}
+
+
+	@Override
+	public SquadSeason getSquadSeason(Long id) {
+		SquadSeason ss = em.find(SquadSeason.class, id);
+		ss.getSquad().size();
+		return ss;
 	}
 	
 }

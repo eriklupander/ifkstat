@@ -18,4 +18,11 @@ inner join position pos ON pos.id=fp.position_id
 where p.name='Magnus Erlingmark' 
 GROUP BY p.name, pos.name
 
- 
+# Antal matcher på en viss position
+select p.name, pos.name, count(pos.id) as gcount from player p 
+inner join player_game pg ON pg.player_id=p.id 
+inner join formation_position fp ON pg.formationposition_id=fp.id  
+inner join position pos ON pos.id=fp.position_id
+WHERE pos.name = 'Innermitt'
+GROUP BY p.name, pos.name
+ORDER BY gcount DESC

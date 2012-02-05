@@ -17,7 +17,7 @@ import se.ifkgoteborg.stat.model.Player;
 import se.ifkgoteborg.stat.model.Position;
 import se.ifkgoteborg.stat.model.PositionType;
 import se.ifkgoteborg.stat.model.Referee;
-import se.ifkgoteborg.stat.model.Season;
+import se.ifkgoteborg.stat.model.SquadSeason;
 import se.ifkgoteborg.stat.model.Tournament;
 import se.ifkgoteborg.stat.model.TournamentSeason;
 
@@ -31,7 +31,7 @@ public interface RegistrationDAO {
 
 	public List<Player> getAllPlayers();
 
-	public void importPlayers(List<SquadPlayer> players, String season);
+	public SquadSeason importPlayers(List<SquadPlayer> players, String season);
 
 	public void persist(Object o);
 
@@ -51,7 +51,7 @@ public interface RegistrationDAO {
 	public List<TournamentSeason> getTournamentSeasons(Long tournamentId);
 
 	public TournamentSeason getTournamentSeasonByName(String tournamentName,
-			String season);
+			SquadSeason squadSeason);
 
 	public Tournament getOrCreateTournamentByName(String tournamentName);
 
@@ -81,8 +81,16 @@ public interface RegistrationDAO {
 
 	public List<PositionType> getPositionTypes();
 
-	public List<Season> getSeasons();
+	public List<SquadSeason> getSeasons();
 
 	public void removePlayedForClub(PlayedForClub selectedItem);
+
+	public void updatePlayerSeason(PlayedForClub bean);
+	
+	public void createPlayerSeason(PlayedForClub pfc);
+
+	public List<Player> getAllPlayersShallow();
+
+	public SquadSeason getSquadSeason(Long id);
 
 }

@@ -6,13 +6,10 @@ import java.util.HashSet;
 import se.ifkgoteborg.stat.controller.RegistrationDAO;
 import se.ifkgoteborg.stat.model.Game;
 
-import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.ui.Button;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.Form;
 import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.Button.ClickEvent;
 
 public class GameForm extends Form {
 
@@ -20,8 +17,6 @@ public class GameForm extends Form {
 
 	private RegistrationDAO dao;
 	private GridLayout ourLayout;
-
-	private Button saveButton;
 	
 	public GameForm(RegistrationDAO dao, BeanItem<Game> gameItem) {
 		this.dao = dao;
@@ -38,7 +33,7 @@ public class GameForm extends Form {
 		fields.add("formation");
 		fields.add("ground");
 		fields.add("referee");
-		fields.add("dateOfGameAsDate");
+		fields.add("dateOfGame");
 		fields.add("gameSummary");
 	
 		setCaption("Matchfakta");
@@ -61,23 +56,13 @@ public class GameForm extends Form {
 		setItemDataSource(gameItem); // bind to POJO via BeanItem
 
 		// Determines which properties are shown, and in which order:
-		setVisibleItemProperties(fields);
-		 saveButton = new Button("Spara");
-	        saveButton.addListener(new Button.ClickListener() {
-
-	            @Override
-	            public void buttonClick(ClickEvent event) {
-	                // Save...
-	            	System.out.println("Saved clicked...");
-	            	commit();
-	            	// Get item from form.	        
-	            	Item item = getItemDataSource();	            	
-	            	BeanItem<Game> bi = (BeanItem<Game>) item;	            	
-	            	Game g = bi.getBean();	            	
-	            	dao.updateGame(g);
-	            }
-	        });
-		ourLayout.addComponent(saveButton, 1, 6);
+		setVisibleItemProperties(fields);		
+	}
+	
+	public Game getEntityForSave() {
+		BeanItem<Game> item = (BeanItem<Game>) this.getItemDataSource();
+		commit();
+		return item.getBean();
 	}
 	
 	/*
@@ -100,7 +85,7 @@ public class GameForm extends Form {
         else if (propertyId.equals("formation")) {
             ourLayout.addComponent(field, 0, 2);
         }
-        else if (propertyId.equals("dateOfGameAsDate")) {
+        else if (propertyId.equals("dateOfGame")) {
             ourLayout.addComponent(field, 1, 2);
         }
         else if (propertyId.equals("ground")) {

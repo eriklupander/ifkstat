@@ -91,15 +91,15 @@ public class PlayerForm extends Form implements Receiver, Upload.SucceededListen
 		// Determines which properties are shown, and in which order:
 		setVisibleItemProperties(fields);
 		saveButton = new Button("Spara");
-	        saveButton.addListener(new Button.ClickListener() {
+        saveButton.addListener(new Button.ClickListener() {
 
-	            @Override
-	            public void buttonClick(ClickEvent event) {
-	                // Save...	            	
-	            	commit();
-	            	PlayerForm.this.dao.updatePlayer( (Player) ((BeanItem) getItemDataSource()).getBean());
-	            }
-	        });
+            @Override
+            public void buttonClick(ClickEvent event) {
+                // Save...	            	
+            	commit();
+            	PlayerForm.this.dao.updatePlayer( (Player) ((BeanItem) getItemDataSource()).getBean());
+            }
+        });
 	        
 	     saveAndCloseButton = new Button("Spara och stäng");
 	     saveAndCloseButton.addListener(new Button.ClickListener() {
