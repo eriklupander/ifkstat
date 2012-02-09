@@ -210,10 +210,11 @@ public class XlsTransformer {
 	
 	
 	private int readCell(HSSFRow gameRow, int cellIndex, int startYear) {
+		System.out.println(cellIndex);
 		int numOfGoals = 0;
 		if(cellIndex > 8) {			
 			// Check formatting for goals for all player indexes
-			numOfGoals = calculateNumberOfGoals(gameRow, cellIndex, numOfGoals);
+			numOfGoals = calculateNumberOfGoals(gameRow, cellIndex, numOfGoals, startYear);
 		}			
 			
 		if(cellIndex == 7) {
@@ -260,18 +261,26 @@ public class XlsTransformer {
 	}
 
 	private int calculateNumberOfGoals(HSSFRow gameRow, int cellIndex,
-			int numOfGoals) {
+			int numOfGoals, int startYear) {
 		HSSFCell cell2 = gameRow.getCell(cellIndex);
 		if(cell2 != null) {
-			HSSFRichTextString r = cell2.getRichStringCellValue();
-			//System.out.println("Testing cell value: " + cell2.toString());
-			for(int a = 0; a < r.getString().length(); a++) {
-				if(r.getFontAtIndex(a) == 12) {
-					// Found goals.
-					numOfGoals = Integer.parseInt(new String(new char[]{cell2.toString().charAt(a)}));
-					
-				}							
+			if(cell2.getCellType() == 3) {
+				// Text-based
+				HSSFRichTextString r = cell2.getRichStringCellValue();
+				for(int a = 0; a < r.getString().length(); a++) {
+					if(r.getFontAtIndex(a) == 12) {
+						// Found goals.
+						numOfGoals = Integer.parseInt(new String(new char[]{cell2.toString().charAt(a)}));
+						
+					}							
+				}
+			} else {
+				// Numeric based, never any goals then
+				
 			}
+			
+		
+			
 		}
 		return numOfGoals;
 	}

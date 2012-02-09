@@ -93,4 +93,6 @@ public interface RegistrationDAO {
 
 	public SquadSeason getSquadSeason(Long id);
 
+	public void updateGameWithNote(Date date, String note);
+
 }

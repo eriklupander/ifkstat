@@ -493,5 +493,17 @@ public class RegistrationDAOBean implements RegistrationDAO {
 		ss.getSquad().size();
 		return ss;
 	}
+
+
+	@Override
+	public void updateGameWithNote(Date date, String note) {
+		try {
+			Game g = (Game) em.createQuery("select g from Game g WHERE g.dateOfGame = :date").setParameter("date", date).getSingleResult();
+			g.setGameSummary(note);
+			System.out.println("Saved note: " + note + " for game on date " + DateFactory.format(date));
+		} catch (NoResultException e) {
+			System.out.println("Could not find a game for date: " + DateFactory.format(date));
+		}
+	}
 	
 }

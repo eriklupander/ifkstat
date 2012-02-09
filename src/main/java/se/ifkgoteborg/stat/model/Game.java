@@ -2,7 +2,6 @@ package se.ifkgoteborg.stat.model;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -10,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -75,7 +75,9 @@ public class Game {
 	
 	private Integer attendance;
 	
-	private String gameSummary = "";
+	@Lob
+	private String gameSummary;
+	
 	private Integer homeGoals = 0;
 	private Integer awayGoals = 0;
 	private Integer homeGoalsHalftime = 0;

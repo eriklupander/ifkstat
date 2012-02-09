@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -38,7 +39,9 @@ public class Player {
 	private Integer weight;
 	
 	private Integer squadNumber = -1;
-	private String biography = "";
+	
+	@Lob
+	private String biography;
 	
 	private Integer otherCompetitiveGames = 0;
 	private Integer otherPracticeGames = 0;
