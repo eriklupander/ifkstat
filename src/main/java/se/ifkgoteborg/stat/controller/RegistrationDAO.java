@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 
 import se.ifkgoteborg.stat.controller.adapter.SquadPlayer;
 import se.ifkgoteborg.stat.model.Club;
+import se.ifkgoteborg.stat.model.Country;
 import se.ifkgoteborg.stat.model.Formation;
 import se.ifkgoteborg.stat.model.FormationPosition;
 import se.ifkgoteborg.stat.model.Game;
@@ -94,5 +95,9 @@ public interface RegistrationDAO {
 	public SquadSeason getSquadSeason(Long id);
 
 	public void updateGameWithNote(Date date, String note);
+
+	public List<Country> getCountries();
+
+	public void updateGround(Ground ground);
 
 }

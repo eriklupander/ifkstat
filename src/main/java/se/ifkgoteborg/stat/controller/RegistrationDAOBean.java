@@ -13,6 +13,7 @@ import javax.persistence.Query;
 
 import se.ifkgoteborg.stat.controller.adapter.SquadPlayer;
 import se.ifkgoteborg.stat.model.Club;
+import se.ifkgoteborg.stat.model.Country;
 import se.ifkgoteborg.stat.model.Formation;
 import se.ifkgoteborg.stat.model.FormationPosition;
 import se.ifkgoteborg.stat.model.Game;
@@ -504,6 +505,18 @@ public class RegistrationDAOBean implements RegistrationDAO {
 		} catch (NoResultException e) {
 			System.out.println("Could not find a game for date: " + DateFactory.format(date));
 		}
+	}
+
+
+	@Override
+	public List<Country> getCountries() {
+		return em.createQuery("select c from Country c ORDER BY c.name").getResultList();
+	}
+
+
+	@Override
+	public void updateGround(Ground ground) {
+		em.merge(ground);
 	}
 	
 }

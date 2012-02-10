@@ -1,5 +1,7 @@
 package se.ifkgoteborg.stat.controller;
 
+import java.util.Locale;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
@@ -15,7 +17,6 @@ import se.ifkgoteborg.stat.model.Ground;
 import se.ifkgoteborg.stat.model.Position;
 import se.ifkgoteborg.stat.model.PositionType;
 import se.ifkgoteborg.stat.model.Setting;
-import se.ifkgoteborg.stat.model.Tournament;
 import se.ifkgoteborg.stat.model.enums.Side;
 
 @Startup
@@ -46,17 +47,19 @@ public class StatStartup {
 			return;
 	
 		
-		// TODO add "is init" check
-	
-		Country sweden = new Country();
-		sweden.setName("Sweden");
-		sweden.setIsoCode("se");		
-		sweden = em.merge(sweden);
-		
-		Country senegal = new Country();
-		senegal.setName("Senegal");
-		senegal.setIsoCode("sn");		
-		senegal = em.merge(senegal);
+		 Locale[] locales = Locale.getAvailableLocales();
+	    for (Locale locale : locales) {
+	      String iso = locale.getISO3Country();
+	      String code = locale.getCountry();
+	      String name = locale.getDisplayCountry();
+	      if(name.trim().length() > 0) {
+	    	  em.merge(new Country(code, iso, name));
+	      }	
+	      
+	    }
+	    em.flush();
+
+		Country sweden = (Country) em.createQuery("select c from Country c WHERE c.code='SE'").getSingleResult();
 		
 		Club ifkgbg = new Club();
 		ifkgbg.setName("IFK Göteborg");

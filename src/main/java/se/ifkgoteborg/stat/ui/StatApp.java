@@ -36,6 +36,7 @@ public class StatApp extends Application {
     PlayerView playerTableView = null;    
     GameView gameTableView = null;
     SeasonView seasonView = null;
+    ArenaView arenaView = null;
 	
 	public void init() { 
         Window main = new Window("IFK-statistik"); 
@@ -61,6 +62,12 @@ public class StatApp extends Application {
         seasonTab.setMargin(true);
         seasonTab.addComponent(seasonView);
         
+        // Arena content
+        VerticalLayout arenaTab = new VerticalLayout();
+        arenaTab.setMargin(true);
+        arenaView = new ArenaView(dao);
+        arenaTab.addComponent(arenaView);
+        
 
         TabSheet t = new TabSheet();
         t.setHeight("100%");
@@ -68,6 +75,7 @@ public class StatApp extends Application {
         t.addTab(playerTab, "Spelare", icon1);
         t.addTab(gamesTab, "Matcher", icon2);
         t.addTab(seasonTab, "Säsonger", icon4);
+        t.addTab(arenaTab, "Arenor", icon3);
         t.addTab(importTab, "Import", icon3);
       
         t.addListener(new SelectedTabChangeListener()  {
@@ -86,6 +94,9 @@ public class StatApp extends Application {
                     }
                     if(tab.getCaption().equals("Säsonger")) {
                     	seasonView.refresh();
+                    }
+                    if(tab.getCaption().equals("Arenor")) {
+                    	arenaView.refresh();
                     }
                 }
             }

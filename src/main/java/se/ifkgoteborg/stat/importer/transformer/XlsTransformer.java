@@ -27,6 +27,7 @@ public class XlsTransformer {
 	private static final String GOAL_TOKEN = "•";
 	private static final String N = "IFK statistik";
 	private static final int PLAYERS_STARTINDEX = 8;
+	private static final int PLAYERS_STARTINDEX_AFTER_2003 = 9;
 	private static final int MAX_CELL = 36;
 
 	private StringBuilder buf;
@@ -92,6 +93,8 @@ public class XlsTransformer {
 		
 		String season =  f.getName().replaceAll("[^\\d]", " ").trim();
 		int startYear = StringUtil.parseSeasonStringToStartYear(season);
+		if(startYear > 2010)
+			return;
 		buf.append("$$$$" + season + "\n");
 		
 		InputStream inputStream = null;
@@ -113,7 +116,8 @@ public class XlsTransformer {
 			HSSFRow playersRow = sheet.getRow(1);
 			
 			// First, read player numbers. (probably not present)
-			int index = PLAYERS_STARTINDEX;
+			int index = startYear < 2004 ? PLAYERS_STARTINDEX : PLAYERS_STARTINDEX_AFTER_2003;
+			System.out.println("Start index: " + index);
 			HSSFCell cell = playersRow.getCell(index);
 			short lastCellNum = playersRow.getLastCellNum();
 			String cellData = cell.toString();
@@ -125,17 +129,20 @@ public class XlsTransformer {
 			buf.append("\n");
 			
 			// Then, write the player names.
-			index = PLAYERS_STARTINDEX;
+			index = startYear < 2004 ? PLAYERS_STARTINDEX : PLAYERS_STARTINDEX_AFTER_2003;
 			cell = playersRow.getCell(index);
 			cellData = cell.toString();
 			int maxIndex = 0;
-			while(index < lastCellNum && index < MAX_CELL) {				
+			System.out.println("cellData: " + cellData);
+			while(index < lastCellNum && index < MAX_CELL && cellData.trim().length() > 0) {				
 				buf.append(cellData.trim() + "\t");
 				cell = playersRow.getCell(++index);
 				if(cell != null) {
 					cellData = cell.toString();
 				}
 				maxIndex++;
+				if(startYear >= 2004)
+					System.out.println("cellData: " + cellData);
 			}
 			buf.append("\n");
 			
@@ -210,7 +217,6 @@ public class XlsTransformer {
 	
 	
 	private int readCell(HSSFRow gameRow, int cellIndex, int startYear) {
-		System.out.println(cellIndex);
 		int numOfGoals = 0;
 		if(cellIndex > 8) {			
 			// Check formatting for goals for all player indexes

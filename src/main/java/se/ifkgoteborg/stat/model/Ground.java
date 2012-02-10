@@ -1,13 +1,11 @@
 package se.ifkgoteborg.stat.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -21,6 +19,11 @@ public class Ground {
 	private Long id;
 	
 	private String name;
+	private String address;
+	private String city;
+	
+	@ManyToOne
+	private Country country;
 	private Integer maxCapacity;
 	
 	@Temporal(TemporalType.DATE)
@@ -34,13 +37,38 @@ public class Ground {
 		this.id = id;
 	}
 	
-
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public Country getCountry() {
+		return country;
+	}
+
+	public void setCountry(Country country) {
+		this.country = country;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 	public Integer getMaxCapacity() {

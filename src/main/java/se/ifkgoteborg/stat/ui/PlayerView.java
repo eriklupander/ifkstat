@@ -3,13 +3,11 @@ package se.ifkgoteborg.stat.ui;
 import java.util.HashSet;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
 import se.ifkgoteborg.stat.controller.RegistrationDAO;
 import se.ifkgoteborg.stat.model.Player;
+import se.ifkgoteborg.stat.ui.editor.BaseEditor.EditorSavedEvent;
+import se.ifkgoteborg.stat.ui.editor.BaseEditor.EditorSavedListener;
 import se.ifkgoteborg.stat.ui.editor.PlayerEditor;
-import se.ifkgoteborg.stat.ui.editor.PlayerEditor.EditorSavedEvent;
-import se.ifkgoteborg.stat.ui.editor.PlayerEditor.EditorSavedListener;
 
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
@@ -35,6 +33,7 @@ public class PlayerView extends VerticalLayout {
 	BeanItemContainer<Player> bic = new BeanItemContainer<Player>(Player.class);	
 
     Table table = new Table("Spelarförteckning");
+    private static final String[] fields = new String[]{"name", "length", "weight"};
 
     HashSet<Object> markedRows = new HashSet<Object>();
     
@@ -67,7 +66,7 @@ public class PlayerView extends VerticalLayout {
 
         // selectable
         table.setSelectable(true);
-        table.setMultiSelect(true);
+        table.setMultiSelect(false);
         table.setImmediate(true); // react at once when something is selected
 
         // connect data source
@@ -154,7 +153,7 @@ public class PlayerView extends VerticalLayout {
         });
     }
     
-    private static final String[] fields = new String[]{"name", "length", "weight"};
+    
 
 	public void loadPlayers() {
 		List<Player> players = dao.getAllPlayers();

@@ -5,14 +5,11 @@ import java.util.List;
 import se.ifkgoteborg.stat.controller.RegistrationDAO;
 import se.ifkgoteborg.stat.model.PlayedForClub;
 import se.ifkgoteborg.stat.model.SquadSeason;
-import se.ifkgoteborg.stat.ui.editor.PlayerEditor.EditorSavedEvent;
-import se.ifkgoteborg.stat.ui.editor.PlayerEditor.EditorSavedListener;
 import se.ifkgoteborg.stat.ui.editor.PlayerSeasonEditor;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;

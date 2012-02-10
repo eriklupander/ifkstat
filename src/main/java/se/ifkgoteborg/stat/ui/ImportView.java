@@ -48,7 +48,7 @@ public class ImportView extends VerticalLayout {
         
         upload2.addListener(new Upload.FinishedListener() {
             public void uploadFinished(FinishedEvent event) {
-                String data = readFile();                
+                String data = readFile2();                
                 new NotesImporter(ImportView.this.dao).importNotes(data);                                      
                 result.setValue("Notes file uploaded");
             }
@@ -58,6 +58,16 @@ public class ImportView extends VerticalLayout {
 
 
 	private String readFile() {
+		String file;
+		try {
+			file = new String(receiver.getUploadedFile().toByteArray(), "UTF-8");
+			return file;
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e.getMessage());
+		}
+	}
+	
+	private String readFile2() {
 		String file;
 		try {
 			file = new String(receiver2.getUploadedFile().toByteArray(), "UTF-8");

@@ -13,8 +13,17 @@ public class Country  {
 	@GeneratedValue
 	private Long id;
 	private String name;
+	private String code;
 	private String isoCode;
 	
+	public Country(){}
+	
+	public Country(String code, String isoCode, String name) {
+		this.name = name;
+		this.isoCode = isoCode;
+		this.code = code;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -33,6 +42,16 @@ public class Country  {
 	}
 	public void setIsoCode(String isoCode) {
 		this.isoCode = isoCode;
+	}
+	
+	
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	@Override
