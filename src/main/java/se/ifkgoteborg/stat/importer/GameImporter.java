@@ -119,7 +119,7 @@ public class GameImporter {
 			// Opponent
 			case 1:
 				// Create opponent club if not exists
-				opponentClub = dao.getOrCreateClub(cells[a]);
+				opponentClub = dao.getOrCreateClub(cells[a].trim());
 				break;
 
 			// Home or Away (H/B) N=Neutral
@@ -132,7 +132,7 @@ public class GameImporter {
 				break;
 			// Arena / ground
 			case 3:
-				g.setGround(dao.getOrCreateGround(cells[a]));
+				g.setGround(dao.getOrCreateGround(cells[a].trim()));
 				break;
 
 			// Result

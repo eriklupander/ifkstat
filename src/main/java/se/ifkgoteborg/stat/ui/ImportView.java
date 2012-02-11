@@ -29,7 +29,7 @@ public class ImportView extends VerticalLayout {
 		upload.setReceiver(receiver);
 		upload2.setReceiver(receiver2);
 
-		addComponent(new Label("Säsongsfil"));
+		addComponent(new Label("Master-fil"));
         addComponent(upload);
         addComponent(result);
         

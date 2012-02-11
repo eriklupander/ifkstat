@@ -1,21 +1,33 @@
 package se.ifkgoteborg.stat.ui;
 
+import java.util.List;
+
 import se.ifkgoteborg.stat.controller.RegistrationDAO;
+import se.ifkgoteborg.stat.model.FormationPosition;
 import se.ifkgoteborg.stat.model.Game;
 import se.ifkgoteborg.stat.model.GameEvent;
 import se.ifkgoteborg.stat.model.GameParticipation;
+import se.ifkgoteborg.stat.model.PlayedForClub;
+import se.ifkgoteborg.stat.model.Player;
+import se.ifkgoteborg.stat.model.Position;
+import se.ifkgoteborg.stat.model.SquadSeason;
 import se.ifkgoteborg.stat.ui.form.GameForm;
-import sun.awt.HorizBagLayout;
 
+import com.vaadin.data.Container;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Select;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.TableFieldFactory;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.themes.Runo;
 
 public class GameDetailsView extends VerticalLayout {	
@@ -24,11 +36,14 @@ public class GameDetailsView extends VerticalLayout {
 	private final RegistrationDAO dao;
 	
 	private GameForm gameDetailsForm;
+	private SquadSeason squadSeason;
+	private List<FormationPosition> formationPositions;
 	
-	public GameDetailsView(Game game, RegistrationDAO dao) {
+	public GameDetailsView(Game game, RegistrationDAO dao, Long seasonId) {
 		this.game = game;		
 		this.dao = dao;
 		this.setStyleName(Runo.PANEL_LIGHT);
+		this.squadSeason = dao.getSquadForSeason(seasonId);
 		
 		addComponent(new Label(""));
 		TabSheet t = new TabSheet();
@@ -43,14 +58,18 @@ public class GameDetailsView extends VerticalLayout {
 
 	private VerticalLayout getGamePlayersList() {
 		
+		
+		
 		VerticalLayout vl = new VerticalLayout();
+		if(game == null || game.getFormation() == null) {
+			vl.addComponent(new Label("Formation måste först anges."));
+			return vl;
+		}
 		
-		
-		
+		this.formationPositions = game.getFormation().getFormationPositions();
 		final BeanItemContainer<GameParticipation> bic = new BeanItemContainer<GameParticipation>(GameParticipation.class);
-		bic.addNestedContainerProperty("player.squadNumber");
-		bic.addNestedContainerProperty("player.name");
-		bic.addNestedContainerProperty("formationPosition.position.name");
+		bic.addNestedContainerProperty("player");
+		bic.addNestedContainerProperty("formationPosition.position");
 		bic.addNestedContainerProperty("participationType.name");
 		
 		for(GameParticipation gp : game.getGameParticipation()) {
@@ -59,13 +78,46 @@ public class GameDetailsView extends VerticalLayout {
 		
 		final Table t = new Table();
 		t.setContainerDataSource(bic);
-		t.setColumnHeader("player.squadNumber", "#");
-		t.setColumnHeader("player.name", "Spelare");
-        t.setColumnHeader("formationPosition.position.name", "Position");
+		t.setTableFieldFactory(new TableFieldFactory() {
+
+			@Override
+			public Field createField(Container container, Object itemId,
+					Object propertyId, Component uiContext) {
+				if("player".equals(propertyId)) {
+					Select select = new Select();
+			        List<PlayedForClub> players = squadSeason.getSquad();
+			        for(PlayedForClub pfc : players) {
+			        	select.addItem(pfc.getPlayer());
+			        }
+			        select.setRequired(true);
+			        select.setNullSelectionAllowed(false);
+			        Player p = (Player) container.getItem(itemId).getItemProperty("player").getValue();
+			        
+			        select.setValue(p);
+			        select.setNewItemsAllowed(false);
+			        return select;
+				} else if("formationPosition.position".equals(propertyId)) {
+					Select select = new Select();
+					for(FormationPosition fp : formationPositions) {
+						select.addItem(fp.getPosition());
+					}
+					Position p = (Position) container.getItem(itemId).getItemProperty("formationPosition.position").getValue();
+					select.setRequired(true);
+			        select.setNullSelectionAllowed(false);
+					select.setValue(p);
+			        select.setNewItemsAllowed(false);
+			        return select;
+				}
+				return new TextField();
+			}
+			
+		});
+		t.setColumnHeader("player", "Spelare");
+        t.setColumnHeader("formationPosition.position", "Position");
         t.setColumnHeader("participationType.name", "Notering");
         t.setSelectable(true);
         t.setEditable(true);
-        t.setVisibleColumns(new String[]{"player.squadNumber", "player.name","formationPosition.position.name", "participationType.name"});
+        t.setVisibleColumns(new String[]{"player","formationPosition.position", "participationType.name"});
         
         Button addBtn = new Button("Lägg till spelare");
 		Button removeBtn = new Button("Ta bort vald spelare");

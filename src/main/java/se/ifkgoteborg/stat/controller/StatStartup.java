@@ -144,6 +144,7 @@ public class StatStartup {
 		Position fw2 = em.merge(new Position("Anfallare", "FW", Side.LEFT, forw));
 		
 		Position fw1_c = em.merge(new Position("Anfallare", "FW", Side.CENTRAL, forw));
+		//Position fw1_def = em.merge(new Position("Anfallare", "FW (D)", Side.CENTRAL, forw));
 		
 		Position p12 = em.merge(new Position("Innermitt", "IM", Side.CENTRAL, mid));
 		
@@ -175,6 +176,12 @@ public class StatStartup {
 		
 		Formation f235 = new Formation("2-3-5");
 		f235 = em.merge(f235);
+		
+		Formation f4411 = new Formation("4-4-1-1");
+		f4411 = em.merge(f4411);
+		
+		Formation f4132 = new Formation("4-1-3-2");
+		f4132 = em.merge(f4132);
 		
 		em.persist(new FormationPosition(1, f442, mv));
 		em.persist(new FormationPosition(2, f442, hb));
@@ -248,6 +255,31 @@ public class StatStartup {
 		em.persist(new FormationPosition(9, f235, c));
 		em.persist(new FormationPosition(10, f235, vi));
 		em.persist(new FormationPosition(11, f235, vy));
+		
+		em.persist(new FormationPosition(1, f4411, mv));
+		em.persist(new FormationPosition(2, f4411, hb));
+		em.persist(new FormationPosition(3, f4411, mb1));
+		em.persist(new FormationPosition(4, f4411, mb2));
+		em.persist(new FormationPosition(5, f4411, vb));
+		em.persist(new FormationPosition(6, f4411, hy));
+		em.persist(new FormationPosition(7, f4411, im1));
+		em.persist(new FormationPosition(8, f4411, im2));
+		em.persist(new FormationPosition(9, f4411, vy));
+		em.persist(new FormationPosition(10, f4411, im1o));
+		em.persist(new FormationPosition(11, f4411, fw1_c));
+		
+		
+		em.persist(new FormationPosition(1, f4132, mv));
+		em.persist(new FormationPosition(2, f4132, hb));
+		em.persist(new FormationPosition(3, f4132, mb1));
+		em.persist(new FormationPosition(4, f4132, mb2));
+		em.persist(new FormationPosition(5, f4132, vb));
+		em.persist(new FormationPosition(6, f4132, im1d_c));
+		em.persist(new FormationPosition(7, f4132, hy));
+		em.persist(new FormationPosition(8, f4132, im1_c));
+		em.persist(new FormationPosition(9, f4132, vy));
+		em.persist(new FormationPosition(10, f4132, fw1));
+		em.persist(new FormationPosition(11, f4132, fw2));
 		
 		// Write setting flag
 		Setting settingsInitialized = new Setting(INIT_DATA_RUN, "1");

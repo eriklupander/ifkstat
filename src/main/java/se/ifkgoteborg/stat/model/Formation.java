@@ -3,7 +3,6 @@ package se.ifkgoteborg.stat.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -19,9 +18,9 @@ public class Formation {
 	private Long id;
 	
 	private String name;
-	
-//	@OneToMany(cascade=CascadeType.ALL)
-//	private List<Game> usedInGames = new ArrayList<Game>();
+
+	@OneToMany(mappedBy="formation")
+	private List<FormationPosition> formationPositions = new ArrayList<FormationPosition>();
 	
 	public Formation() {}
 
@@ -45,6 +44,16 @@ public class Formation {
 		this.name = name;
 	}
 	
+	
+	
+	public List<FormationPosition> getFormationPositions() {
+		return formationPositions;
+	}
+
+	public void setFormationPositions(List<FormationPosition> formationPositions) {
+		this.formationPositions = formationPositions;
+	}
+
 	public String toString() {
 		return this.name;
 	}

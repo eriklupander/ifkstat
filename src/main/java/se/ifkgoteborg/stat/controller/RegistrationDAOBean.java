@@ -217,6 +217,7 @@ public class RegistrationDAOBean implements RegistrationDAO {
 				.getSingleResult();
 		g.getEvents().size();
 		g.getGameParticipation().size();
+		g.getFormation().getFormationPositions().size();
 		return g;
 	}
 
@@ -230,7 +231,7 @@ public class RegistrationDAOBean implements RegistrationDAO {
 				.setParameter("positionId", positionId)
 				.getSingleResult();
 		} catch (Exception e) {
-			System.out.println("Error, could not get FormationPosition: " + e.getMessage());
+			System.out.println("Error, could not get FormationPosition: " + e.getMessage() + " Formation name: " + formationName + " positionId: " + positionId);
 			return new FormationPosition();
 		}
 	}
@@ -518,5 +519,29 @@ public class RegistrationDAOBean implements RegistrationDAO {
 	public void updateGround(Ground ground) {
 		em.merge(ground);
 	}
+
+
+	@Override
+	public SquadSeason getSquadForSeason(Long seasonId) {
+		SquadSeason ss = em.find(SquadSeason.class, seasonId);
+		ss.getSquad().size();
+		return ss;
+	}
+
+
+	@Override
+	public TournamentSeason getTournamentSeason(Long tournamentId,
+			String seasonStr) {
+		try {
+			return (TournamentSeason) em.createQuery("select ts from TournamentSeason ts where ts.tournament.id=:tournamentId AND ts.season.name=:seasonStr")
+				.setParameter("tournamentId", tournamentId)
+				.setParameter("seasonStr", seasonStr)
+				.getSingleResult();
+		} catch (Exception e) {
+			System.err.println("Could not find TournamentSeason by: getTournamentSeason(" + tournamentId + "," + seasonStr + ")");
+			return null;
+		}
+	}
+
 	
 }

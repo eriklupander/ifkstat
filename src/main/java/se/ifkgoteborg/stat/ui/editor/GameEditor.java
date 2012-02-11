@@ -5,15 +5,15 @@ import java.lang.reflect.Method;
 
 import se.ifkgoteborg.stat.controller.RegistrationDAO;
 import se.ifkgoteborg.stat.model.Game;
+import se.ifkgoteborg.stat.model.TournamentSeason;
 import se.ifkgoteborg.stat.ui.GameDetailsView;
 
 import com.vaadin.data.Item;
-import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Window;
-import com.vaadin.ui.Button.ClickEvent;
 
 public class GameEditor extends Window  {
 
@@ -26,10 +26,10 @@ public class GameEditor extends Window  {
 	private Button saveBtn;
 	private Button cancelBtn;
 	
-	public GameEditor(Game game, RegistrationDAO dao) {		
+	public GameEditor(Game game, RegistrationDAO dao, TournamentSeason ts) {		
 		
 		this.dao = dao;
-		gdw = new GameDetailsView(game, dao);
+		gdw = new GameDetailsView(game, dao, ts.getSeason().getId());
 		
 		setWidth(700, UNITS_PIXELS);
 		 // Set form caption and description texts 

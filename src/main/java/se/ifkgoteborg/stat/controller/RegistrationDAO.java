@@ -100,4 +100,8 @@ public interface RegistrationDAO {
 
 	public void updateGround(Ground ground);
 
+	public SquadSeason getSquadForSeason(Long seasonId);
+
+	public TournamentSeason getTournamentSeason(Long tournamentId, String seasonStr);
+
 }

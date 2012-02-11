@@ -6,6 +6,7 @@ import java.util.List;
 import se.ifkgoteborg.stat.controller.RegistrationDAO;
 import se.ifkgoteborg.stat.model.Game;
 import se.ifkgoteborg.stat.model.Tournament;
+import se.ifkgoteborg.stat.model.TournamentSeason;
 import se.ifkgoteborg.stat.ui.control.ComboBoxFactory;
 import se.ifkgoteborg.stat.ui.editor.GameEditor;
 import se.ifkgoteborg.stat.ui.wrapper.GameTableWrapper;
@@ -17,10 +18,10 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Table;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Table.CellStyleGenerator;
 import com.vaadin.ui.VerticalLayout;
 
@@ -37,6 +38,8 @@ public class GameView extends VerticalLayout {
    // HorizontalLayout buttons = new HorizontalLayout();
     ComboBox seasonComboBox;
     ComboBox tournamentComboBox;
+    
+    TournamentSeason ts = null;
     
     public GameView(RegistrationDAO dao) {
     	
@@ -61,6 +64,7 @@ public class GameView extends VerticalLayout {
 
 					@Override
 					public void valueChange(ValueChangeEvent event) {
+						ts = GameView.this.dao.getTournamentSeason(t.getId(), event.getProperty().getValue().toString());
 						List<Game> games = GameView.this.dao.getGames(t.getId(),  event.getProperty().getValue().toString());
 						
 						// Populate game list...
@@ -79,7 +83,7 @@ public class GameView extends VerticalLayout {
 								
 								@Override
 								public void buttonClick(ClickEvent event) {
-									GameEditor ge = new GameEditor(new Game(), GameView.this.dao);
+									GameEditor ge = new GameEditor(new Game(), GameView.this.dao, ts);
 						            getApplication().getMainWindow().addWindow(ge);
 								}
 							});
@@ -180,7 +184,7 @@ public class GameView extends VerticalLayout {
 	                
 	            	Game g = GameView.this.dao.getGame(gtw.getBean().getId());
 	            	                      	
-	               GameEditor ge = new GameEditor(g, GameView.this.dao);
+	               GameEditor ge = new GameEditor(g, GameView.this.dao, ts);
 	               getApplication().getMainWindow().addWindow(ge);
 	            }
             }
