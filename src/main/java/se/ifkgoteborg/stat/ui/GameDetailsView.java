@@ -12,6 +12,7 @@ import se.ifkgoteborg.stat.model.Player;
 import se.ifkgoteborg.stat.model.Position;
 import se.ifkgoteborg.stat.model.SquadSeason;
 import se.ifkgoteborg.stat.ui.form.GameForm;
+import se.ifkgoteborg.stat.ui.form.GameSeasonForm;
 
 import com.vaadin.data.Container;
 import com.vaadin.data.util.BeanItem;
@@ -35,6 +36,7 @@ public class GameDetailsView extends VerticalLayout {
 	private final Game game;
 	private final RegistrationDAO dao;
 	
+	private GameSeasonForm gameSeasonForm;
 	private GameForm gameDetailsForm;
 	private SquadSeason squadSeason;
 	private List<FormationPosition> formationPositions;
@@ -49,10 +51,14 @@ public class GameDetailsView extends VerticalLayout {
 		TabSheet t = new TabSheet();
         t.setHeight("100%");
         t.setWidth("100%");
+        gameSeasonForm = getGameSeasonForm();
         gameDetailsForm = getGameDetailsForm();
+        
         t.addTab(gameDetailsForm, "Matchfakta");
         t.addTab(getGamePlayersList(), "Laguppställning");
         t.addTab(getEventsList(), "Händelser");
+        t.addTab(gameSeasonForm, "Säsong");
+        
         addComponent(t);
 	}
 
@@ -101,10 +107,18 @@ public class GameDetailsView extends VerticalLayout {
 					for(FormationPosition fp : formationPositions) {
 						select.addItem(fp.getPosition());
 					}
-					Position p = (Position) container.getItem(itemId).getItemProperty("formationPosition.position").getValue();
+					if(container.getItem(itemId) != null && container.getItem(itemId).getItemProperty("formationPosition.position") != null) {
+						try {
+							Position p = (Position) container.getItem(itemId).getItemProperty("formationPosition.position").getValue();
+							select.setValue(p);
+						} catch (Exception e) {
+							System.err.println("Error setting formationPosition: " + e.getMessage());
+						}
+					}
+					
 					select.setRequired(true);
 			        select.setNullSelectionAllowed(false);
-					select.setValue(p);
+					
 			        select.setNewItemsAllowed(false);
 			        return select;
 				}
@@ -170,6 +184,22 @@ public class GameDetailsView extends VerticalLayout {
 		
 		BeanItem<Game> item = new BeanItem<Game>(game);
 		GameForm form = new GameForm(dao, item);
+		
+		 // Set form caption and description texts 
+		if(game.getHomeTeam() != null && game.getAwayTeam() != null) {
+			form.setCaption(game.getHomeTeam().getName() + " - " + game.getAwayTeam().getName() + " " + game.getResultStr());
+		} else {
+			form.setCaption("Ny match");
+		}
+		
+		return form;
+	}
+	
+	private GameSeasonForm getGameSeasonForm() {
+		
+		
+		BeanItem<Game> item = new BeanItem<Game>(game);
+		GameSeasonForm form = new GameSeasonForm(dao, item);
 		
 		 // Set form caption and description texts 
 		if(game.getHomeTeam() != null && game.getAwayTeam() != null) {

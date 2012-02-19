@@ -71,9 +71,9 @@ public class StatApp extends Application {
 
         TabSheet t = new TabSheet();
         t.setHeight("100%");
-        t.setWidth("100%");
-        t.addTab(playerTab, "Spelare", icon1);
+        t.setWidth("100%");        
         t.addTab(gamesTab, "Matcher", icon2);
+        t.addTab(playerTab, "Spelare", icon1);
         t.addTab(seasonTab, "Säsonger", icon4);
         t.addTab(arenaTab, "Arenor", icon3);
         t.addTab(importTab, "Import", icon3);

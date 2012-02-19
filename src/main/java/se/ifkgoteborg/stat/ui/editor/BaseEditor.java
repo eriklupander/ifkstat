@@ -43,6 +43,7 @@ public abstract class BaseEditor extends Window {
 		public EditorSavedEvent(Component source, Item savedItem) {
 			super(source);
 			this.savedItem = savedItem;
+			System.out.println("INSIDE - EditorSavedEvent ");
 		}
 
 		public Item getSavedItem() {

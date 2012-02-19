@@ -543,5 +543,32 @@ public class RegistrationDAOBean implements RegistrationDAO {
 		}
 	}
 
+
+	@Override
+	public Tournament createTournament(String tournamentName) {
+		Tournament t = new Tournament(tournamentName, false);
+		return em.merge(t);
+	}
+
+
+	@Override
+	public List<TournamentSeason> getTournamentSeasonsOfSeason(
+			Long squadSeasonId) {
+		return em.createQuery("select ts from TournamentSeason ts WHERE ts.season.id=:id").setParameter("id", squadSeasonId).getResultList();
+		
+	}
+
+
+	@Override
+	public TournamentSeason saveTournamentSeason(TournamentSeason tournamentSeason) {
+		return em.merge(tournamentSeason);
+	}
+
+
+	@Override
+	public void removeTournamentSeasonFromSeason(TournamentSeason ts) {
+		em.remove(ts);
+	}
+
 	
 }

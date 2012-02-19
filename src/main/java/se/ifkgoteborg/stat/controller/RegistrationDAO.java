@@ -104,4 +104,12 @@ public interface RegistrationDAO {
 
 	public TournamentSeason getTournamentSeason(Long tournamentId, String seasonStr);
 
+	public Tournament createTournament(String tournamentName);
+
+	public List<TournamentSeason> getTournamentSeasonsOfSeason(Long squadSeasonId);
+
+	public TournamentSeason saveTournamentSeason(TournamentSeason tournamentSeason);
+
+	public void removeTournamentSeasonFromSeason(TournamentSeason ts);
+
 }
