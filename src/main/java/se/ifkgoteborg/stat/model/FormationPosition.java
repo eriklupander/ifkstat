@@ -1,5 +1,6 @@
 package se.ifkgoteborg.stat.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -14,6 +15,7 @@ public class FormationPosition {
 	@GeneratedValue
 	private Long id;
 	
+	@Column(name="pos_index")
 	private Integer index;
 	
 	@ManyToOne

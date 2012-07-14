@@ -1,5 +1,6 @@
 package se.ifkgoteborg.stat.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -13,8 +14,10 @@ public class Setting {
 	@GeneratedValue
 	private Long id;
 	
+	@Column(name="settings_key")
 	private String key;
 	
+	@Column(name="settings_value")
 	private String value;
 	
 	private Setting() {}

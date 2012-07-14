@@ -23,15 +23,19 @@ import se.ifkgoteborg.stat.util.StringUtil;
 
 public class XlsTransformer {
 
-	private static final String ROOT_FOLDER = "F:\\Dropbox\\Statistik till webben";
+	//private static final String OUTPUT_FILE = "c:\\java\\workspace\\ifkstat\\data\\master.txt";
+	private static final String OUTPUT_FILE = "c:\\tankesmedja\\ifkstat\\ifkstat\\data\\master.txt";
+
+	//private static final String ROOT_FOLDER = "F:\\Dropbox\\Statistik till webben";
+	private static final String ROOT_FOLDER = "C:\\Users\\Erik\\Dropbox\\Statistik till webben";
+	
 	private static final String GOAL_TOKEN = "•";
 	private static final String N = "IFK statistik";
 	private static final int PLAYERS_STARTINDEX = 8;
 	private static final int PLAYERS_STARTINDEX_AFTER_2003 = 9;
-	private static final int MAX_CELL = 36;
+	private static final int MAX_CELL = 49;
 
 	private StringBuilder buf;
-	private StringBuilder players;
 	
 	private static final List<String> blockList = new ArrayList<String>();
 	static {
@@ -63,7 +67,7 @@ public class XlsTransformer {
 		String data = buf.toString().replaceAll("–", "-").replaceAll("\\[", "(").replaceAll("\\]", ")");
 		
 		//System.out.println("Total file:\n" + buf.toString());
-		File f = new File("c:\\java\\workspace\\ifkstat\\data\\master.txt");
+		File f = new File(OUTPUT_FILE);
 		try {
 			
 			FileOutputStream fos = new FileOutputStream(f);
@@ -97,7 +101,7 @@ public class XlsTransformer {
 		
 		String season =  f.getName().replaceAll("[^\\d]", " ").trim();
 		int startYear = StringUtil.parseSeasonStringToStartYear(season);
-		if(startYear > 2010)
+		if(startYear > 2011)
 			return;
 		buf.append("$$$$" + season + "\n");
 		
@@ -137,8 +141,8 @@ public class XlsTransformer {
 			cell = playersRow.getCell(index);
 			cellData = cell.toString();
 			int maxIndex = 0;
-			System.out.println("cellData: " + cellData);
-			while(index < lastCellNum && index < MAX_CELL && cellData.trim().length() > 0) {				
+			//System.out.println("cellData: " + cellData);
+			while(index < lastCellNum && index < MAX_CELL && cellData.trim().length() > 0 && !cellData.trim().equalsIgnoreCase("SUMMA") && !cellData.trim().startsWith("För att")) {				
 				buf.append(cellData.trim() + "\t");
 				cell = playersRow.getCell(++index);
 				if(cell != null) {

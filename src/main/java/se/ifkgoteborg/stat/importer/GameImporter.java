@@ -169,8 +169,12 @@ public class GameImporter {
 				break;
 			// attendance
 			case 6:
-				g.setAttendance(Integer.parseInt(cells[a].replaceAll("[^\\d]",
+				if(cells[a] == null || cells[a].trim().length() == 0) {
+					g.setAttendance(-1);
+				} else {
+					g.setAttendance(Integer.parseInt(cells[a].replaceAll("[^\\d]",
 						"")));
+				}
 				break;
 
 			// default team formation
