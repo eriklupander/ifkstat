@@ -26,3 +26,14 @@ inner join position pos ON pos.id=fp.position_id
 WHERE pos.name = 'Innermitt'
 GROUP BY p.name, pos.name
 ORDER BY gcount DESC
+
+# Lista alla unika spelare som en viss spelare spelat med, hur många gånger, samt första och sista matchdatum
+SELECT distinct(p1.name) as name, COUNT(pg1.game_id) as cnt, MIN(g1.dateOfGame) as firstGame, MAX(g1.dateOfGame) as lastGame 
+FROM PLAYER_GAME pg1 
+INNER JOIN PLAYER p1 ON p1.id=pg1.player_id 
+INNER JOIN GAME g1 ON g1.id=pg1.game_id 
+WHERE pg1.game_id IN 
+	(SELECT pg.game_id FROM GAME g 
+	INNER JOIN PLAYER_GAME pg ON pg.game_id=g.id 
+	WHERE pg.playER_ID = 38452) 
+GROUP BY name ORDER BY name DESC
