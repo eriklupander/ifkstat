@@ -53,4 +53,17 @@ public class StringUtil {
 		}
 	}
 
+	public static String capitalize(String str) {
+		String[] parts = str.toLowerCase().split(" ");
+		StringBuilder buf = new StringBuilder();
+		for(String part : parts) {
+			buf.append(part.substring(0, 1).toUpperCase() + part.substring(1) + " ");
+		}
+		if(buf.length() > 1) {
+			return buf.toString().trim();
+		} else {
+			return "";
+		}
+	}
+
 }

@@ -78,8 +78,6 @@ public class GameImporter {
 		} else {
 			 year = dateOfLastGame.getYear()+1900;
 		}
-		
-		System.out.println("Import game of season: " + year);
 
 		String[] cells = dataRow.split("\t");
 
@@ -93,7 +91,6 @@ public class GameImporter {
 		List<Integer> substitutedPositions = new ArrayList();
 		
 		for (int a = 0; a < cells.length; a++) {
-			//System.out.println("INDEX: " + a + " DATA: " + cells[a]);
 			
 			switch (a) {
 
@@ -182,7 +179,6 @@ public class GameImporter {
 				String formation = cells[a].trim();
 				Formation f = dao.getFormationByName(formation);				
 				g.setFormation(f);
-				//f.getUsedInGames().add(g);
 				
 				break;
 

@@ -1,5 +1,6 @@
 package se.ifkgoteborg.stat.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -17,6 +18,7 @@ public class GameNote {
 	@ManyToOne
 	private Game game;
 	
+	@Column(name="note_text", length=1024, nullable=true)
 	private String text;
 	
 	private GameNote() {}

@@ -143,7 +143,7 @@ public class XlsTransformer {
 			int maxIndex = 0;
 			//System.out.println("cellData: " + cellData);
 			while(index < lastCellNum && index < MAX_CELL && cellData.trim().length() > 0 && !cellData.trim().equalsIgnoreCase("SUMMA") && !cellData.trim().startsWith("För att")) {				
-				buf.append(cellData.trim() + "\t");
+				buf.append(StringUtil.capitalize(cellData.trim()) + "\t");
 				cell = playersRow.getCell(++index);
 				if(cell != null) {
 					cellData = cell.toString();

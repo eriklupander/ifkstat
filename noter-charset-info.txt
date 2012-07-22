@@ -1,0 +1,5 @@
+Om noter och charsets. För att få det hela att funka:
+
+Öppna noter.rtf från Dropbox-mappen. Spara om i wordpad som .txt i "Unicode" format.
+Öppna noter.txt (eller vad du nu döpte den till) i Notepad++. Ändra charset under "Format" till UTF-8. Spara.
+Importera den nysparade noter.txt via användargränssnittet. Nu blir åäö etc. korrekta.

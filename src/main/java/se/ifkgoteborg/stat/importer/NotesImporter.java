@@ -23,7 +23,7 @@ public class NotesImporter {
 		int n = 0;
 		for(String row : rows) {
 			if(row.trim().length() > 0) {
-				//System.out.println("Row: " + row.trim().replaceAll("\r", ""));
+				System.out.println("Row: " + row.trim().replaceAll("\r", ""));
 				processNoteRow(row.trim().replaceAll("\r", ""));
 				n++;
 			}
@@ -32,7 +32,7 @@ public class NotesImporter {
 	}
 
 	private void processNoteRow(String row) {
-		//System.out.println(row);
+		System.out.println(row);
 		String[] parts = row.split("\t");
 		if(parts.length == 2 && !parts[0].startsWith("€€€")) {
 			try {

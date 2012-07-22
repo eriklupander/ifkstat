@@ -1,0 +1,9 @@
+Lite om MySQL
+
+För att komma in i kommandotolken för mysql:
+mysql -u ifkstat -p ifkstat
+
+För att göra en dump på databasen:
+mysqldump -u ifkstat -p ifkstat > ifkstat.dump
+
+Man behöver inte kalla dumpfilen för ifkstat.dump, den kan heta vad man vill.

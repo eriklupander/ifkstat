@@ -17,6 +17,7 @@ import se.ifkgoteborg.stat.model.Country;
 import se.ifkgoteborg.stat.model.Formation;
 import se.ifkgoteborg.stat.model.FormationPosition;
 import se.ifkgoteborg.stat.model.Game;
+import se.ifkgoteborg.stat.model.GameNote;
 import se.ifkgoteborg.stat.model.Ground;
 import se.ifkgoteborg.stat.model.PlayedForClub;
 import se.ifkgoteborg.stat.model.Player;
@@ -501,7 +502,10 @@ public class RegistrationDAOBean implements RegistrationDAO {
 	public void updateGameWithNote(Date date, String note) {
 		try {
 			Game g = (Game) em.createQuery("select g from Game g WHERE g.dateOfGame = :date").setParameter("date", date).getSingleResult();
-			g.setGameSummary(note);
+			// Append note onto game summary
+			g.setGameSummary(g.getGameSummary() + "\n\n" + note);
+			g.getGameNotes().add(new GameNote(g, note));
+			em.merge(g);
 			System.out.println("Saved note: " + note + " for game on date " + DateFactory.format(date));
 		} catch (NoResultException e) {
 			System.out.println("Could not find a game for date: " + DateFactory.format(date));
