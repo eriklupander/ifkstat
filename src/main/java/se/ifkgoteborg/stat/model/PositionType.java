@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 @Entity
 @Table(name="position_type")
 public class PositionType {
@@ -20,6 +22,7 @@ public class PositionType {
 	private String name;
 	
 	@OneToMany(mappedBy="positionType")
+	@JsonIgnore
 	private List<Position> positions = new ArrayList<Position>();
 	
 	private PositionType() {}

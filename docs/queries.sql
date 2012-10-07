@@ -19,7 +19,7 @@ select p.name, pos.name, count(pos.id) as gcount from player p
 inner join player_game pg ON pg.player_id=p.id 
 inner join formation_position fp ON pg.formationposition_id=fp.id  
 inner join position pos ON pos.id=fp.position_id
-where p.name='Magnus Erlingmark' 
+where p.name='Jakob Johansson' 
 GROUP BY p.name, pos.name
 
 # Antal matcher pÃ¥ en viss position
@@ -39,5 +39,34 @@ INNER JOIN GAME g1 ON g1.id=pg1.game_id
 WHERE pg1.game_id IN 
 	(SELECT pg.game_id FROM GAME g 
 	INNER JOIN PLAYER_GAME pg ON pg.game_id=g.id 
-	WHERE pg.playER_ID = 38452) 
+	WHERE pg.playER_ID = 29526) 
 GROUP BY name ORDER BY name DESC
+
+# Lista alla matcher där IFK legat under med 0-3 i paus
+select ht.name hemmlag, awt.name bortalag, g.name, dateofgame, homegoals, awaygoals, homegoalshalftime, awaygoalshalftime from game i
+nner join ground g ON g.id=ground_id inner join club ht ON ht.id = hometeam_id inner join club awt ON awt.id=awayteam_id where homegoalshalf
+time = 0 and awaygoalshalftime = 3 ORDER BY dateOfGame;
+
+# Lista alla matcher som slutat 3-3 eller mer...
+select ht.name hemmlag, awt.name bortalag, g.name, dateofgame, homegoals, awaygoals from game inner join ground g ON g.id=ground_id inner join club ht ON ht.id = hometeam_id inner join club awt ON awt.id=awayteam_id where homegoals >= 0 and awaygoals >= 3 ORDER BY dateOfGame;
+
+# Alla matcher för en viss spelare på en viss position
+select p.name, pos.name, g.dateofgame, ht.name, at.name, pg.participationType from player p 
+inner join player_game pg ON pg.player_id=p.id
+inner join game g ON pg.game_id=g.id
+inner join club ht ON g.hometeam_id=ht.id
+inner join club at ON g.awayteam_id=at.id
+inner join formation_position fp ON pg.formationposition_id=fp.id  
+inner join position pos ON pos.id=fp.position_id
+WHERE pos.name like 'V%nsterytter' AND p.name = 'Jakob Johansson'
+
+# Mål av Torbjörn Nilsson fördelat per turnering
+select count(ge.id) as goals, t.name from player p 
+inner join player_game pg ON pg.player_id=p.id
+inner join game g ON pg.game_id=g.id
+inner join game_event ge ON ge.game_id=g.id
+inner join player p2 ON p2.id = ge.player_id AND p2.id = p.id
+inner join tournament_season ts ON ts.id = g.tournamentseason_id
+inner join tournament t ON t.id = ts.tournament_id
+WHERE p.name like 'Torbj%rn Nilsson' AND ge.eventType = 'GOAL'
+GROUP BY t.name

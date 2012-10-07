@@ -16,6 +16,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 
 
 @Entity
@@ -55,9 +57,11 @@ public class Player {
 	private PositionType positionType;
 	
 	@OneToMany(fetch=FetchType.EAGER, mappedBy="player")
+	@JsonIgnore
 	private List<PlayedForClub> clubs = new ArrayList<PlayedForClub>();
 	
 	@OneToMany(mappedBy="player")
+	@JsonIgnore
 	private List<GameParticipation> games = new ArrayList<GameParticipation>();
 	
 	public Long getId() {

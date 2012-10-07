@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -12,6 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 @Entity
 @Table(name="tournament_season")
@@ -27,11 +30,13 @@ public class TournamentSeason {
 	@Temporal(value=TemporalType.DATE)
 	private Date start;
 	
-	@OneToMany(mappedBy="tournamentSeason")
+	@JsonIgnore
+	@OneToMany(mappedBy="tournamentSeason", fetch=FetchType.EAGER)
 	private List<Game> games = new ArrayList<Game>();
 	
 	// Can be either a "pure" year such as 1993, or a cross-season string such as 1992/1993.
 	@ManyToOne
+	@JsonIgnore
 	private SquadSeason season;
 	
 	/**

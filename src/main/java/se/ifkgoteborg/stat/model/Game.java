@@ -16,6 +16,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 @Entity
 public class Game {
 	
@@ -56,15 +58,18 @@ public class Game {
 //	private List<Goal> awayGoals;
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="game")
+	@JsonIgnore
 	private List<GameEvent> events = new ArrayList<GameEvent>();
 	
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="game")
+	@JsonIgnore
 	private List<GameParticipation> gameParticipation = new ArrayList<GameParticipation>();
 	
 	@ManyToOne(cascade=CascadeType.PERSIST)
 	private Formation formation;
 	
 	@OneToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE}, mappedBy="game")
+	@JsonIgnore
 	private List<GameNote> gameNotes = new ArrayList<GameNote>();
 	
 	private Integer homeFreekicks = 0;

@@ -11,8 +11,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="game_event")
-public class GameEvent {
 
+public class GameEvent {
 	public enum EventType {
 		YELLOW_CARD, RED_CARD, SUBSTITUTION_IN, SUBSTITUTION_OUT, PENALTY_KICK, GOAL
 	}

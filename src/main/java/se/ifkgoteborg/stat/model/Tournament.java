@@ -1,6 +1,8 @@
 package se.ifkgoteborg.stat.model;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -15,6 +17,8 @@ public class Tournament {
 	private Long id;
 	
 	private String name;
+	
+	private TournamentType tournamentType;
 	
 	private boolean yearOverlapping = false;
 	
@@ -33,6 +37,16 @@ public class Tournament {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	
+	@Enumerated(value=EnumType.STRING)
+	public TournamentType getTournamentType() {
+		return tournamentType;
+	}
+
+	public void setTournamentType(TournamentType tournamentType) {
+		this.tournamentType = tournamentType;
 	}
 
 	public String getName() {
