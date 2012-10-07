@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
@@ -196,6 +197,15 @@ public class Player {
 
 	public void setGames(List<GameParticipation> games) {
 		this.games = games;
+	}
+	
+	@Transient
+	public Integer getNumberOfGames() {
+		try {
+			return games.size();
+		} catch (Throwable e) {
+			return 0;
+		}
 	}
 
 	@Override

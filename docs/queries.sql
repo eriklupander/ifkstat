@@ -70,3 +70,10 @@ inner join tournament_season ts ON ts.id = g.tournamentseason_id
 inner join tournament t ON t.id = ts.tournament_id
 WHERE p.name like 'Torbj%rn Nilsson' AND ge.eventType = 'GOAL'
 GROUP BY t.name
+
+# Lista mål per turnering av spelare
+SELECT t.name, COUNT(ge.id) as goals FROM player p 
+INNER JOIN game_event ge ON ge.player_id=p.id 
+INNER JOIN tournament_season ts ON ts.id = g.tournamentseason_id
+INNER JOIN tournament t ON t.id = ts.tournament_id
+WHERE ge.EVENTTYPE ='GOAL' GROUP BY t.name ORDER BY goals DESC

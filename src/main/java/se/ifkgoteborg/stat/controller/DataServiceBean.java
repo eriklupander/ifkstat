@@ -5,7 +5,11 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
+import se.ifkgoteborg.stat.dto.GamePositionStatDTO;
+import se.ifkgoteborg.stat.dto.GoalsPerTournamentDTO;
+import se.ifkgoteborg.stat.dto.PlayerStatDTO;
 import se.ifkgoteborg.stat.model.Game;
 import se.ifkgoteborg.stat.model.GameEvent;
 import se.ifkgoteborg.stat.model.GameNote;
@@ -25,7 +29,12 @@ public class DataServiceBean implements DataService {
 
 	@Override
 	public Player getPlayer(Long id) {
-		return em.find(Player.class, id);
+		Player p = em.find(Player.class, id);
+		
+		// Lazy loading fix. I don't like it at all.
+		p.getGames().size();
+		
+		return p;
 	}
 
 	@Override
@@ -42,7 +51,7 @@ public class DataServiceBean implements DataService {
 
 	@Override
 	public List<Game> getGamesOfPlayer(Long id) {
-		return em.createQuery("select g from Game g WHERE g.gameParticipation.player.id = :id")
+		return em.createQuery("select g from Game g join g.gameParticipation gp join gp.player p WHERE p.id = :id")
 			.setParameter("id", id)
 			.getResultList();
 	}
@@ -105,6 +114,45 @@ public class DataServiceBean implements DataService {
 		return em.createQuery("select ge from GameEvent ge WHERE ge.game.id = :id")
 				.setParameter("id", id)
 				.getResultList();
+	}
+
+	@Override
+	public List<Game> getGamesVsClub(Long id) {
+		return em.createQuery("select g from Game g WHERE (g.homeTeam.id = :id OR g.awayTeam.id = :id)")
+				.setParameter("id", id)
+				.getResultList();
+	}
+	
+	@Override
+	public PlayerStatDTO getPlayerStats(Long id) {
+		PlayerStatDTO dto = new PlayerStatDTO();
+		
+		Query q1 = em.createNativeQuery(
+			"SELECT t.name, COUNT(ge.id) as goals FROM player p " +
+			"INNER JOIN game_event ge ON ge.player_id=p.id  " +
+			"INNER JOIN game g ON g.id = ge.game_id " +
+			"INNER JOIN tournament_season ts ON ts.id = g.tournamentseason_id " +
+			"INNER JOIN tournament t ON t.id = ts.tournament_id " +
+			"WHERE ge.EVENTTYPE ='GOAL' AND p.id=" + id + " GROUP BY t.name ORDER BY goals DESC");
+		List<Object[]> res1 = q1.getResultList();
+		for(Object[] row : res1) {
+			dto.getGoalsPerTournament().add(new GoalsPerTournamentDTO((String) row[0], (Number) row[1]));
+		}
+		
+		Query q2 = em.createNativeQuery(
+				"select pos.name, count(pos.id) as gcount from player p " +
+				"inner join player_game pg ON pg.player_id=p.id  " +
+				"inner join formation_position fp ON pg.formationposition_id=fp.id " +
+				"inner join position pos ON pos.id=fp.position_id " +
+				"WHERE p.id = " + id + " " +
+				"GROUP BY p.name, pos.name " +
+				"ORDER BY gcount DESC");
+			List<Object[]> res2 = q2.getResultList();
+			for(Object[] row : res2) {
+				dto.getGamesPerPosition().add(new GamePositionStatDTO((String) row[0], (Number) row[1]));
+			}
+		
+		return dto;
 	}
 
 }

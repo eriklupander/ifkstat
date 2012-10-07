@@ -8,6 +8,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import se.ifkgoteborg.stat.dto.PlayerStatDTO;
 import se.ifkgoteborg.stat.model.Game;
 import se.ifkgoteborg.stat.model.GameEvent;
 import se.ifkgoteborg.stat.model.GameNote;
@@ -85,6 +86,11 @@ public interface DataService {
 	    @Produces(MediaType.APPLICATION_JSON)
 		List<Game> getGamesOfPlayer(@PathParam("id") Long id);
 		
+		@Path("/club/{id}/games")
+	    @GET
+	    @Produces(MediaType.APPLICATION_JSON)
+		List<Game> getGamesVsClub(@PathParam("id") Long id);
+		
 		@Path("/tournamentseason/{id}/games")
 	    @GET
 	    @Produces(MediaType.APPLICATION_JSON)
@@ -94,4 +100,9 @@ public interface DataService {
 	    @GET
 	    @Produces(MediaType.APPLICATION_JSON)
 		List<TournamentSeason> getSeasonsOfTournament(@PathParam("id") Long id);
+
+		@Path("/player/{id}/stats")
+	    @GET
+	    @Produces(MediaType.APPLICATION_JSON)
+		PlayerStatDTO getPlayerStats(@PathParam("id") Long id);
 }
