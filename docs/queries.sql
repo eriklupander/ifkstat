@@ -71,9 +71,28 @@ inner join tournament t ON t.id = ts.tournament_id
 WHERE p.name like 'Torbj%rn Nilsson' AND ge.eventType = 'GOAL'
 GROUP BY t.name
 
-# Lista mål per turnering av spelare
+# Lista mål och antal matcher per turnering av spelare
 SELECT t.name, COUNT(ge.id) as goals FROM player p 
 INNER JOIN game_event ge ON ge.player_id=p.id 
+INNER JOIN game g ON g.id = ge.game_id
 INNER JOIN tournament_season ts ON ts.id = g.tournamentseason_id
 INNER JOIN tournament t ON t.id = ts.tournament_id
-WHERE ge.EVENTTYPE ='GOAL' GROUP BY t.name ORDER BY goals DESC
+WHERE ge.EVENTTYPE ='GOAL' AND p.id=54533 GROUP BY t.name ORDER BY goals DESC
+
+
+# Lista snittmål, snittpoäng för spelare i turneringar
+SELECT t.name, COUNT(ge.id) as goals, COUNT(pg.id) as appearances, 
+COUNT(ge2.id) as inbytt, COUNT(ge3.id) as utbytt, COUNT(ge4.id) as goals_as_subst
+, COUNT(ge5.id) as goals_as_subst_out
+FROM player p 
+INNER JOIN player_game pg ON pg.player_id=p.id
+INNER JOIN game g ON g.id = pg.game_id
+INNER JOIN tournament_season ts ON ts.id = g.tournamentseason_id
+INNER JOIN tournament t ON t.id = ts.tournament_id
+LEFT OUTER JOIN game_event ge ON ge.player_id=p.id AND ge.game_id=g.id AND ge.EVENTTYPE ='GOAL'
+LEFT OUTER JOIN game_event ge2 ON ge2.player_id=p.id AND ge2.game_id=g.id AND ge2.EVENTTYPE ='SUBSTITUTION_IN'
+LEFT OUTER JOIN game_event ge3 ON ge3.player_id=p.id AND ge3.game_id=g.id AND ge3.EVENTTYPE ='SUBSTITUTION_OUT'
+LEFT OUTER JOIN game_event ge4 ON ge4.player_id=p.id AND ge4.game_id=g.id AND (ge4.EVENTTYPE ='SUBSTITUTION_IN' AND ge.EVENTTYPE ='GOAL')
+LEFT OUTER JOIN game_event ge5 ON ge5.player_id=p.id AND ge5.game_id=g.id AND (ge5.EVENTTYPE ='SUBSTITUTION_OUT' AND ge.EVENTTYPE ='GOAL')
+WHERE p.id=44829 
+GROUP BY t.name ORDER BY goals DESC;

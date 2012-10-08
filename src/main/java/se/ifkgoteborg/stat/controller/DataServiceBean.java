@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import se.ifkgoteborg.stat.dto.AveragesPerGameAndTournamentDTO;
 import se.ifkgoteborg.stat.dto.GamePositionStatDTO;
 import se.ifkgoteborg.stat.dto.GoalsPerTournamentDTO;
 import se.ifkgoteborg.stat.dto.PlayerStatDTO;
@@ -152,6 +153,34 @@ public class DataServiceBean implements DataService {
 				dto.getGamesPerPosition().add(new GamePositionStatDTO((String) row[0], (Number) row[1]));
 			}
 		
+			Query q3 = em.createNativeQuery(
+				"SELECT t.name, COUNT(ge.id) as goals, COUNT(pg.id) as appearances, " +
+				"COUNT(ge2.id) as inbytt, COUNT(ge3.id) as utbytt, COUNT(ge4.id) as goals_as_subst " +
+				", COUNT(ge5.id) as goals_as_subst_out " +
+				"FROM player p  " +
+				"INNER JOIN player_game pg ON pg.player_id=p.id " +
+				"INNER JOIN game g ON g.id = pg.game_id " +
+				"INNER JOIN tournament_season ts ON ts.id = g.tournamentseason_id " +
+				"INNER JOIN tournament t ON t.id = ts.tournament_id " +
+				"LEFT OUTER JOIN game_event ge ON ge.player_id=p.id AND ge.game_id=g.id AND ge.EVENTTYPE ='GOAL' " +
+				"LEFT OUTER JOIN game_event ge2 ON ge2.player_id=p.id AND ge2.game_id=g.id AND ge2.EVENTTYPE ='SUBSTITUTION_IN' " +
+				"LEFT OUTER JOIN game_event ge3 ON ge3.player_id=p.id AND ge3.game_id=g.id AND ge3.EVENTTYPE ='SUBSTITUTION_OUT' " +
+				"LEFT OUTER JOIN game_event ge4 ON ge4.player_id=p.id AND ge4.game_id=g.id AND (ge4.EVENTTYPE ='SUBSTITUTION_IN' AND ge.EVENTTYPE ='GOAL') " +
+				"LEFT OUTER JOIN game_event ge5 ON ge5.player_id=p.id AND ge5.game_id=g.id AND (ge5.EVENTTYPE ='SUBSTITUTION_OUT' AND ge.EVENTTYPE ='GOAL') " +
+				"WHERE p.id=" + id + " " +
+				"GROUP BY t.name ORDER BY t.name");
+			List<Object[]> res3 = q3.getResultList();
+			for(Object[] row : res3) {
+				AveragesPerGameAndTournamentDTO avDto = new AveragesPerGameAndTournamentDTO();
+				avDto.setTournamentName((String) row[0]);
+				avDto.setGoals( ((Number) row[1]).intValue());
+				avDto.setTotalGames( ((Number) row[2]).intValue());
+				avDto.setGamesAsSubstituteIn( ((Number) row[3]).intValue());
+				avDto.setGamesAsSubstituteOut( ((Number) row[4]).intValue());
+				avDto.setGoalsAsSubstituteIn( ((Number) row[5]).intValue());
+				avDto.setGoalsAsSubstituteOut( ((Number) row[6]).intValue());
+				dto.getAveragesPerTournament().add(avDto);
+			}
 		return dto;
 	}
 

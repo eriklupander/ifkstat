@@ -7,6 +7,7 @@ public class PlayerStatDTO {
 	private List<GoalsPerTournamentDTO> goalsPerTournament = new ArrayList<GoalsPerTournamentDTO>();
 	private List<GamePositionStatDTO> gamesPerPosition = new ArrayList<GamePositionStatDTO>();
 	private List<PlayedWithPlayerDTO> playedWithPlayer = new ArrayList<PlayedWithPlayerDTO>();
+	private List<AveragesPerGameAndTournamentDTO> averagesPerTournament = new ArrayList<AveragesPerGameAndTournamentDTO>();
 	
 	public List<GoalsPerTournamentDTO> getGoalsPerTournament() {
 		return goalsPerTournament;
@@ -26,6 +27,11 @@ public class PlayerStatDTO {
 	public void setPlayedWithPlayer(List<PlayedWithPlayerDTO> playedWithPlayer) {
 		this.playedWithPlayer = playedWithPlayer;
 	}
-	
-	
+	public List<AveragesPerGameAndTournamentDTO> getAveragesPerTournament() {
+		return averagesPerTournament;
+	}
+	public void setAveragesPerTournament(
+			List<AveragesPerGameAndTournamentDTO> averagesPerTournament) {
+		this.averagesPerTournament = averagesPerTournament;
+	}
 }

@@ -65,7 +65,36 @@ function showPlayerDetails(id) {
 		'<tr><td>Nationalitet</td><td>' + (data.nationality != null ? data.nationality.name : '') + '</td></tr>' + 
 		'<tr><td>Position</td><td>' + (data.positionType != null ? data.positionType.name : '' ) + '</td></tr>' + 
 		'</tbody></table>');
+	
+	$('#playerstats').css('display', 'block');
+	$('#playerstats').html('<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="player_stats"></table>');
+	
+	var statdata = DataService.getPlayerStats(params);
+	$('#player_stats').dataTable( {	 
+			
+			"bProcessing" : true,
+			"aaData": statdata.averagesPerTournament,
+			"bPaginate": false,
+	        "bLengthChange": false,
+	        "bFilter": false,
+	        "bSort": true,
+	        "bInfo": false,
+			"aoColumns": [		    
+			    { "mData": "tournamentName", "sTitle": "Turnering" },
+			    { "mData": "totalGames", "sTitle": "Matcher" },
+			    { "mData": "goals", "sTitle": "Mål" },
+			    { "mData": "gamesAsSubstituteIn", "sTitle": "Inbytt" },
+			    { "mData": "gamesAsSubstituteOut", "sTitle": "Utbytt" },
+			    { "mData": "goalsAsSubstituteIn", "sTitle": "Mål som inhoppare" },
+			    { "mData": "goalsAsSubstituteOut", "sTitle": "Mål, sedan utbytt" }
+			]
+		} );
+
 }
+
+
+
+
 
 
 function showGameDetails(id) {

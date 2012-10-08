@@ -19,6 +19,8 @@ import javax.persistence.Transient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import se.ifkgoteborg.stat.model.enums.ParticipationType;
+
 
 
 @Entity
@@ -197,6 +199,36 @@ public class Player {
 
 	public void setGames(List<GameParticipation> games) {
 		this.games = games;
+	}
+	
+	@Transient
+	public Integer getNumberGamesSubstitutedIn() {
+		try {
+			int count = 0;
+			for(GameParticipation g : games) {
+				if(g.getParticipationType() == ParticipationType.SUBSTITUTE_IN) {
+					count++;
+				}
+			}
+			return count;
+		} catch (Throwable e) {
+			return 0;
+		}
+	}
+	
+	@Transient
+	public Integer getNumberGamesSubstitutedOut() {
+		try {
+			int count = 0;
+			for(GameParticipation g : games) {
+				if(g.getParticipationType() == ParticipationType.SUBSTITUTE_OUT) {
+					count++;
+				}
+			}
+			return count;
+		} catch (Throwable e) {
+			return 0;
+		}
 	}
 	
 	@Transient

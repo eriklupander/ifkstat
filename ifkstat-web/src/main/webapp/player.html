@@ -18,9 +18,12 @@
 </head>
 <body>
 	<div>IFK Göteborg statistikdatabas</div>
-	<div style="display:none;width:500px;" id="playerdetails" class="infopanel"></div>
-	<div style="display:none;width:500px;" id="gamedetails" class="infopanel"></div>
-	<div style="width:500px;" id="demo" class="infotables"></div>
+	<table>
+		<tr>
+			<td valign="top"><div style="display:none;width:500px;" id="playerdetails" class="infopanel"></div></td>
+			<td valign="top"><div style="display:none;width:500px;" id="playerstats" class="infopanel"></div></td>
+		</tr>
+	</table>
 	
 	<script>	
 		$(document).ready(function() {
