@@ -1,11 +1,13 @@
-#Sun Jul 22 11:38:41 CEST 2012
 eclipse.preferences.version=1
+encoding//data/master.txt=UTF-8
 encoding//data/matcher_utf8.txt=UTF-8
 encoding//src/main/java/se/ifkgoteborg/stat/controller/StatStartup.java=UTF-8
 encoding//src/main/java/se/ifkgoteborg/stat/importer/GameImporter.java=UTF-8
-encoding//src/main/java/se/ifkgoteborg/stat/importer/NotesImporter.java=UTF-8
 encoding//src/main/java/se/ifkgoteborg/stat/importer/transformer/XlsTransformer.java=UTF-8
 encoding//src/main/java/se/ifkgoteborg/stat/ui/GameDetailsView.java=UTF-8
 encoding//src/main/java/se/ifkgoteborg/stat/ui/ImportView.java=UTF-8
+encoding//src/main/java/se/ifkgoteborg/stat/ui/PlayerView.java=UTF-8
 encoding//src/main/java/se/ifkgoteborg/stat/ui/control/ComboBoxFactory.java=UTF-8
 encoding//src/main/java/se/ifkgoteborg/stat/ui/form/GameFormFieldFactory.java=UTF-8
+encoding//src/main/java/se/ifkgoteborg/stat/ui/form/PlayerForm.java=UTF-8
+encoding//src/main/java/se/ifkgoteborg/stat/ui/form/PlayerFormFieldFactory.java=UTF-8

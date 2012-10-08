@@ -8,7 +8,7 @@
  
 <context-param>
   <param-name>resteasy.resources</param-name>
-  <param-value>se.ifkgoteborg.stat.controller.DataServiceBean</param-value>
+  <param-value>se.ifkgoteborg.stat.controller.DataServiceBean,se.ifkgoteborg.stat.controller.AdminDataServiceBean</param-value>
  </context-param>
  
  <context-param>
