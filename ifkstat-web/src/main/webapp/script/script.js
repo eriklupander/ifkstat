@@ -48,6 +48,37 @@ function showGamesOfPlayer(id) {
     createGamesTable(data);
 }
 
+function editPlayerDetails(id) {
+	$('.infopanel').css('display', 'none');
+	$('.infotables').css('display', 'none');
+	
+	var params = {"id":id};
+	var data = DataService.getPlayer(params);
+	
+	$('#playerdetails').css('display', 'block');
+	$('#playerdetails').html('<table class="bordered">' + 
+		'<thead><tr><th colspan="2">' + data.name + '</th></tr></thead>' +
+		'<tbody>' +
+		'<tr><td>Namn</td><td><input type="text" id="name"/></td></tr>' + 
+		'<tr><td>Född</td><td><input type="text" id="dateOfBirth"/></td></tr>' + 
+		'<tr><td>Moderklubb</td><td><input type="text" id="motherClub"/></td></tr>' + 
+		'<tr><td>Övriga klubbar</td><td><input type="text" id="otherClubs"/></td></tr>' + 
+		'<tr><td>Längd</td><td><input type="text" id="length"/></td></tr>' +
+		'<tr><td>Vikt</td><td><input type="text" id="weight"/></td></tr>' +
+		'<tr><td>Biografi</td><td><textarea id="biography"></textarea></td></tr>' +
+		'</tbody></table>');
+	
+	// Populate
+	$('#name').val(data.name);
+	$('#dateOfBirth').val(data.dateOfBirth);
+	$('#motherClub').val(data.motherClub);
+	$('#otherClubs').val(data.otherClubs);
+	$('#length').val(data.length);
+	$('#weight').val(data.weight);
+	$('#biography').val(data.biography);
+	
+}
+
 function showPlayerDetails(id) {
 	$('.infopanel').css('display', 'none');
 	$('.infotables').css('display', 'none');
@@ -55,7 +86,7 @@ function showPlayerDetails(id) {
 	var data = DataService.getPlayer(params);
 	$('#playerdetails').css('display', 'block');
 	$('#playerdetails').html('<table class="bordered">' + 
-		'<thead><tr><th colspan="2">' + data.name + '</th></tr></thead>' +
+		'<thead><tr><th colspan="2">' + data.name + '<span style="float:right;"><button id="editplayer" class="btn">Redigera</button></span></th></tr></thead>' +
 		'<tbody>' +
 		'<tr><td>Antal matcher</td><td><a href="gamesOfPlayer.html?id=' + data.id + '">' + nstr(data.numberOfGames) + '</a></td></tr>' + 
 		'<tr><td>Född</td><td>' + nstr(data.dateOfBirth) + '</td></tr>' + 
@@ -65,6 +96,10 @@ function showPlayerDetails(id) {
 		'<tr><td>Nationalitet</td><td>' + (data.nationality != null ? data.nationality.name : '') + '</td></tr>' + 
 		'<tr><td>Position</td><td>' + (data.positionType != null ? data.positionType.name : '' ) + '</td></tr>' + 
 		'</tbody></table>');
+	
+	$('#editplayer').click(function() {
+		editPlayerDetails(id);
+	});
 	
 	$('#playerstats').css('display', 'block');
 	$('#playerstats').html('<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="player_stats"></table>');
