@@ -17,6 +17,7 @@ import se.ifkgoteborg.stat.model.GameNote;
 import se.ifkgoteborg.stat.model.GameParticipation;
 import se.ifkgoteborg.stat.model.Ground;
 import se.ifkgoteborg.stat.model.Player;
+import se.ifkgoteborg.stat.model.PositionType;
 import se.ifkgoteborg.stat.model.Referee;
 import se.ifkgoteborg.stat.model.SquadSeason;
 import se.ifkgoteborg.stat.model.Tournament;
@@ -182,6 +183,16 @@ public class DataServiceBean implements DataService {
 				dto.getAveragesPerTournament().add(avDto);
 			}
 		return dto;
+	}
+
+	@Override
+	public List<PositionType> getPositionTypes() {
+		return em.createQuery("select pt from PositionType pt").getResultList();
+	}
+
+	@Override
+	public List<PositionType> getCountries() {
+		return em.createQuery("select c from Country c ORDER BY c.name").getResultList();
 	}
 
 }

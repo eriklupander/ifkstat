@@ -57,14 +57,16 @@ function editPlayerDetails(id) {
 	
 	$('#playerdetails').css('display', 'block');
 	$('#playerdetails').html('<table class="bordered">' + 
-		'<thead><tr><th colspan="2">' + data.name + '</th></tr></thead>' +
+		'<thead><tr><th colspan="2">' + data.name + '<span style="float:right;"><button id="saveplayer" class="btn">Spara</button><button id="cancel" class="btn">Avbryt</button></span></th></tr></thead>' +
 		'<tbody>' +
 		'<tr><td>Namn</td><td><input type="text" id="name"/></td></tr>' + 
 		'<tr><td>Född</td><td><input type="text" id="dateOfBirth"/></td></tr>' + 
 		'<tr><td>Moderklubb</td><td><input type="text" id="motherClub"/></td></tr>' + 
-		'<tr><td>Övriga klubbar</td><td><input type="text" id="otherClubs"/></td></tr>' + 
+		'<tr><td>Övriga klubbar</td><td><input type="text" id="playedForClubs"/></td></tr>' + 
 		'<tr><td>Längd</td><td><input type="text" id="length"/></td></tr>' +
 		'<tr><td>Vikt</td><td><input type="text" id="weight"/></td></tr>' +
+		'<tr><td>Nationalitet</td><td><select id="nationality"/></td></tr>' +
+		'<tr><td>Position</td><td><select id="positionType"/></td></tr>' +
 		'<tr><td>Biografi</td><td><textarea id="biography"></textarea></td></tr>' +
 		'</tbody></table>');
 	
@@ -72,10 +74,48 @@ function editPlayerDetails(id) {
 	$('#name').val(data.name);
 	$('#dateOfBirth').val(data.dateOfBirth);
 	$('#motherClub').val(data.motherClub);
-	$('#otherClubs').val(data.otherClubs);
+	$('#playedForClubs').val(data.playedForClubs);
 	$('#length').val(data.length);
 	$('#weight').val(data.weight);
 	$('#biography').val(data.biography);
+	
+	var positions = DataService.getPositionTypes();
+	for(var a = 0; a < positions.length; a++) {
+		var isSelected = (data.positionType != null && positions[a].id == data.positionType.id);
+		$('#positionType').append('<option ' + (isSelected ? 'selected' : '') + ' value="' + positions[a].id + '">' + positions[a].name + '</option>');
+	}
+	
+	var countries = DataService.getCountries();
+	for(var a = 0; a < countries.length; a++) {
+		var isSelected = (data.nationality != null && countries[a].id == data.nationality.id);
+		$('#nationality').append('<option ' + (isSelected ? 'selected' : '') + ' value="' + countries[a].id + '">' + countries[a].name + '</option>');
+	}
+	
+	$('#saveplayer').click(function() {
+		// Save to backend
+		data.name = $('#name').val();
+		data.dateOfBirth = $('#dateOfBirth').val();
+		data.motherClub = $('#motherClub').val();
+		data.playedForClubs = $('#playedForClubs').val();
+		data.length = $('#length').val();
+		data.weight = $('#weight').val();
+		data.biography = $('#biography').val();
+		if(data.positionType == null) {
+			data.positionType = {};
+		}
+		data.positionType.id = $('#positionType').val();
+		if(data.nationality == null) {
+			data.nationality = {};
+		}
+		data.nationality.id = $('#nationality').val();
+		var playerParam = {};
+		playerParam.$entity = data;
+		data = AdminDataService.savePlayer(playerParam);
+		showPlayerDetails(id);
+	});
+	$('#cancel').click(function() {
+		showPlayerDetails(id);
+	});
 	
 }
 
@@ -93,9 +133,11 @@ function showPlayerDetails(id) {
 		'<tr><td>Moderklubb</td><td>' + nstr(data.motherClub) + '</td></tr>' + 
 		'<tr><td>Övriga klubbar</td><td>' + nstr(data.playedForClubs) + '</td></tr>' + 
 		'<tr><td>Längd</td><td>' + nstr(data.length) + '</td></tr>' + 
+		'<tr><td>Vikt</td><td>' + nstr(data.weight) + '</td></tr>' + 
 		'<tr><td>Nationalitet</td><td>' + (data.nationality != null ? data.nationality.name : '') + '</td></tr>' + 
 		'<tr><td>Position</td><td>' + (data.positionType != null ? data.positionType.name : '' ) + '</td></tr>' + 
-		'</tbody></table>');
+		'<tr><td>Biografi</td><td>' + nstr(data.biography) + '</td></tr>' +
+			'</tbody></table>');
 	
 	$('#editplayer').click(function() {
 		editPlayerDetails(id);

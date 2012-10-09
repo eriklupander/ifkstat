@@ -15,6 +15,7 @@ import se.ifkgoteborg.stat.model.GameNote;
 import se.ifkgoteborg.stat.model.GameParticipation;
 import se.ifkgoteborg.stat.model.Ground;
 import se.ifkgoteborg.stat.model.Player;
+import se.ifkgoteborg.stat.model.PositionType;
 import se.ifkgoteborg.stat.model.Referee;
 import se.ifkgoteborg.stat.model.SquadSeason;
 import se.ifkgoteborg.stat.model.Tournament;
@@ -105,4 +106,14 @@ public interface DataService {
 	    @GET
 	    @Produces(MediaType.APPLICATION_JSON)
 		PlayerStatDTO getPlayerStats(@PathParam("id") Long id);
+		
+		@Path("/positiontypes")
+	    @GET
+	    @Produces(MediaType.APPLICATION_JSON)
+		List<PositionType> getPositionTypes();
+		
+		@Path("/countries")
+	    @GET
+	    @Produces(MediaType.APPLICATION_JSON)
+		List<PositionType> getCountries();
 }
