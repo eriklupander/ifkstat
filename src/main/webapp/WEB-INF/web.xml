@@ -46,5 +46,28 @@
   <servlet-name>resteasy-servlet</servlet-name>
   <url-pattern>/rest/*</url-pattern>
  </servlet-mapping>
+ 
+ <security-constraint>
+      <web-resource-collection>
+         <web-resource-name>resteasy-servlet</web-resource-name>
+         <url-pattern>/rest/admin/*</url-pattern>
+      </web-resource-collection>
+       <auth-constraint>
+         <role-name>admin</role-name>
+         <role-name>user</role-name>
+      </auth-constraint>
+  </security-constraint>
+
+   <login-config>
+      <auth-method>BASIC</auth-method>
+      <realm-name>IFKSTAT</realm-name>
+   </login-config>
+
+   <security-role>
+      <role-name>admin</role-name>
+   </security-role>
+   <security-role>
+      <role-name>user</role-name>
+   </security-role>
     
 </web-app>

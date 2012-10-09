@@ -17,6 +17,8 @@ import se.ifkgoteborg.stat.model.Ground;
 import se.ifkgoteborg.stat.model.Position;
 import se.ifkgoteborg.stat.model.PositionType;
 import se.ifkgoteborg.stat.model.Setting;
+import se.ifkgoteborg.stat.model.User;
+import se.ifkgoteborg.stat.model.Userrole;
 import se.ifkgoteborg.stat.model.enums.Side;
 
 @Startup
@@ -46,6 +48,17 @@ public class StatStartup {
 		if(!runInitData)
 			return;
 	
+		// Bootstrap user
+		User user = new User();
+		user.setUsername("admin");
+		user.setPasswd("admin");
+		
+		user = em.merge(user);
+		
+		Userrole userrole = new Userrole();
+		userrole.setUsername("admin");
+		userrole.setUserRoles("admin");
+		userrole = em.merge(userrole);
 		
 		 Locale[] locales = Locale.getAvailableLocales();
 	    for (Locale locale : locales) {

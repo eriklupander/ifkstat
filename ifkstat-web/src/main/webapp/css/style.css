@@ -1,6 +1,6 @@
 body {
     width: 600px;
-    margin: 40px auto;
+    margin: 40px;
     font-family: 'trebuchet MS', 'Lucida sans', Arial;
     font-size: 14px;
     color: #444;
@@ -98,4 +98,31 @@ table {
 	font-weight:bold;
 	font-family: verdana;
 	font-size: 12px;
+}
+
+.btn {
+	padding:4px 18px;
+	position:relative;
+	background:#e0e0e0 url(/images/bg_btn.gif) repeat-x;
+	text-decoration:none;
+	text-shadow: 1px 1px #fff;
+	font-weight:bold;
+	display:inline-block;
+	color:#666 !important;
+	border:1px #dbdbdb solid;
+	font-size:12px;
+    line-height:14px;
+	margin:2px;
+}
+
+.btn:hover {
+    cursor:pointer;
+    border:1px #a1a1a1 solid;
+    text-decoration: none;
+}
+
+.btn:active {
+	cursor:pointer;
+	background:#fff url(/images/bg_btn.gif) bottom left repeat-x;
+    border:1px #a1a1a1 solid;
 }

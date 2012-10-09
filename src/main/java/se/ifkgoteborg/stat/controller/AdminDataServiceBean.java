@@ -1,5 +1,6 @@
 package se.ifkgoteborg.stat.controller;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -9,10 +10,16 @@ import se.ifkgoteborg.stat.model.Player;
 import se.ifkgoteborg.stat.model.PositionType;
 
 @Stateless
+@RolesAllowed("admin")
 public class AdminDataServiceBean implements AdminDataService {
 	
 	@Inject
 	EntityManager em;
+	
+	@Override
+	public String test() {
+		return "Hello World!";
+	}
 
 	@Override
 	public Player savePlayer(Player player) {

@@ -2,6 +2,7 @@ package se.ifkgoteborg.stat.controller;
 
 import java.util.List;
 
+import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -24,6 +25,7 @@ import se.ifkgoteborg.stat.model.Tournament;
 import se.ifkgoteborg.stat.model.TournamentSeason;
 
 @Stateless
+@PermitAll
 public class DataServiceBean implements DataService {
 	
 	@Inject
