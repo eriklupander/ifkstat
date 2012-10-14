@@ -10,7 +10,7 @@ import se.ifkgoteborg.stat.model.Player;
 import se.ifkgoteborg.stat.model.PositionType;
 
 @Stateless
-@RolesAllowed("admin")
+@RolesAllowed("user")
 public class AdminDataServiceBean implements AdminDataService {
 	
 	@Inject

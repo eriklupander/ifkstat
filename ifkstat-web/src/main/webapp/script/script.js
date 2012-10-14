@@ -48,6 +48,42 @@ function showGamesOfPlayer(id) {
     createGamesTable(data);
 }
 
+function showGamesOfPlayerInTournament(id, tournamentId) {
+	$('.infopanel').css('display', 'none');
+	$('.infotables').css('display', 'block');
+	var params = {"id":id, "tournamentId":tournamentId};
+	var data = DataService.getGamesOfPlayerInTournament(params);
+    $('#demo').html( '<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
+    createGamesTable(data);
+}
+
+function showGamesOfPlayerInTournamentGoalScored(id, tournamentId) {
+	$('.infopanel').css('display', 'none');
+	$('.infotables').css('display', 'block');
+	var params = {"id":id, "tournamentId":tournamentId};
+	var data = DataService.getGamesOfPlayerInTournamentGoalScored(params);
+    $('#demo').html( '<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
+    createGamesTable(data);
+}
+
+function showGamesOfPlayerInTournamentSubstIn(id, tournamentId) {
+	$('.infopanel').css('display', 'none');
+	$('.infotables').css('display', 'block');
+	var params = {"id":id, "tournamentId":tournamentId};
+	var data = DataService.getGamesOfPlayerInTournamentSubstIn(params);
+    $('#demo').html( '<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
+    createGamesTable(data);
+}
+
+function showGamesOfPlayerInTournamentSubstOut(id, tournamentId) {
+	$('.infopanel').css('display', 'none');
+	$('.infotables').css('display', 'block');
+	var params = {"id":id, "tournamentId":tournamentId};
+	var data = DataService.getGamesOfPlayerInTournamentSubstOut(params);
+    $('#demo').html( '<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
+    createGamesTable(data);
+}
+
 function editPlayerDetails(id) {
 	$('.infopanel').css('display', 'none');
 	$('.infotables').css('display', 'none');
@@ -148,7 +184,13 @@ function showPlayerDetails(id) {
 	
 	var statdata = DataService.getPlayerStats(params);
 	$('#player_stats').dataTable( {	 
-			
+			"fnRowCallback": function( nRow, aData, iDisplayIndex ) {	           
+                $('td:eq(1)', nRow).html( '<a href="gamesOfPlayerInTournament.html?id=' + id + '&tournament_id=' + aData.tournamentId + '">' + aData.totalGames + '</a>' );
+                $('td:eq(2)', nRow).html( '<a href="gamesOfPlayerInTournamentGoalScored.html?id=' + id + '&tournament_id=' + aData.tournamentId + '">' + aData.goals + '</a>' );
+                $('td:eq(3)', nRow).html( '<a href="gamesOfPlayerInTournamentSubstIn.html?id=' + id + '&tournament_id=' + aData.tournamentId + '">' + aData.gamesAsSubstituteIn + '</a>' );
+                $('td:eq(4)', nRow).html( '<a href="gamesOfPlayerInTournamentSubstOut.html?id=' + id + '&tournament_id=' + aData.tournamentId + '">' + aData.gamesAsSubstituteOut + '</a>' );
+                
+			},
 			"bProcessing" : true,
 			"aaData": statdata.averagesPerTournament,
 			"bPaginate": false,

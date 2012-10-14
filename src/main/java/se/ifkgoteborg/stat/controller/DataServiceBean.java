@@ -28,6 +28,33 @@ import se.ifkgoteborg.stat.model.TournamentSeason;
 @PermitAll
 public class DataServiceBean implements DataService {
 	
+	private static final String GAMES_PER_PLAYER_TOURNAMENT =
+			"SELECT t.name, COUNT(pg.id) as appearances, " + 
+			"	COUNT(ge2.id) as inbytt, COUNT(ge3.id) as utbytt, t.id  " +  
+			"	FROM player p   " + 
+			"	INNER JOIN player_game pg ON pg.player_id=p.id  " + 
+			"	INNER JOIN game g ON g.id = pg.game_id  " + 
+			"	INNER JOIN tournament_season ts ON ts.id = g.tournamentseason_id  " + 
+			"	INNER JOIN tournament t ON t.id = ts.tournament_id  " + 
+			"	LEFT OUTER JOIN game_event ge2 ON ge2.player_id=p.id AND ge2.game_id=g.id AND ge2.EVENTTYPE ='SUBSTITUTION_IN'  " + 
+			"	LEFT OUTER JOIN game_event ge3 ON ge3.player_id=p.id AND ge3.game_id=g.id AND ge3.EVENTTYPE ='SUBSTITUTION_OUT'  " + 
+			"	WHERE p.id = :id " + 
+			"	GROUP BY t.name ORDER BY t.name;";
+	
+	private static final String GOALS_PER_PLAYER_TOURNAMENT = 
+			"SELECT t.name, COUNT(ge.id) as goals, COUNT(ge4.id) as goals_as_subst " +
+			"	, COUNT(ge5.id) as goals_as_subst_out " +
+			"	FROM player p   " +
+			"	INNER JOIN player_game pg ON pg.player_id=p.id  " +
+			"	INNER JOIN game g ON g.id = pg.game_id  " +
+			"	INNER JOIN tournament_season ts ON ts.id = g.tournamentseason_id  " +
+			"	INNER JOIN tournament t ON t.id = ts.tournament_id  " +
+			"	LEFT OUTER JOIN game_event ge ON ge.player_id=p.id AND ge.game_id=g.id AND ge.EVENTTYPE ='GOAL'  " +
+			"	LEFT OUTER JOIN game_event ge4 ON ge4.player_id=p.id AND ge.player_id=p.id AND ge4.game_id=g.id AND (ge4.EVENTTYPE ='SUBSTITUTION_IN' AND ge.EVENTTYPE ='GOAL')  " +
+			"	LEFT OUTER JOIN game_event ge5 ON ge5.player_id=p.id AND ge.player_id=p.id AND ge5.game_id=g.id AND (ge5.EVENTTYPE ='SUBSTITUTION_OUT' AND ge.EVENTTYPE ='GOAL')  " +
+			"	WHERE p.id=:id " +
+			"	GROUP BY t.name ORDER BY t.name";
+	
 	@Inject
 	EntityManager em;
 
@@ -53,13 +80,61 @@ public class DataServiceBean implements DataService {
 		return em.find(Game.class, id);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Game> getGamesOfPlayer(Long id) {
 		return em.createQuery("select g from Game g join g.gameParticipation gp join gp.player p WHERE p.id = :id")
 			.setParameter("id", id)
 			.getResultList();
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Game> getGamesOfPlayerInTournament(Long id, Long tournamentId) {
+		return em.createQuery("select g from Game g join g.gameParticipation gp join gp.player p WHERE p.id = :id AND g.tournamentSeason.tournament.id = :tournamentId")
+				.setParameter("id", id)
+				.setParameter("tournamentId", tournamentId)
+				.getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Game> getGamesOfPlayerInTournamentSubstIn(Long id, Long tournamentId) {
+		return em.createQuery("select DISTINCT(g) from Game g join g.gameParticipation gp " +
+				"join gp.player p " +
+				"join g.events ge " +                                                                      
+				"WHERE p.id = :id AND g.tournamentSeason.tournament.id = :tournamentId AND ge.eventType = 'SUBSTITUTION_IN' and ge.player.id=:id")
+					.setParameter("id", id)
+					.setParameter("tournamentId", tournamentId)
+					.getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Game> getGamesOfPlayerInTournamentSubstOut(Long id, Long tournamentId) {
+		return em.createQuery("select DISTINCT(g) from Game g join g.gameParticipation gp " +
+				"join gp.player p " +
+				"join g.events ge " +
+				"WHERE p.id = :id AND g.tournamentSeason.tournament.id = :tournamentId AND ge.eventType = 'SUBSTITUTION_OUT' and ge.player.id=:id")
+					.setParameter("id", id)
+					.setParameter("tournamentId", tournamentId)
+					.getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Game> getGamesOfPlayerInTournamentGoalScored(Long id,
+			Long tournamentId) {
+		return em.createQuery("select DISTINCT(g) from Game g join g.gameParticipation gp " +
+			"join gp.player p " +
+			"join g.events ge " +
+			"WHERE p.id = :id AND g.tournamentSeason.tournament.id = :tournamentId AND ge.eventType = 'GOAL' and ge.player.id=:id")
+				.setParameter("id", id)
+				.setParameter("tournamentId", tournamentId)
+				.getResultList();
+	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Game> getGamesOfTournamentSeason(Long id) {
 		return em.createQuery("select g from Game g WHERE g.tournamentSeason.id = :id")
@@ -67,6 +142,7 @@ public class DataServiceBean implements DataService {
 				.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<SquadSeason> getSquadSeasons() {
 		return em.createQuery("select ss from SquadSeason ss").getResultList();
@@ -156,34 +232,31 @@ public class DataServiceBean implements DataService {
 				dto.getGamesPerPosition().add(new GamePositionStatDTO((String) row[0], (Number) row[1]));
 			}
 		
-			Query q3 = em.createNativeQuery(
-				"SELECT t.name, COUNT(ge.id) as goals, COUNT(pg.id) as appearances, " +
-				"COUNT(ge2.id) as inbytt, COUNT(ge3.id) as utbytt, COUNT(ge4.id) as goals_as_subst " +
-				", COUNT(ge5.id) as goals_as_subst_out " +
-				"FROM player p  " +
-				"INNER JOIN player_game pg ON pg.player_id=p.id " +
-				"INNER JOIN game g ON g.id = pg.game_id " +
-				"INNER JOIN tournament_season ts ON ts.id = g.tournamentseason_id " +
-				"INNER JOIN tournament t ON t.id = ts.tournament_id " +
-				"LEFT OUTER JOIN game_event ge ON ge.player_id=p.id AND ge.game_id=g.id AND ge.EVENTTYPE ='GOAL' " +
-				"LEFT OUTER JOIN game_event ge2 ON ge2.player_id=p.id AND ge2.game_id=g.id AND ge2.EVENTTYPE ='SUBSTITUTION_IN' " +
-				"LEFT OUTER JOIN game_event ge3 ON ge3.player_id=p.id AND ge3.game_id=g.id AND ge3.EVENTTYPE ='SUBSTITUTION_OUT' " +
-				"LEFT OUTER JOIN game_event ge4 ON ge4.player_id=p.id AND ge4.game_id=g.id AND (ge4.EVENTTYPE ='SUBSTITUTION_IN' AND ge.EVENTTYPE ='GOAL') " +
-				"LEFT OUTER JOIN game_event ge5 ON ge5.player_id=p.id AND ge5.game_id=g.id AND (ge5.EVENTTYPE ='SUBSTITUTION_OUT' AND ge.EVENTTYPE ='GOAL') " +
-				"WHERE p.id=" + id + " " +
-				"GROUP BY t.name ORDER BY t.name");
+			Query q3 = em.createNativeQuery(GAMES_PER_PLAYER_TOURNAMENT)
+					.setParameter("id", id);
 			List<Object[]> res3 = q3.getResultList();
-			for(Object[] row : res3) {
+			
+			Query q4 = em.createNativeQuery(GOALS_PER_PLAYER_TOURNAMENT)
+					.setParameter("id", id);
+			List<Object[]> res4 = q4.getResultList();
+			
+			for(int a = 0; a < res3.size(); a++) {
+				
+				Object[] row3 = res3.get(a);
+				Object[] row4 = res4.get(a);
+				
 				AveragesPerGameAndTournamentDTO avDto = new AveragesPerGameAndTournamentDTO();
-				avDto.setTournamentName((String) row[0]);
-				avDto.setGoals( ((Number) row[1]).intValue());
-				avDto.setTotalGames( ((Number) row[2]).intValue());
-				avDto.setGamesAsSubstituteIn( ((Number) row[3]).intValue());
-				avDto.setGamesAsSubstituteOut( ((Number) row[4]).intValue());
-				avDto.setGoalsAsSubstituteIn( ((Number) row[5]).intValue());
-				avDto.setGoalsAsSubstituteOut( ((Number) row[6]).intValue());
+				avDto.setTournamentName((String) row3[0]);
+				avDto.setGoals( ((Number) row4[1]).intValue());
+				avDto.setTotalGames( ((Number) row3[1]).intValue());
+				avDto.setGamesAsSubstituteIn( ((Number) row3[2]).intValue());
+				avDto.setGamesAsSubstituteOut( ((Number) row3[3]).intValue());
+				avDto.setGoalsAsSubstituteIn( ((Number) row4[2]).intValue());
+				avDto.setGoalsAsSubstituteOut( ((Number) row4[3]).intValue());
+				avDto.setTournamentId( ((Number) row3[4]).longValue());
 				dto.getAveragesPerTournament().add(avDto);
 			}
+			
 		return dto;
 	}
 
@@ -196,5 +269,9 @@ public class DataServiceBean implements DataService {
 	public List<PositionType> getCountries() {
 		return em.createQuery("select c from Country c ORDER BY c.name").getResultList();
 	}
+
+	
+
+	
 
 }

@@ -87,6 +87,29 @@ public interface DataService {
 	    @Produces(MediaType.APPLICATION_JSON)
 		List<Game> getGamesOfPlayer(@PathParam("id") Long id);
 		
+		@Path("/player/{id}/tournament/{tournamentId}/games")
+	    @GET
+	    @Produces(MediaType.APPLICATION_JSON)
+		List<Game> getGamesOfPlayerInTournament(@PathParam("id") Long id, @PathParam("tournamentId") Long tournamentId);
+		
+		@Path("/player/{id}/tournament/{tournamentId}/games/goals")
+	    @GET
+	    @Produces(MediaType.APPLICATION_JSON)
+		List<Game> getGamesOfPlayerInTournamentGoalScored(@PathParam("id") Long id, @PathParam("tournamentId") Long tournamentId);
+
+		@Path("/player/{id}/tournament/{tournamentId}/games/substin")
+	    @GET
+	    @Produces(MediaType.APPLICATION_JSON)
+		List<Game> getGamesOfPlayerInTournamentSubstIn(@PathParam("id") Long id,
+				@PathParam("tournamentId") Long tournamentId);
+		
+		@Path("/player/{id}/tournament/{tournamentId}/games/substout")
+	    @GET
+	    @Produces(MediaType.APPLICATION_JSON)
+		List<Game> getGamesOfPlayerInTournamentSubstOut(@PathParam("id") Long id,
+				@PathParam("tournamentId")Long tournamentId);
+
+		
 		@Path("/club/{id}/games")
 	    @GET
 	    @Produces(MediaType.APPLICATION_JSON)
@@ -116,4 +139,6 @@ public interface DataService {
 	    @GET
 	    @Produces(MediaType.APPLICATION_JSON)
 		List<PositionType> getCountries();
+
+		
 }

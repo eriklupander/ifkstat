@@ -1,3 +1,4 @@
+#Sun Oct 14 09:29:37 CEST 2012
 eclipse.preferences.version=1
 encoding//data/master.txt=UTF-8
 encoding//data/matcher_utf8.txt=UTF-8
@@ -11,3 +12,4 @@ encoding//src/main/java/se/ifkgoteborg/stat/ui/control/ComboBoxFactory.java=UTF-
 encoding//src/main/java/se/ifkgoteborg/stat/ui/form/GameFormFieldFactory.java=UTF-8
 encoding//src/main/java/se/ifkgoteborg/stat/ui/form/PlayerForm.java=UTF-8
 encoding//src/main/java/se/ifkgoteborg/stat/ui/form/PlayerFormFieldFactory.java=UTF-8
+encoding//src/main/java/se/ifkgoteborg/stat/util/Base64Encoder.java=UTF-8

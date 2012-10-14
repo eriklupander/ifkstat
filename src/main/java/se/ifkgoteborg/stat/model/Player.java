@@ -67,6 +67,9 @@ public class Player {
 	@JsonIgnore
 	private List<GameParticipation> games = new ArrayList<GameParticipation>();
 	
+	@OneToMany
+	private List<PlayerImage> playerImages;
+	
 	public Long getId() {
 		return id;
 	}

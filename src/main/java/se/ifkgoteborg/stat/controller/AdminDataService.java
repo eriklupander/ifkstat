@@ -11,7 +11,7 @@ import javax.ws.rs.core.MediaType;
 import se.ifkgoteborg.stat.model.Player;
 
 @Path("/admin")
-@RolesAllowed("admin")
+@RolesAllowed({"user", "admin"})
 public interface AdminDataService {
 	
 	@Path("/test")
