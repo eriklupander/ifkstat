@@ -13,17 +13,18 @@
 	<script type="text/javascript" src="script/jquery/jquery.dataTables.js"></script>
 	
 	<script type="text/javascript" src="/ifkstat-server/rest-js"></script>
-	<script type="text/javascript" src="script/script.js"></script><script type="text/javascript" src="script/head.js"></script>
+	<script type="text/javascript" src="script/script.js"></script>
+	<script type="text/javascript" src="script/head.js"></script>
 	
 </head>
 <body>
 	<div id="header"></div>
 	<div id="content"></div>
-	<div id="footer"></div>
+	<div id="footer"></div>	
 	<script>	
 		$(document).ready(function() {
 			header();
-			showGamesOfPlayer($.urlParam('id'));   
+			showGames();   
 		} );
 	</script>
 </body>

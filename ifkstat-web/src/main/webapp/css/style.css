@@ -16,6 +16,64 @@ table {
     width: 100%;    
 }
 
+.menubar {
+	
+
+margin:10px;
+
+background-image: linear-gradient(right , rgb(255,255,255) 49%, rgb(222,222,222) 82%);
+background-image: -o-linear-gradient(right , rgb(255,255,255) 49%, rgb(222,222,222) 82%);
+background-image: -moz-linear-gradient(right , rgb(255,255,255) 49%, rgb(222,222,222) 82%);
+background-image: -webkit-linear-gradient(right , rgb(255,255,255) 49%, rgb(222,222,222) 82%);
+background-image: -ms-linear-gradient(right , rgb(255,255,255) 49%, rgb(222,222,222) 82%);
+
+background-image: -webkit-gradient(
+	linear,
+	right top,
+	left top,
+	color-stop(0.49, rgb(255,255,255)),
+	color-stop(0.82, rgb(222,222,222))
+);
+
+
+}
+
+.btn {
+	padding:4px 18px;
+	position:relative;
+	background:#e0e0e0 url(../images/bg_btn.gif) repeat-x;
+	text-decoration:none;
+	text-shadow: 1px 1px #fff;
+	font-weight:bold;
+	display:inline-block;
+	color:#666 !important;
+	border:1px #dbdbdb solid;
+	font-size:12px;
+    line-height:14px;
+	margin:2px;
+}
+
+.btn:hover {
+    cursor:pointer;
+    border:1px #a1a1a1 solid;
+    text-decoration: none;
+}
+
+.btn:active {
+	cursor:pointer;
+	background:#fff url(/images/bg_btn.gif) bottom left repeat-x;
+    border:1px #a1a1a1 solid;
+}
+
+#heading {
+	padding: 2px 4px;
+	font-size: 0.6em;
+	width: 100%;
+}
+.menuanchor {
+	margin: 5px;
+}
+
 .bordered {
     border: solid #ccc 1px;
     -moz-border-radius: 6px;
@@ -73,7 +131,7 @@ table {
     border-radius: 0 6px 0 0;
 }
 
-.bordered th:only-child{
+.bordered th:only-child {
     -moz-border-radius: 6px 6px 0 0;
     -webkit-border-radius: 6px 6px 0 0;
     border-radius: 6px 6px 0 0;
@@ -89,6 +147,7 @@ table {
     -moz-border-radius: 0 0 6px 0;
     -webkit-border-radius: 0 0 6px 0;
     border-radius: 0 0 6px 0;
+}
 .heading {
 	font-weight:bold;
 	font-family: verdana;
@@ -98,31 +157,4 @@ table {
 	font-weight:bold;
 	font-family: verdana;
 	font-size: 12px;
-}
-
-.btn {
-	padding:4px 18px;
-	position:relative;
-	background:#e0e0e0 url(/images/bg_btn.gif) repeat-x;
-	text-decoration:none;
-	text-shadow: 1px 1px #fff;
-	font-weight:bold;
-	display:inline-block;
-	color:#666 !important;
-	border:1px #dbdbdb solid;
-	font-size:12px;
-    line-height:14px;
-	margin:2px;
-}
-
-.btn:hover {
-    cursor:pointer;
-    border:1px #a1a1a1 solid;
-    text-decoration: none;
-}
-
-.btn:active {
-	cursor:pointer;
-	background:#fff url(/images/bg_btn.gif) bottom left repeat-x;
-    border:1px #a1a1a1 solid;
 }

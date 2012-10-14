@@ -4,11 +4,9 @@ $.urlParam = function(name){
 }
 
 function showGamesVsTeam(id) {
-	$('.infopanel').css('display', 'none');
-	$('.infotables').css('display', 'block');
 	var params = {"id":id};
 	var data = DataService.getGamesVsClub(params);
-    $('#demo').html( '<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
+    $('#content').html( '<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
     createGamesTable(data);
 }
 
@@ -40,53 +38,41 @@ function createGamesTable(data) {
 }
 
 function showGamesOfPlayer(id) {
-	$('.infopanel').css('display', 'none');
-	$('.infotables').css('display', 'block');
 	var params = {"id":id};
 	var data = DataService.getGamesOfPlayer(params);
-    $('#demo').html( '<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
+    $('#content').html( '<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
     createGamesTable(data);
 }
 
 function showGamesOfPlayerInTournament(id, tournamentId) {
-	$('.infopanel').css('display', 'none');
-	$('.infotables').css('display', 'block');
 	var params = {"id":id, "tournamentId":tournamentId};
 	var data = DataService.getGamesOfPlayerInTournament(params);
-    $('#demo').html( '<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
+    $('#content').html( '<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
     createGamesTable(data);
 }
 
 function showGamesOfPlayerInTournamentGoalScored(id, tournamentId) {
-	$('.infopanel').css('display', 'none');
-	$('.infotables').css('display', 'block');
 	var params = {"id":id, "tournamentId":tournamentId};
 	var data = DataService.getGamesOfPlayerInTournamentGoalScored(params);
-    $('#demo').html( '<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
+    $('#content').html( '<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
     createGamesTable(data);
 }
 
 function showGamesOfPlayerInTournamentSubstIn(id, tournamentId) {
-	$('.infopanel').css('display', 'none');
-	$('.infotables').css('display', 'block');
 	var params = {"id":id, "tournamentId":tournamentId};
 	var data = DataService.getGamesOfPlayerInTournamentSubstIn(params);
-    $('#demo').html( '<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
+    $('#content').html( '<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
     createGamesTable(data);
 }
 
 function showGamesOfPlayerInTournamentSubstOut(id, tournamentId) {
-	$('.infopanel').css('display', 'none');
-	$('.infotables').css('display', 'block');
 	var params = {"id":id, "tournamentId":tournamentId};
 	var data = DataService.getGamesOfPlayerInTournamentSubstOut(params);
-    $('#demo').html( '<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
+    $('#content').html( '<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
     createGamesTable(data);
 }
 
 function editPlayerDetails(id) {
-	$('.infopanel').css('display', 'none');
-	$('.infotables').css('display', 'none');
 	
 	var params = {"id":id};
 	var data = DataService.getPlayer(params);
@@ -122,9 +108,23 @@ function editPlayerDetails(id) {
 	}
 	
 	var countries = DataService.getCountries();
+	var hasSelection = false;
 	for(var a = 0; a < countries.length; a++) {
 		var isSelected = (data.nationality != null && countries[a].id == data.nationality.id);
 		$('#nationality').append('<option ' + (isSelected ? 'selected' : '') + ' value="' + countries[a].id + '">' + countries[a].name + '</option>');
+		if(isSelected) {
+			hasSelection = true;
+		}
+	}
+	
+	// Select sweden if no country is pre-selected. Otherwise, I think we'll end up with a lot of Albanian players
+	if(!hasSelection) {
+		var text1 = 'Sverige';
+		$("#nationality option").filter(function() {
+		    //may want to use $.trim in here
+		    return $(this).text() == text1; 
+		}).attr('selected', true);
+
 	}
 	
 	$('#saveplayer').click(function() {
@@ -155,9 +155,33 @@ function editPlayerDetails(id) {
 	
 }
 
+function showPlayers() {
+
+	$('#content').html( 
+		'<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="players"></table>');
+	
+	var players = DataService.getPlayers();
+
+	$('#players').dataTable( {	 
+	"fnRowCallback": function( nRow, aData, iDisplayIndex ) {	           
+        $('td:eq(0)', nRow).html( '<a href="player.html?id=' + aData.id + '">' + aData.name + '</a>' );   
+	},
+	"bProcessing" : true,
+	"aaData": players,
+	"bPaginate": true,
+    "bLengthChange": false,
+    "bFilter": true,
+    "bSort": true,
+    "bInfo": false,
+	"aoColumns": [		    
+	    { "mData": "name", "sTitle": "Spelare" }
+	]
+} );
+
+}
+
 function showPlayerDetails(id) {
-	$('.infopanel').css('display', 'none');
-	$('.infotables').css('display', 'none');
+
 	var params = {"id":id};
 	var data = DataService.getPlayer(params);
 	$('#playerdetails').css('display', 'block');
@@ -217,8 +241,7 @@ function showPlayerDetails(id) {
 
 
 function showGameDetails(id) {
-	$('.infopanel').css('display', 'none');
-	$('.infotables').css('display', 'block');
+
 	var params = {"id":id};
 	var data = DataService.getGame(params);
 	var events = DataService.getGameEvents(params);
@@ -229,16 +252,14 @@ function showGameDetails(id) {
 	$('#gamedetails').html('<table class="bordered"><tr><td>' + data.homeTeam.name + '-' + data.awayTeam.name + ' ' + data.homeGoals + '-' + data.awayGoals + ' (' + data.homeGoalsHalftime + '-' + data.awayGoalsHalftime + ')</td></tr></table>');
 	
 	// events
-	$('#demo').html( 
+	$('#content').html( 
+		'<h2>' + data.homeTeam.name + '-' + data.awayTeam.name + ' ' + data.homeGoals + '-' + data.awayGoals + ' (' + data.homeGoalsHalftime + '-' + data.awayGoalsHalftime + ')</h2>' +
 		'<table><tr><td valign="top"><table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="players"></table></td>' +
 		'<td valign="top"><table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="events"></table></td>' +
 		'<td valign="top"><table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="notes"></table></td></tr></table>');
 		$('#players').dataTable( {	 
 			"fnRowCallback": function( nRow, aData, iDisplayIndex ) {	           
                 $('td:eq(0)', nRow).html( '<a href="player.html?id=' + aData.player.id + '">' + aData.player.name + '</a>' );   
-//                $('td:eq(0)', nRow).click(function() {
-//                	showPlayerDetails(aData.player.id);
-//                });                
     		},
 			"bProcessing" : true,
 			"aaData": participants,
@@ -280,31 +301,32 @@ function showGameDetails(id) {
 	        ]
 	    } );
 	    
-	    $('#demo').css('width', '900px');
+	    $('#content').css('width', '900px');
+}
+
+function showGames() {
+	var data = DataService.getGames();
+    $('#content').html( '<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
+    createGamesTable(data);
 }
 
 function showGamesOfSeason(id) {
-	$('.infopanel').css('display', 'none');
-	$('.infotables').css('display', 'block');
+
 	var params = {"id":id};
 	var data = DataService.getGamesOfTournamentSeason(params);
-    $('#demo').html( '<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
+    $('#content').html( '<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
     createGamesTable(data);
 }
 
 
 function showTournamentSeasons(id) {
-	$('.infopanel').css('display', 'none');
-	$('.infotables').css('display', 'block');
+
 	var params = {"id":id};
 	var data = DataService.getSeasonsOfTournament(params);
-    $('#demo').html( '<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
+    $('#content').html( '<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
     $('#example').dataTable( {
     	"fnRowCallback": function( nRow, aData, iDisplayIndex ) {	           
-                $('td:eq(0)', nRow).html( '<a href="gamesOfSeason.html?id='+aData.id + '">' + aData.tournament.name + '</a>' );   
-//                $('td:eq(0)', nRow).click(function() {
-//                	showGamesOfSeason(aData.id);
-//                });
+                $('td:eq(0)', nRow).html( '<a href="gamesOfSeason.html?id='+aData.id + '">' + aData.tournament.name + '</a>' );
     	},
     	"bProcessing" : true,
         "aaData": data,
@@ -316,17 +338,12 @@ function showTournamentSeasons(id) {
 }
 
 function showTournaments() {
-	$('.infopanel').css('display', 'none');
-	$('.infotables').css('display', 'block');
-	
+		
 	var data = DataService.getTournaments();
-    $('#demo').html( '<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
+    $('#content').html( '<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
     $('#example').dataTable( {
     	"fnRowCallback": function( nRow, aData, iDisplayIndex ) {	           
-                $('td:eq(0)', nRow).html( '<a href="tournamentSeasons.html?id=' + aData.id + '">' + aData.name + '</a>' );   
-//                $('td:eq(0)', nRow).click(function() {
-//                	showTournamentSeasons(aData.id);
-//                });
+                $('td:eq(0)', nRow).html( '<a href="tournamentSeasons.html?id=' + aData.id + '">' + aData.name + '</a>' );
     	},
     	"bProcessing" : true,
         "aaData": data,

@@ -13,17 +13,17 @@
 	<script type="text/javascript" src="script/jquery/jquery.dataTables.js"></script>
 	
 	<script type="text/javascript" src="/ifkstat-server/rest-js"></script>
-	<script type="text/javascript" src="script/script.js"></script>
+	<script type="text/javascript" src="script/script.js"></script><script type="text/javascript" src="script/head.js"></script>
 	
 </head>
 <body>
-	<div>IFK Göteborg statistikdatabas</div>
-	<div style="display:none;width:500px;" id="playerdetails" class="infopanel"></div>
-	<div style="display:none;width:500px;" id="gamedetails" class="infopanel"></div>
-	<div style="width:500px;" id="demo" class="infotables"></div>
+	<div id="header"></div>
+	<div id="content"></div>
+	<div id="footer"></div>
 	
 	<script>	
 		$(document).ready(function() {
+			header();
 			showGamesOfPlayerInTournamentSubstIn($.urlParam('id'), $.urlParam('tournament_id'));   
 		} );
 	</script>

@@ -270,6 +270,16 @@ public class DataServiceBean implements DataService {
 		return em.createQuery("select c from Country c ORDER BY c.name").getResultList();
 	}
 
+	@Override
+	public List<Player> getPlayers() {
+		return em.createQuery("select p from Player p ORDER BY p.name").getResultList();
+	}
+
+	@Override
+	public List<Game> getGames() {
+		return em.createQuery("select g from Game g ORDER BY g.dateOfGame DESC").getResultList();
+	}
+
 	
 
 	

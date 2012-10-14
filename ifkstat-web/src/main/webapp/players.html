@@ -18,12 +18,21 @@
 </head>
 <body>
 	<div id="header"></div>
-	<div id="content"></div>
+	<div id="content">
+		<table>
+			<tr>
+				<td valign="top"><div style="display:none;width:500px;" id="playerdetails" class="infopanel"></div></td>
+				<td valign="top"><div style="display:none;width:500px;" id="playerstats" class="infopanel"></div></td>
+			</tr>
+		</table>
+	</div>
+	
 	<div id="footer"></div>
-	<script>	
+
+	<script>
 		$(document).ready(function() {
 			header();
-			showGamesOfPlayer($.urlParam('id'));   
+			showPlayers(); 
 		} );
 	</script>
 </body>

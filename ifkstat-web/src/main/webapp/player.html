@@ -13,21 +13,26 @@
 	<script type="text/javascript" src="script/jquery/jquery.dataTables.js"></script>
 	
 	<script type="text/javascript" src="/ifkstat-server/rest-js"></script>
-	<script type="text/javascript" src="script/script.js"></script>
+	<script type="text/javascript" src="script/script.js"></script><script type="text/javascript" src="script/head.js"></script>
 	
 </head>
 <body>
-	<div>IFK Göteborg statistikdatabas</div>
-	<table>
-		<tr>
-			<td valign="top"><div style="display:none;width:500px;" id="playerdetails" class="infopanel"></div></td>
-			<td valign="top"><div style="display:none;width:500px;" id="playerstats" class="infopanel"></div></td>
-		</tr>
-	</table>
+	<div id="header"></div>
+	<div id="content">
+		<table>
+			<tr>
+				<td valign="top"><div style="display:none;width:500px;" id="playerdetails" class="infopanel"></div></td>
+				<td valign="top"><div style="display:none;width:500px;" id="playerstats" class="infopanel"></div></td>
+			</tr>
+		</table>
+	</div>
 	
-	<script>	
+	<div id="footer"></div>
+
+	<script>
 		$(document).ready(function() {
-			showPlayerDetails($.urlParam('id'));   
+			header();
+			showPlayerDetails($.urlParam('id')); 
 		} );
 	</script>
 </body>

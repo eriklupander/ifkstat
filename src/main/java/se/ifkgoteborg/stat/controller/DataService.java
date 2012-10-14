@@ -25,6 +25,15 @@ import se.ifkgoteborg.stat.model.TournamentSeason;
 @Path("/")
 public interface DataService {
 
+		@Path("/players")
+    	@GET
+    	@Produces(MediaType.APPLICATION_JSON)
+		List<Player> getPlayers();
+	
+		@Path("/games")
+    	@GET
+    	@Produces(MediaType.APPLICATION_JSON)
+		List<Game> getGames();
 
 		@Path("/player/{id}")
 	    @GET

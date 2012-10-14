@@ -1,51 +1,33 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>IFKSTAT web</title>
-	<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/ui-lightness/jquery-ui.css" type="text/css" rel="stylesheet">
-	<link href="css/style.css" type="text/css" rel="stylesheet">
-	<link href="css/demo_table.css" type="text/css" rel="stylesheet">
-	<link href="css/header.css" type="text/css" rel="stylesheet">
-	<style>
-		#feedback { font-size: 1.4em; }
-		#datapanel_courses .ui-selecting { background: #FECA40; }
-		#datapanel_courses .ui-selected { background: #F39814; color: white; }
-		#datapanel_courses { list-style-type: none; margin: 0; padding: 0; width: 100%; }
-		#datapanel_courses li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
-		
-		
-		#feedback { font-size: 1.4em; }
-		#datapanel_holes .ui-selecting { background: #FECA40; }
-		#datapanel_holes .ui-selected { background: #F39814; color: white; }
-		#datapanel_holes { list-style-type: none; margin: 0; padding: 0; }
-		#datapanel_holes li { margin: 3px; padding: 1px; float: left; width: 100px; height: 80px; font-size: 3em; text-align: center; }
-		
-		#toolbar {
-			padding: 2px 4px;
-			font-size:0.6em;
-			width:100%;
-		}
-	</style>
-		  
-	<script type="text/javascript" src="script/jquery/jquery-1.8.1.min.js"></script>
-	<script type="text/javascript" src="script/jquery/jquery.ui.min.js"></script>
-	<script type="text/javascript" src="script/jquery/jquery.dataTables.js"></script>
-	
-	<script type="text/javascript" src="/ifkstat-server/rest-js"></script>
-	<script type="text/javascript" src="script/script.js"></script>
-	
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>IFKSTAT web</title>
+<link
+	href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/ui-lightness/jquery-ui.css"
+	type="text/css" rel="stylesheet">
+<link href="css/style.css" type="text/css" rel="stylesheet">
+<link href="css/demo_table.css" type="text/css" rel="stylesheet">
+<link href="css/header.css" type="text/css" rel="stylesheet">
+
+<script type="text/javascript" src="script/jquery/jquery-1.8.1.min.js"></script>
+<script type="text/javascript" src="script/jquery/jquery.ui.min.js"></script>
+<script type="text/javascript" src="script/jquery/jquery.dataTables.js"></script>
+
+<script type="text/javascript" src="/ifkstat-server/rest-js"></script>
+<script type="text/javascript" src="script/script.js"></script>
+<script type="text/javascript" src="script/head.js"></script>
+
 </head>
 <body>
-	<div>IFK Göteborg statistikdatabas<span style="float:right;"><a href="createuser.html">Skapa användare</a></span></div>
-	<div style="display:none;width:500px;" id="playerdetails" class="infopanel"></div>
-	<div style="display:none;width:500px;" id="gamedetails" class="infopanel"></div>
-	<div style="width:500px;" id="demo" class="infotables"></div>
-	
+	<div id="header"></div>
+	<div id="content"></div>
+	<div id="footer"></div>
 	<script>
-	$(document).ready(function() {
-		showTournaments();   
-	} );
+		$(document).ready(function() {
+			header();
+			showTournaments();
+		});
 	</script>
 </body>
 </html>
