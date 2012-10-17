@@ -1,6 +1,12 @@
 package se.ifkgoteborg.stat.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
@@ -12,6 +18,7 @@ import se.ifkgoteborg.stat.dto.AveragesPerGameAndTournamentDTO;
 import se.ifkgoteborg.stat.dto.GamePositionStatDTO;
 import se.ifkgoteborg.stat.dto.GoalsPerTournamentDTO;
 import se.ifkgoteborg.stat.dto.PlayerStatDTO;
+import se.ifkgoteborg.stat.dto.PlayerSummaryDTO;
 import se.ifkgoteborg.stat.model.Game;
 import se.ifkgoteborg.stat.model.GameEvent;
 import se.ifkgoteborg.stat.model.GameNote;
@@ -27,6 +34,8 @@ import se.ifkgoteborg.stat.model.TournamentSeason;
 @Stateless
 @PermitAll
 public class DataServiceBean implements DataService {
+	
+	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	
 	private static final String GAMES_PER_PLAYER_TOURNAMENT =
 			"SELECT t.name, COUNT(pg.id) as appearances, " + 
@@ -280,8 +289,66 @@ public class DataServiceBean implements DataService {
 		return em.createQuery("select g from Game g ORDER BY g.dateOfGame DESC").getResultList();
 	}
 
-	
+	@Override
+	public Collection<PlayerSummaryDTO> getPlayerSummaries() {
+		String sql = "select p.id, p.name, COUNT(pg.id) as games, MIN(g.dateOfGame) as firstGame, MAX(g.dateOfGame) as lastGame FROM player p " +
+				"INNER JOIN player_game pg ON pg.player_id=p.id " +
+				"INNER JOIN game g ON pg.game_id=g.id " +
+				"GROUP BY p.name ORDER BY p.name";
+		
+		Query q1 = em.createNativeQuery(sql);
+		List<Object[]> res1 = q1.getResultList();
+		Map<Long, PlayerSummaryDTO> map = new HashMap<Long, PlayerSummaryDTO>();
+		for(Object[] row : res1) {
+			PlayerSummaryDTO dto = new PlayerSummaryDTO();
+			dto.setId( ((Number) row[0]).longValue());
+			dto.setName((String) row[1]);
+			dto.setGames( ((Number) row[2]).intValue());
+			dto.setFirstGame(new Date(((java.sql.Date) row[3]).getTime()));
+			dto.setLastGame(new Date(((java.sql.Date) row[4]).getTime()));
+			map.put(dto.getId(), dto);
+		}
+		
+		// Get the goals in a separate query...
+		String sql2 = "select p.id, COUNT(ge.id) as goals FROM player p " +	
+					"LEFT OUTER JOIN game_event ge ON ge.player_id=p.id AND ge.eventType = 'GOAL' " + 
+					"GROUP BY p.id";
+		
+		Query q2 = em.createNativeQuery(sql2);
+		List<Object[]> res2 = q2.getResultList();
+		
+		// Fugly, we assume the rows are matching the result from above. Reason for this:
+		// Doing the goals thing in a sub-select makes the query take many seconds instead of
+		// milliseconds. This is much faster. And more fugly.
+		for(Object[] row : res2) {
+			Long id = ((Number) row[0]).longValue();
+			Integer goals = ((Number) row[1]).intValue();
+			
+			if(map.containsKey(id)) {
+				map.get(id).setGoals(goals);
+			} else {
+				// WARN!
+				System.out.println("Could not find playerId in map: " + id);
+			}
+			
+		}
+		
+		return map.values();
+	}
 
+	
+	public List<Game> getGamesOfDate(String date) {
+		try {
+			Date dateOfGame = sdf.parse(date);
+			
+			return em.createQuery("SELECT g FROM Game g WHERE g.dateOfGame = :dateOfGame")
+					.setParameter("dateOfGame", dateOfGame)
+					.getResultList();
+		} catch (Exception e) {
+			return new ArrayList<Game>();
+		}
+		
+	}
 	
 
 }

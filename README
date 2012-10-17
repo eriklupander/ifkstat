@@ -6,3 +6,6 @@ Don't forget to set %JBOSS_HOME% to your JBoss 7 home folder.
 Also, don't forget to set M2_REPO to c:\Users\[username]\.m2\repository (or similar) in Eclipse.
 
 Note that this software uses the Vaadin JPAContainer under AGPL license. The full source of this software is available on GITHUB: https://github.com/eriklupander/ifkstat
+
+How to enable debugging for JBoss7: Open %JBOSS_HOME%/bin/standalone.conf.bat. Uncomment the line below:
+"Sample JPDA settings for remote socket debugging"

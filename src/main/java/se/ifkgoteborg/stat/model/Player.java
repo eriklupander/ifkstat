@@ -203,7 +203,16 @@ public class Player {
 	public void setGames(List<GameParticipation> games) {
 		this.games = games;
 	}
-	
+
+	@JsonIgnore
+	public List<PlayerImage> getPlayerImages() {
+		return playerImages;
+	}
+
+	public void setPlayerImages(List<PlayerImage> playerImages) {
+		this.playerImages = playerImages;
+	}
+
 	@Transient
 	public Integer getNumberOfGames() {
 		try {

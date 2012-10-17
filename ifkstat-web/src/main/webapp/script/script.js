@@ -160,11 +160,14 @@ function showPlayers() {
 	$('#content').html( 
 		'<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="players"></table>');
 	
-	var players = DataService.getPlayers();
+	var players = DataService.getPlayerSummaries();
 
 	$('#players').dataTable( {	 
 	"fnRowCallback": function( nRow, aData, iDisplayIndex ) {	           
         $('td:eq(0)', nRow).html( '<a href="player.html?id=' + aData.id + '">' + aData.name + '</a>' );   
+        $('td:eq(1)', nRow).html( '<a href="gamesOfPlayer.html?id=' + aData.id + '">' + nstr(aData.games) + '</a>' ); 
+        $('td:eq(3)', nRow).html( '<a href="gamesOfDate.html?date=' + formatDate(new Date(aData.firstGame)) + '">' + formatDate(new Date(aData.firstGame)) + '</a>');
+        $('td:eq(4)', nRow).html( '<a href="gamesOfDate.html?date=' + formatDate(new Date(aData.lastGame)) + '">' + formatDate(new Date(aData.lastGame)) + '</a>');
 	},
 	"bProcessing" : true,
 	"aaData": players,
@@ -174,7 +177,11 @@ function showPlayers() {
     "bSort": true,
     "bInfo": false,
 	"aoColumns": [		    
-	    { "mData": "name", "sTitle": "Spelare" }
+	    { "mData": "name", "sTitle": "Spelare" },
+	    { "mData": "games", "sTitle": "Matcher" },
+	    { "mData": "goals", "sTitle": "Mål" },
+	    { "mData": "firstGame", "sTitle": "Första match" },
+	    { "mData": "lastGame", "sTitle": "Sista match" }
 	]
 } );
 
@@ -318,6 +325,14 @@ function showGamesOfSeason(id) {
     createGamesTable(data);
 }
 
+function showGamesOfDate(date) {
+
+	var params = {"date":date};
+	var data = DataService.getGamesOfDate(params);
+    $('#content').html( '<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
+    createGamesTable(data);
+}
+
 
 function showTournamentSeasons(id) {
 
@@ -359,4 +374,8 @@ function nstr(str) {
 	} else {
 		return str;
 	}
+}
+
+function formatDate(d) {
+	return $.datepicker.formatDate('yy-mm-dd', d);
 }

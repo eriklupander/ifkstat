@@ -1,5 +1,6 @@
 package se.ifkgoteborg.stat.controller;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.ws.rs.GET;
@@ -9,6 +10,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import se.ifkgoteborg.stat.dto.PlayerStatDTO;
+import se.ifkgoteborg.stat.dto.PlayerSummaryDTO;
 import se.ifkgoteborg.stat.model.Game;
 import se.ifkgoteborg.stat.model.GameEvent;
 import se.ifkgoteborg.stat.model.GameNote;
@@ -149,5 +151,18 @@ public interface DataService {
 	    @Produces(MediaType.APPLICATION_JSON)
 		List<PositionType> getCountries();
 
-		
+		@Path("/players/summary")
+		@GET
+		@Produces(MediaType.APPLICATION_JSON)
+		Collection<PlayerSummaryDTO> getPlayerSummaries();
+
+		/**
+		 * Format of the date: yyyy-MM-dd 2001-05-22
+		 * @param date
+		 * @return
+		 */
+		@Path("/games/{date}")
+    	@GET
+    	@Produces(MediaType.APPLICATION_JSON)
+		List<Game> getGamesOfDate(@PathParam("date") String date);
 }
