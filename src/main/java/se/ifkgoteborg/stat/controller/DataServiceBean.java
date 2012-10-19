@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import se.ifkgoteborg.stat.dto.AveragesPerGameAndTournamentDTO;
+import se.ifkgoteborg.stat.dto.ClubStatDTO;
 import se.ifkgoteborg.stat.dto.GamePositionStatDTO;
 import se.ifkgoteborg.stat.dto.GoalsPerTournamentDTO;
 import se.ifkgoteborg.stat.dto.PlayerStatDTO;
@@ -350,5 +351,133 @@ public class DataServiceBean implements DataService {
 		
 	}
 	
+	private String statSql = "SELECT c.name, c.id, j1.g1, j2.g2, j1.hg1, j1.ag1, j2.hg2, j2.ag2, j1.wins1, j1.draws1, j1.losses1, j2.wins2, j2.draws2, j2.losses2 FROM club c " +
+							"	LEFT OUTER JOIN " +
+							"	( " +
+							"	SELECT c1.id as j1id, count(g.id) as g1, sum(g.homeGoals) as hg1, sum(g.awayGoals) as ag1, COUNT(g2.id) as wins1, COUNT(g3.id) as draws1, COUNT(g4.id) as losses1  " +
+							"	FROM game g " +
+							"	LEFT OUTER JOIN club c1 ON c1.id=g.hometeam_id " +
+							"	LEFT OUTER JOIN game g2 ON g2.id=g.id AND g2.homegoals > g2.awaygoals " +
+							"	LEFT OUTER JOIN game g3 ON g3.id=g.id AND g3.homegoals = g3.awaygoals " +
+							"	LEFT OUTER JOIN game g4 ON g4.id=g.id AND g4.homegoals < g4.awaygoals " +
+							"	WHERE c1.id <> 110 " +
+							"	GROUP BY c1.id " +
+							"	) as j1 " +
+							"	ON j1id=c.id " +
+							"	 " +
+							"	LEFT OUTER JOIN " +
+							"	 " +
+							"	(SELECT c2.id as j2id, count(g.id) as g2, sum(g.homeGoals) as hg2, sum(g.awayGoals) as ag2, COUNT(g2.id) as wins2, COUNT(g3.id) as draws2, COUNT(g4.id) as losses2   " +
+							"	FROM game g " +
+							"	LEFT OUTER JOIN club c2 ON c2.id=g.awayteam_id " +
+							"	LEFT OUTER JOIN game g2 ON g2.id=g.id AND g2.homegoals > g2.awaygoals " +
+							"	LEFT OUTER JOIN game g3 ON g3.id=g.id AND g3.homegoals = g3.awaygoals " +
+							"	LEFT OUTER JOIN game g4 ON g4.id=g.id AND g4.homegoals < g4.awaygoals " +
+							"	WHERE c2.id <> 110 " +
+							"	GROUP BY c2.id " +
+							"	) j2 " +
+							"	ON j2.j2id = c.id";
+	
+	@Override
+	public List<ClubStatDTO> getAllClubStatistics() {
+		List<Object[]> rows = em.createNativeQuery(statSql).getResultList();
+		
+		List<ClubStatDTO> res = new ArrayList<ClubStatDTO>();
+		
+		for(Object[] row : rows) {
+			ClubStatDTO dto = new ClubStatDTO();
+			dto.setClubName( (String) row[0]);
+			dto.setClubId( ((Number) row[1]).longValue());
+			
+			// c.name, c.id, j1.g1, j2.g2, j1.hg, j1.ag, j2.hg, j2.ag, j1.wins, j1.draws, j1.losses, j2.wins, j2.draws, j2.losses
+			// IFK away team first
+			dto.setAwayGames(getInt(row[2]));
+			dto.setHomeGames(getInt(row[3]));
+			dto.setAwayGoalsConceded(getInt(row[4]));
+			dto.setAwayGoalsScored(getInt(row[5]));
+			dto.setHomeGoalsScored(getInt(row[6]));
+			dto.setHomeGoalsConceded(getInt(row[7]));
+			
+			dto.setAwayLosses(getInt(row[8]));
+			dto.setAwayDraws(getInt(row[9]));
+			dto.setAwayWins(getInt(row[10]));
+			
+			dto.setHomeWins(getInt(row[11]));
+			dto.setHomeDraws(getInt(row[12]));
+			dto.setHomeLosses(getInt(row[13]));
+			
+			res.add(dto);
+		}
+		
+		return res;
+	}
+	
+	
+	private Integer getInt(Object object) {
+		if(object == null) {
+			return 0;
+		}
+		if(object instanceof Number) {			
+			return ((Number) object).intValue();
+		}
+		return 0;
+	}
 
+	private String singleClubStatSql = "SELECT c.name, c.id, j1.g1, j2.g2, j1.hg1, j1.ag1, j2.hg2, j2.ag2, j1.wins1, j1.draws1, j1.losses1, j2.wins2, j2.draws2, j2.losses2 FROM club c " +
+			"	LEFT OUTER JOIN " +
+			"	( " +
+			"	SELECT c1.id as j1id, count(g.id) as g1, sum(g.homeGoals) as hg1, sum(g.awayGoals) as ag1, COUNT(g2.id) as wins1, COUNT(g3.id) as draws1, COUNT(g4.id) as losses1  " +
+			"	FROM game g " +
+			"	LEFT OUTER JOIN club c1 ON c1.id=g.hometeam_id " +
+			"	LEFT OUTER JOIN game g2 ON g2.id=g.id AND g2.homegoals > g2.awaygoals " +
+			"	LEFT OUTER JOIN game g3 ON g3.id=g.id AND g3.homegoals = g3.awaygoals " +
+			"	LEFT OUTER JOIN game g4 ON g4.id=g.id AND g4.homegoals < g4.awaygoals " +
+			"	WHERE c1.id = :id" +
+			"	GROUP BY c1.id " +
+			"	) as j1 " +
+			"	ON j1id=c.id " +
+			"	 " +
+			"	LEFT OUTER JOIN " +
+			"	 " +
+			"	(SELECT c2.id as j2id, count(g.id) as g2, sum(g.homeGoals) as hg2, sum(g.awayGoals) as ag2, COUNT(g2.id) as wins2, COUNT(g3.id) as draws2, COUNT(g4.id) as losses2   " +
+			"	FROM game g " +
+			"	LEFT OUTER JOIN club c2 ON c2.id=g.awayteam_id " +
+			"	LEFT OUTER JOIN game g2 ON g2.id=g.id AND g2.homegoals > g2.awaygoals " +
+			"	LEFT OUTER JOIN game g3 ON g3.id=g.id AND g3.homegoals = g3.awaygoals " +
+			"	LEFT OUTER JOIN game g4 ON g4.id=g.id AND g4.homegoals < g4.awaygoals " +
+			"	WHERE c2.id = :id " +
+			"	GROUP BY c2.id " +
+			"	) j2 " +
+			"	ON j2.j2id = c.id AND c.id = :id";
+
+	@Override
+	public ClubStatDTO getClubStatistics(Integer id) {
+		
+		Object[] row = (Object[]) em.createNativeQuery(singleClubStatSql)
+				.setParameter("id", id)
+				.getSingleResult();
+		
+		ClubStatDTO dto = new ClubStatDTO();
+		dto.setClubName( (String) row[0]);
+		dto.setClubId( ((Number) row[1]).longValue());
+		
+		// IFK away team first
+		dto.setAwayGames(getInt(row[2]));
+		dto.setHomeGames(getInt(row[3]));
+		dto.setAwayGoalsConceded(getInt(row[4]));
+		dto.setAwayGoalsScored(getInt(row[5]));
+		dto.setHomeGoalsScored(getInt(row[6]));
+		dto.setHomeGoalsConceded(getInt(row[7]));
+		
+		dto.setAwayLosses(getInt(row[8]));
+		dto.setAwayDraws(getInt(row[9]));
+		dto.setAwayWins(getInt(row[10]));
+		
+		dto.setHomeWins(getInt(row[11]));
+		dto.setHomeDraws(getInt(row[12]));
+		dto.setHomeLosses(getInt(row[13]));
+		
+		return dto;
+	}
+	
 }

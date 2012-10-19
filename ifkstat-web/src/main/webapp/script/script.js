@@ -155,6 +155,72 @@ function editPlayerDetails(id) {
 	
 }
 
+function showClubs() {
+	$('#content').html( 
+	'<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="clubs">' +
+	'<thead>' +
+	'<tr><th></th><th colspan="5">Totalt</th><th colspan="5">Hemma</th><th colspan="5">Borta</th></tr>' +
+	'<tr><th>Klubb</th><th>M</th><th>V</th><th>O</th><th>F</th><th>Mål</th><th>M</th><th>V</th><th>O</th><th>F</th><th>Mål</th><th>M</th><th>V</th><th>O</th><th>F</th><th>Mål</th></tr>' +
+	'</thead>' +
+	'</table>');
+
+	var clubs = DataService.getAllClubStatistics();
+	
+	$('#clubs').dataTable( {	 
+		"fnRowCallback": function( nRow, aData, iDisplayIndex ) {	  
+			$('td:eq(0)', nRow).html( '<a href="gamesVsTeam.html?id=' + aData.clubId + '">' + aData.clubName + '</a>');
+			$('td:eq(5)', nRow).html( aData.goalsScored + '-' + aData.goalsConceded );   
+			$('td:eq(10)', nRow).html( aData.homeGoalsScored + '-' + aData.homeGoalsConceded );   
+			$('td:eq(15)', nRow).html( aData.awayGoalsScored + '-' + aData.awayGoalsConceded );   
+	    },
+		"bProcessing" : true,
+		"aaData": clubs,
+		"bPaginate": true,
+	    "bLengthChange": false,
+	    "bFilter": true,
+	    "bSort": true,
+	    "bInfo": false,
+	    "aoColumns": [		    
+	      		    { "mData": "clubName"},
+	      		    { "mData": "games"},
+	      		    { "mData": "wins"},
+	      		    { "mData": "draws"},
+	      		    { "mData": "losses"},
+	      		    { "mData": "games" },
+	      		    { "mData": "homeGames"},
+	      		    { "mData": "homeWins"},
+	      		    { "mData": "homeDraws"},
+	      		    { "mData": "homeLosses"},
+	      		    { "mData": "games"},
+	      		    { "mData": "awayGames"},
+	      		    { "mData": "awayWins"},
+	      		    { "mData": "awayDraws"},
+	      		    { "mData": "awayLosses"},
+	      		    { "mData": "games"}
+	      		    ]
+	    });
+//		"aoColumns": [		    
+//		    { "mData": "clubName", "sTitle": "Klubb" },
+//		    { "mData": "games", "sTitle": "M" },
+//		    { "mData": "wins", "sTitle": "V" },
+//		    { "mData": "draws", "sTitle": "O" },
+//		    { "mData": "losses", "sTitle": "F" },
+//		    { "mData": "games", "sTitle": "Mål" },
+//		    { "mData": "homeGames", "sTitle": "M" },
+//		    { "mData": "homeWins", "sTitle": "V" },
+//		    { "mData": "homeDraws", "sTitle": "O" },
+//		    { "mData": "homeLosses", "sTitle": "F" },
+//		    { "mData": "games", "sTitle": "Mål" },
+//		    { "mData": "awayGames", "sTitle": "M" },
+//		    { "mData": "awayWins", "sTitle": "V" },
+//		    { "mData": "awayDraws", "sTitle": "O" },
+//		    { "mData": "awayLosses", "sTitle": "F" },
+//		    { "mData": "games", "sTitle": "Mål" }
+		   
+		
+
+}
+
 function showPlayers() {
 
 	$('#content').html( 

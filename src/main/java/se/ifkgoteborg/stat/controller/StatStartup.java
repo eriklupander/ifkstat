@@ -19,6 +19,9 @@ import se.ifkgoteborg.stat.model.PositionType;
 import se.ifkgoteborg.stat.model.Setting;
 import se.ifkgoteborg.stat.model.User;
 import se.ifkgoteborg.stat.model.Userrole;
+import se.ifkgoteborg.stat.model.enums.MajorVerticalAlignment;
+import se.ifkgoteborg.stat.model.enums.MinorHorizontalAlignment;
+import se.ifkgoteborg.stat.model.enums.MinorVerticalAlignment;
 import se.ifkgoteborg.stat.model.enums.Side;
 
 @Startup
@@ -129,32 +132,32 @@ public class StatStartup {
 //		pl2 = em.merge(pl2);
 //		
 		
-		PositionType gk = em.merge(new PositionType("Målvakt"));
-		PositionType def = em.merge(new PositionType("Försvarare"));
-		PositionType mid = em.merge(new PositionType("Mittfältare"));
-		PositionType forw = em.merge(new PositionType("Anfallare"));
+		PositionType gk = em.merge(new PositionType("Målvakt", MajorVerticalAlignment.GK));
+		PositionType def = em.merge(new PositionType("Försvarare", MajorVerticalAlignment.DEF));
+		PositionType mid = em.merge(new PositionType("Mittfältare", MajorVerticalAlignment.MF));
+		PositionType forw = em.merge(new PositionType("Anfallare", MajorVerticalAlignment.FW));
 		
-		// Positioner f�r 4-4-2
+		// Positioner för 4-4-2
 		Position mv = em.merge(new Position("Målvakt", "MV", Side.CENTRAL, gk));
 		Position hb = em.merge(new Position("Högerback", "HB", Side.RIGHT, def));
-		Position mb1 = em.merge(new Position("Mittback", "MB", Side.RIGHT, def));
-		Position mb2 = em.merge(new Position("Mittback", "MB", Side.LEFT, def));
+		Position mb1 = em.merge(new Position("Mittback", "MB", Side.CENTRAL, def, MinorHorizontalAlignment.RIGHT));
+		Position mb2 = em.merge(new Position("Mittback", "MB", Side.CENTRAL, def, MinorHorizontalAlignment.LEFT));
 		Position vb = em.merge(new Position("Vänsterback", "VB", Side.LEFT, def));
 		Position hy = em.merge(new Position("Högerytter", "HY", Side.RIGHT, mid));
-		Position im1 = em.merge(new Position("Innermitt", "IM", Side.RIGHT, mid));
-		Position im2 = em.merge(new Position("Innermitt", "IM", Side.LEFT, mid));
+		Position im1 = em.merge(new Position("Innermitt", "IM", Side.CENTRAL, mid, MinorHorizontalAlignment.RIGHT));
+		Position im2 = em.merge(new Position("Innermitt", "IM", Side.CENTRAL, mid, MinorHorizontalAlignment.LEFT));
 		Position im1_c = em.merge(new Position("Innermitt", "IM", Side.CENTRAL, mid));
 		
-		Position im1d_r = em.merge(new Position("Innermitt (def)", "IM (D)", Side.RIGHT, mid));
-		Position im2d_l = em.merge(new Position("Innermitt (def)", "IM (D)", Side.LEFT, mid));
-		Position im1d_c = em.merge(new Position("Innermitt (def)", "IM (D)", Side.CENTRAL, mid));
+		Position im1d_r = em.merge(new Position("Innermitt (def)", "IM (D)", Side.CENTRAL, mid, MinorVerticalAlignment.DEFENSIVE, MinorHorizontalAlignment.RIGHT));
+		Position im2d_l = em.merge(new Position("Innermitt (def)", "IM (D)", Side.CENTRAL, mid, MinorVerticalAlignment.DEFENSIVE, MinorHorizontalAlignment.LEFT));
+		Position im1d_c = em.merge(new Position("Innermitt (def)", "IM (D)", Side.CENTRAL, mid, MinorVerticalAlignment.DEFENSIVE));
 		
-		Position im1o = em.merge(new Position("Innermitt (off)", "IM (O)", Side.CENTRAL, mid));
+		Position im1o = em.merge(new Position("Innermitt (off)", "IM (O)", Side.CENTRAL, mid, MinorVerticalAlignment.OFFENSIVE));
 		
 		Position vy = em.merge(new Position("Vänsterytter", "VY", Side.LEFT, mid));
 		
-		Position fw1 = em.merge(new Position("Anfallare", "FW", Side.RIGHT, forw));
-		Position fw2 = em.merge(new Position("Anfallare", "FW", Side.LEFT, forw));
+		Position fw1 = em.merge(new Position("Anfallare", "FW", Side.CENTRAL, forw, MinorHorizontalAlignment.RIGHT));
+		Position fw2 = em.merge(new Position("Anfallare", "FW", Side.CENTRAL, forw, MinorHorizontalAlignment.LEFT));
 		
 		Position fw1_c = em.merge(new Position("Anfallare", "FW", Side.CENTRAL, forw));
 		//Position fw1_def = em.merge(new Position("Anfallare", "FW (D)", Side.CENTRAL, forw));

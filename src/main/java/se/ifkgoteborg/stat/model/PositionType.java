@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+
+import se.ifkgoteborg.stat.model.enums.MajorVerticalAlignment;
 
 @Entity
 @Table(name="position_type")
@@ -24,11 +28,15 @@ public class PositionType {
 	@OneToMany(mappedBy="positionType")
 	@JsonIgnore
 	private List<Position> positions = new ArrayList<Position>();
+
+	@Enumerated(EnumType.STRING)
+	private MajorVerticalAlignment alignment;
 	
 	private PositionType() {}
-
-	public PositionType(String name) {
-		this.name = name;		
+	
+	public PositionType(String name, MajorVerticalAlignment alignment) {
+		this.name = name;
+		this.alignment = alignment;		
 	}
 
 	public Long getId() {
@@ -46,8 +54,14 @@ public class PositionType {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	
+
+	public MajorVerticalAlignment getAlignment() {
+		return alignment;
+	}
+
+	public void setAlignment(MajorVerticalAlignment alignment) {
+		this.alignment = alignment;
+	}
 
 	public List<Position> getPositions() {
 		return positions;

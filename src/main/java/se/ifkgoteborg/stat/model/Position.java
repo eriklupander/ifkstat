@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import se.ifkgoteborg.stat.model.enums.MinorHorizontalAlignment;
+import se.ifkgoteborg.stat.model.enums.MinorVerticalAlignment;
 import se.ifkgoteborg.stat.model.enums.Side;
 
 @Entity
@@ -27,6 +29,12 @@ public class Position {
 
 	@ManyToOne
 	private PositionType positionType;
+
+	@Enumerated(value=EnumType.STRING)
+	private MinorVerticalAlignment minorVerticalAlignment = MinorVerticalAlignment.NEUTRAL;
+
+	@Enumerated(value=EnumType.STRING)
+	private MinorHorizontalAlignment minorHorizontalAlignment = MinorHorizontalAlignment.NEUTRAL;
 	
 	public Position() {}
 	
@@ -37,6 +45,31 @@ public class Position {
 		this.positionType = positionType;
 	}
 	
+	public Position(String name, String code, Side side, PositionType positionType, MinorVerticalAlignment minorVerticalAlignment) {
+		this.name = name;
+		this.code = code;
+		this.side = side;
+		this.positionType = positionType;
+		this.minorVerticalAlignment = minorVerticalAlignment;
+	}
+
+	public Position(String name, String code, Side side, PositionType positionType, MinorHorizontalAlignment minorHorizontalAlignment) {
+		this.name = name;
+		this.code = code;
+		this.side = side;
+		this.positionType = positionType;
+		this.minorHorizontalAlignment = minorHorizontalAlignment;
+	}
+
+	public Position(String name, String code, Side side, PositionType positionType, MinorVerticalAlignment minorVerticalAlignment, MinorHorizontalAlignment minorHorizontalAlignment) {
+		this.name = name;
+		this.code = code;
+		this.side = side;
+		this.positionType = positionType;
+		this.minorVerticalAlignment = minorVerticalAlignment;
+		this.minorHorizontalAlignment = minorHorizontalAlignment;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -69,6 +102,26 @@ public class Position {
 
 	public void setPositionType(PositionType positionType) {
 		this.positionType = positionType;
+	}
+	
+	
+
+	public MinorVerticalAlignment getMinorVerticalAlignment() {
+		return minorVerticalAlignment;
+	}
+
+	public void setMinorVerticalAlignment(
+			MinorVerticalAlignment minorVerticalAlignment) {
+		this.minorVerticalAlignment = minorVerticalAlignment;
+	}
+
+	public MinorHorizontalAlignment getMinorHorizontalAlignment() {
+		return minorHorizontalAlignment;
+	}
+
+	public void setMinorHorizontalAlignment(
+			MinorHorizontalAlignment minorHorizontalAlignment) {
+		this.minorHorizontalAlignment = minorHorizontalAlignment;
 	}
 
 	@Override
