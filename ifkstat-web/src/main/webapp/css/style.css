@@ -1,6 +1,6 @@
 body {
-    width: 600px;
-    margin: 40px;
+    width: 800px;
+    margin: 20px;
     font-family: 'trebuchet MS', 'Lucida sans', Arial;
     font-size: 14px;
     color: #444;
@@ -157,4 +157,29 @@ background-image: -webkit-gradient(
 	font-weight:bold;
 	font-family: verdana;
 	font-size: 12px;
+}
+
+.lineup {
+	background: url("../images/pitch.png") no-repeat scroll 0 0 transparent;
+	width:640px;
+	height:400px;
+	position:relative;
+}
+.lineup_player {
+	color:white;
+	font-size:12pt;
+	position:absolute;
+	width:80px;
+	text-align:center;
+}
+.lineup_player a {
+	color:white;
+	font-size:12pt;	
+}
+.player_icon {
+	background: url("../images/playerdot.png") no-repeat scroll 0 0 transparent;
+	width:80px;
+	height:32px;
+	text-align:center;
+	background-position:center;
 }

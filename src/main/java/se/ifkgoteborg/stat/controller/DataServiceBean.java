@@ -89,6 +89,14 @@ public class DataServiceBean implements DataService {
 	public Game getGame(Long id) {
 		return em.find(Game.class, id);
 	}
+	
+//	@Override
+//	public List<GameParticipation> getGameParticipation(Long id) {
+//		Game g = em.find(Game.class, id);
+//		g.getGameParticipation().size();
+//		return g.getGameParticipation();
+//	}
+
 
 	@SuppressWarnings("unchecked")
 	@Override

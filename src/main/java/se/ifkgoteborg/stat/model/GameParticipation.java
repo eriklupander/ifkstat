@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import se.ifkgoteborg.stat.model.enums.ParticipationType;
 
 /**
@@ -37,6 +39,7 @@ public class GameParticipation {
 	//private Integer playerNumber;
 	
 	@ManyToOne
+	@JsonIgnore
 	private Game game;
 	
 	@ManyToOne

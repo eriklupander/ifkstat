@@ -199,26 +199,6 @@ function showClubs() {
 	      		    { "mData": "games"}
 	      		    ]
 	    });
-//		"aoColumns": [		    
-//		    { "mData": "clubName", "sTitle": "Klubb" },
-//		    { "mData": "games", "sTitle": "M" },
-//		    { "mData": "wins", "sTitle": "V" },
-//		    { "mData": "draws", "sTitle": "O" },
-//		    { "mData": "losses", "sTitle": "F" },
-//		    { "mData": "games", "sTitle": "Mål" },
-//		    { "mData": "homeGames", "sTitle": "M" },
-//		    { "mData": "homeWins", "sTitle": "V" },
-//		    { "mData": "homeDraws", "sTitle": "O" },
-//		    { "mData": "homeLosses", "sTitle": "F" },
-//		    { "mData": "games", "sTitle": "Mål" },
-//		    { "mData": "awayGames", "sTitle": "M" },
-//		    { "mData": "awayWins", "sTitle": "V" },
-//		    { "mData": "awayDraws", "sTitle": "O" },
-//		    { "mData": "awayLosses", "sTitle": "F" },
-//		    { "mData": "games", "sTitle": "Mål" }
-		   
-		
-
 }
 
 function showPlayers() {
@@ -321,33 +301,59 @@ function showGameDetails(id) {
 	var notes = DataService.getGameNotes(params);
 	var participants = DataService.getGameParticipation(params);
 	
-	$('#gamedetails').css('display', 'block');
-	$('#gamedetails').html('<table class="bordered"><tr><td>' + data.homeTeam.name + '-' + data.awayTeam.name + ' ' + data.homeGoals + '-' + data.awayGoals + ' (' + data.homeGoalsHalftime + '-' + data.awayGoalsHalftime + ')</td></tr></table>');
+//	$('#gamedetails').css('display', 'block');
+//	$('#gamedetails').html('<table class="bordered"><tr><td>' + data.homeTeam.name + '-' + data.awayTeam.name + ' ' + data.homeGoals + '-' + data.awayGoals + ' (' + data.homeGoalsHalftime + '-' + data.awayGoalsHalftime + ')</td></tr></table>');
 	
 	// events
 	$('#content').html( 
 		'<h2>' + data.homeTeam.name + '-' + data.awayTeam.name + ' ' + data.homeGoals + '-' + data.awayGoals + ' (' + data.homeGoalsHalftime + '-' + data.awayGoalsHalftime + ')</h2>' +
-		'<table><tr><td valign="top"><table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="players"></table></td>' +
+		'<div>' + data.dateOfGame + ' '+ data.ground.name + ', ' + data.attendance + ' åskådare</div>' + 
+		'<table><tr>' + 
+		'<td valign="top">' + 
+			'<div class="lineup" id="lineup"></div>' +
+		'</td>' +
+		'<td valign="top">' + 
+			'<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="players"></table>' +
+		'</td>' +
 		'<td valign="top"><table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="events"></table></td>' +
 		'<td valign="top"><table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="notes"></table></td></tr></table>');
-		$('#players').dataTable( {	 
-			"fnRowCallback": function( nRow, aData, iDisplayIndex ) {	           
-                $('td:eq(0)', nRow).html( '<a href="player.html?id=' + aData.player.id + '">' + aData.player.name + '</a>' );   
-    		},
-			"bProcessing" : true,
-			"aaData": participants,
-			"bPaginate": false,
-	        "bLengthChange": false,
-	        "bFilter": false,
-	        "bSort": true,
-	        "bInfo": false,
-			"aoColumns": [		    
-			    { "mData": "player.name", "sTitle": "Spelare" },
-			    { "mData": "formationPosition.position.name", "sTitle": "Position" }
-			]
-		} );
+
 		
-		$('#events').dataTable( {	    	
+		for(var a = 0; a < participants.length; a++) {
+			var prt = participants[a];
+			if(prt.participationType == 'STARTER' || prt.participationType == 'SUBSTITUTE_OUT' ) {
+				$('#lineup').append('<div style="' + getPositionOffset(prt.formationPosition.position) + '" class="lineup_player"><div class="player_icon"></div><div><a href="player.html?id=' + prt.player.id + '">' + prt.player.name + '</a></div></div>');
+			}
+		}
+	//		$('#players').dataTable( {	 
+//			"fnRowCallback": function( nRow, aData, iDisplayIndex ) {	           
+//                $('td:eq(0)', nRow).html( '<a href="player.html?id=' + aData.player.id + '">' + aData.player.name + '</a>' );   
+//    		},
+//			"bProcessing" : true,
+//			"aaData": participants,
+//			"bPaginate": false,
+//	        "bLengthChange": false,
+//	        "bFilter": false,
+//	        "bSort": true,
+//	        "bInfo": false,
+//			"aoColumns": [		    
+//			    { "mData": "player.name", "sTitle": "Spelare" },
+//			    { "mData": "formationPosition.position.name", "sTitle": "Position" }
+//			]
+//		} );
+		
+		$('#events').dataTable( {	   
+			"fnRowCallback": function( nRow, aData, iDisplayIndex ) {	  
+				var str = '';
+				if(aData.eventType == 'GOAL') {
+					str = 'Mål';
+				} else if(aData.eventType == 'SUBSTITUTION_IN') {
+					str = 'Inbytt';
+				} else if(aData.eventType == 'SUBSTITUTION_OUT') {
+					str = 'Utbytt';
+				}
+              $('td:eq(0)', nRow).html(str);   
+  		},
 	    	"bProcessing" : true,
 	        "aaData": events,
 			"bPaginate": false,
@@ -432,6 +438,67 @@ function showTournaments() {
             { "mData": "name", "sTitle": "Namn" }
         ]
     } );
+}
+
+/**
+ * Should return a css position string such as 'left:50px;top:100px;'
+ * 
+ * "position":
+ * 	{"id":128,"name":"Innermitt (off)","code":"IM (O)","side":"CENTRAL","positionType":
+ * 		{"id":114,"name":"Mittfältare","alignment":"MF"},
+ * "minorVerticalAlignment":"OFFENSIVE","minorHorizontalAlignment":"NEUTRAL"}}
+ * @param position
+ */
+function getPositionOffset(position) {
+	// First, get base vertical position (GK, DEF, MF, FW)
+	var top = 0;
+	var left = 0;
+	switch(position.positionType.alignment) {
+	case 'GK':
+		top = 40;		
+		break;
+	case 'DEF':
+		top = 120;
+		break;
+	case 'MF':
+		top = 230;
+		break;
+	case 'FW':
+		top = 330;
+		break;
+	}
+	
+	switch(position.side) {
+	case 'RIGHT':
+		left = 100;		
+		break;
+	case 'CENTRAL':
+		left = 320;
+		break;
+	case 'LEFT':
+		left = 550;
+		break;
+	}
+	
+	switch(position.minorVerticalAlignment) {
+	case 'DEFENSIVE':
+		top -= 30;		
+		break;
+	case 'OFFENSIVE':
+		top += 40;
+		break;
+	}
+	
+	switch(position.minorHorizontalAlignment) {
+	case 'LEFT':
+		left += 90;		
+		break;
+	case 'RIGHT':
+		left -= 90;
+		break;
+	}
+	
+	return 'left:' + (left-40) + 'px;top:' + top + 'px;';
 }
 
 function nstr(str) {

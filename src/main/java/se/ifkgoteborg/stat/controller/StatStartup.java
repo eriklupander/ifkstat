@@ -142,6 +142,7 @@ public class StatStartup {
 		Position hb = em.merge(new Position("Högerback", "HB", Side.RIGHT, def));
 		Position mb1 = em.merge(new Position("Mittback", "MB", Side.CENTRAL, def, MinorHorizontalAlignment.RIGHT));
 		Position mb2 = em.merge(new Position("Mittback", "MB", Side.CENTRAL, def, MinorHorizontalAlignment.LEFT));
+		Position mb1_c = em.merge(new Position("Mittback", "MB", Side.CENTRAL, def, MinorHorizontalAlignment.NEUTRAL));
 		Position vb = em.merge(new Position("Vänsterback", "VB", Side.LEFT, def));
 		Position hy = em.merge(new Position("Högerytter", "HY", Side.RIGHT, mid));
 		Position im1 = em.merge(new Position("Innermitt", "IM", Side.CENTRAL, mid, MinorHorizontalAlignment.RIGHT));
@@ -232,7 +233,7 @@ public class StatStartup {
 		em.persist(new FormationPosition(7, f4141, hy));
 		em.persist(new FormationPosition(8, f4141, im1));
 		em.persist(new FormationPosition(9, f4141, vy));
-		em.persist(new FormationPosition(10, f4141, im1o));
+		em.persist(new FormationPosition(10, f4141, im2));
 		em.persist(new FormationPosition(11, f4141, fw1_c));
 		
 		em.persist(new FormationPosition(1, f451, mv));
@@ -249,7 +250,7 @@ public class StatStartup {
 		
 		em.persist(new FormationPosition(1, f352, mv));
 		em.persist(new FormationPosition(2, f352, hb));
-		em.persist(new FormationPosition(3, f352, mb1));
+		em.persist(new FormationPosition(3, f352, mb1_c));
 		em.persist(new FormationPosition(4, f352, vb));
 		em.persist(new FormationPosition(5, f352, hy));
 		em.persist(new FormationPosition(6, f352, im1));
