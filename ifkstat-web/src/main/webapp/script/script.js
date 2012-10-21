@@ -301,48 +301,35 @@ function showGameDetails(id) {
 	var notes = DataService.getGameNotes(params);
 	var participants = DataService.getGameParticipation(params);
 	
-//	$('#gamedetails').css('display', 'block');
-//	$('#gamedetails').html('<table class="bordered"><tr><td>' + data.homeTeam.name + '-' + data.awayTeam.name + ' ' + data.homeGoals + '-' + data.awayGoals + ' (' + data.homeGoalsHalftime + '-' + data.awayGoalsHalftime + ')</td></tr></table>');
+
+	$('#game_opponent').html(data.homeTeam.name == 'IFK Göteborg' ? data.awayTeam.name : data.homeTeam.name);
+	$('#game_result').html(data.homeGoals + '-' + data.awayGoals);
+	$('#game_result_halftime').html(data.homeGoalsHalftime + '-' + data.awayGoalsHalftime);
+	$('#game_tournament').html(data.tournamentSeason.tournament.name);
+	$('#game_season').html(data.tournamentSeason.start);
+	$('#game_homeaway').html(data.homeTeam.name == 'IFK Göteborg' ? 'Hemmamatch' : 'Bortamatch');
+	$('#game_dateOfGame').html(data.dateOfGame);
+	$('#game_ground').html(data.ground.name + ', ' + data.ground.city);
+	$('#game_attendence').html(data.attendance);
+	$('#game_referee').html(data.referee != null ? data.referee.name : '');
+
 	
 	// events
-	$('#content').html( 
-		'<h2>' + data.homeTeam.name + '-' + data.awayTeam.name + ' ' + data.homeGoals + '-' + data.awayGoals + ' (' + data.homeGoalsHalftime + '-' + data.awayGoalsHalftime + ')</h2>' +
-		'<div>' + data.dateOfGame + ' '+ data.ground.name + ', ' + data.attendance + ' åskådare</div>' + 
-		'<table><tr>' + 
-		'<td valign="top">' + 
-			'<div class="lineup" id="lineup"></div>' +
-		'</td>' +
-		'<td valign="top">' + 
-			'<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="players"></table>' +
-		'</td>' +
-		'<td valign="top"><table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="events"></table></td>' +
-		'<td valign="top"><table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="notes"></table></td></tr></table>');
-
-		
+	$('#gameheader').html( 
+		'<h2>' + data.homeTeam.name + '-' + data.awayTeam.name + ' ' + data.homeGoals + '-' + data.awayGoals + ' (' + data.homeGoalsHalftime + '-' + data.awayGoalsHalftime + ')</h2>');
+	//	'<div>' + data.dateOfGame + ' '+ data.ground.name + ', ' + data.attendance + ' åskådare</div>' + 
+				
+	
+	
 		for(var a = 0; a < participants.length; a++) {
 			var prt = participants[a];
 			if(prt.participationType == 'STARTER' || prt.participationType == 'SUBSTITUTE_OUT' ) {
-				$('#lineup').append('<div style="' + getPositionOffset(prt.formationPosition.position) + '" class="lineup_player"><div class="player_icon"></div><div><a href="player.html?id=' + prt.player.id + '">' + prt.player.name + '</a></div></div>');
+				$('#gamelineup').append('<div style="' + getPositionOffset(prt.formationPosition.position) + '" class="lineup_player"><div class="player_icon"></div><div><a href="player.html?id=' + prt.player.id + '">' + prt.player.name + '</a></div></div>');
 			}
 		}
-	//		$('#players').dataTable( {	 
-//			"fnRowCallback": function( nRow, aData, iDisplayIndex ) {	           
-//                $('td:eq(0)', nRow).html( '<a href="player.html?id=' + aData.player.id + '">' + aData.player.name + '</a>' );   
-//    		},
-//			"bProcessing" : true,
-//			"aaData": participants,
-//			"bPaginate": false,
-//	        "bLengthChange": false,
-//	        "bFilter": false,
-//	        "bSort": true,
-//	        "bInfo": false,
-//			"aoColumns": [		    
-//			    { "mData": "player.name", "sTitle": "Spelare" },
-//			    { "mData": "formationPosition.position.name", "sTitle": "Position" }
-//			]
-//		} );
+
 		
-		$('#events').dataTable( {	   
+		$('#gameevents_table').dataTable( {	   
 			"fnRowCallback": function( nRow, aData, iDisplayIndex ) {	  
 				var str = '';
 				if(aData.eventType == 'GOAL') {
@@ -367,7 +354,7 @@ function showGameDetails(id) {
 	        ]
 	    } );
 		
-	    $('#notes').dataTable( {	    	
+	    $('#gamenotes_table').dataTable( {	    	
 	    	"bProcessing" : true,
 	        "aaData": notes,
 		    "bPaginate": false,

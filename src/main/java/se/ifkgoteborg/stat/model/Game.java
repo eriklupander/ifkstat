@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
@@ -87,6 +88,9 @@ public class Game {
 	private Integer awayGoals = 0;
 	private Integer homeGoalsHalftime = 0;
 	private Integer awayGoalsHalftime = 0;
+	
+	@OneToOne
+	private GameStatistics gameStats;
 	
 	public Date getDateOfGame() {
 		return dateOfGame;
@@ -224,6 +228,14 @@ public class Game {
 
 	public void setGameNotes(List<GameNote> gameNotes) {
 		this.gameNotes = gameNotes;
+	}
+
+	public GameStatistics getGameStats() {
+		return gameStats;
+	}
+
+	public void setGameStats(GameStatistics gameStats) {
+		this.gameStats = gameStats;
 	}
 
 	@Transient
