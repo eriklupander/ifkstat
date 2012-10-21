@@ -31,7 +31,8 @@
 		    </ul>
 		    <div id="tabs-1">
 		    	<div style="width:500px;" id="gamedetails" class="infopanel">
-		    	<table width="450" cellspacing="0" cellpadding="0" border="0">
+		    	<table width="450" class="bordered">
+					<thead><tr><th colspan="2">Matchfakta<span style="float:right;"><button id="editplayer" class="btn">Redigera</button></span></th></tr></thead>
 					<tbody>
 					<tr><td>Motståndare:</td><td id="game_opponent"></td></tr>
 					<tr><td>Resultat:</td><td id="game_result"></td></tr>
@@ -57,17 +58,16 @@
 		    </div>
 		    <div id="tabs-5">
 		        <div style="width:500px;" id="gamestats" class="infopanel">
-		        	<table width="450" cellspacing="0" cellpadding="0" border="0">
+		        	<table width="450" class="bordered">
+						
+					<thead><tr><th colspan="2">Matchfakta<span style="float:right;"><button id="editplayer" class="btn">Redigera</button></span></th></tr></thead>
 						<tbody>
 			        		<tr><td>Skott:</td><td id="gamestats_shots"></td></tr>
-							<tr><td>- på mål:</td><td id="gamestats_shots_on_goal"></td></tr>
-							<tr><td>- utanför mål:</td><td id="gamestats_shots_off_goal"></td></tr>
-							<tr><td>- i målställningen:</td><td id="gamestats_shots_on_posts"></td></tr>
+							<tr><td>- på mål:</td><td id="gamestats_shotsongoal"></td></tr>
+							<tr><td>- utanför mål:</td><td id="gamestats_shotsoffgoal"></td></tr>
 							<tr><td>Offside:</td><td id="gamestats_offsides"></td></tr>
 							<tr><td>Hörnor:</td><td id="gamestats_corners"></td></tr>
 							<tr><td>Frisparkar:</td><td id="gamestats_freekicks"></td></tr>
-							
-							<tr><td>Insparkar:</td><td id="gamestats_goalkicks"></td></tr>
 							<tr><td>Inkast:</td><td id="gamestats_throwins"></td></tr>
 							<tr><td>Bollinnehav:</td><td id="gamestats_possession"></td></tr>
 						</tbody>

@@ -367,6 +367,17 @@ function showGameDetails(id) {
 	        ]
 	    } );
 	    
+	    $('#gamestats_shots').html(data.gameStats.shots);
+		$('#gamestats_shotsongoal').html(data.gameStats.shotsOnGoal);
+		$('#gamestats_shotsoffgoal').html(data.gameStats.shotsOffGoal);
+		$('#gamestats_offsides').html(data.gameStats.offsides);
+		$('#gamestats_corners').html(data.gameStats.corners);
+		$('#gamestats_throwins').html(data.gameStats.throwins);
+		$('#gamestats_freekicks').html(data.gameStats.freekicks);
+		$('#gamestats_possession').html(data.gameStats.possession);
+		
+		
+		
 	    $('#content').css('width', '900px');
 }
 

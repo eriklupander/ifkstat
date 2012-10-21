@@ -31,8 +31,8 @@ public class GameStatistics {
 	private Integer freekicksAwayTeam = 0;
 	private Integer throwinsHomeTeam = 0;
 	private Integer throwinsAwayTeam = 0;
-	private Integer possessionHomeTeam = 0;
-	private Integer possessionAwayTeam = 0;
+	private Integer possessionHomeTeam = 50;
+	private Integer possessionAwayTeam = 50;
 	
 	
 
@@ -42,6 +42,46 @@ public class GameStatistics {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	@Transient
+	public String getShots() {
+		return getShotsHomeTeam() + "-" + getShotsAwayTeam();
+	}
+	
+	@Transient
+	public String getShotsOnGoal() {
+		return getShotsOnGoalHomeTeam() + "-" + getShotsOnGoalAwayTeam();
+	}
+	
+	@Transient
+	public String getShotsOffGoal() {
+		return getShotsOffGoalHomeTeam() + "-" + getShotsOffGoalAwayTeam();
+	}
+	
+	@Transient
+	public String getOffsides() {
+		return getOffsidesHomeTeam() + "-" + getOffsidesAwayTeam();
+	}
+	
+	@Transient
+	public String getThrowins() {
+		return getThrowinsHomeTeam() + "-" + getThrowinsAwayTeam();
+	}
+	
+	@Transient
+	public String getFreekicks() {
+		return getFreekicksHomeTeam() + "-" + getFreekicksAwayTeam();
+	}
+	
+	@Transient
+	public String getPossession() {
+		return getPossessionHomeTeam() + "-" + getPossessionAwayTeam();
+	}
+	
+	@Transient
+	public String getCorners() {
+		return getCornersHomeTeam() + "-" + getCornersAwayTeam();
 	}
 
 	@Transient

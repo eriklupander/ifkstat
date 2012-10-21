@@ -90,7 +90,7 @@ public class Game {
 	private Integer awayGoalsHalftime = 0;
 	
 	@OneToOne
-	private GameStatistics gameStats;
+	private GameStatistics gameStats = new GameStatistics();
 	
 	public Date getDateOfGame() {
 		return dateOfGame;
@@ -231,6 +231,9 @@ public class Game {
 	}
 
 	public GameStatistics getGameStats() {
+		if(gameStats == null) {
+			gameStats = new GameStatistics();
+		}
 		return gameStats;
 	}
 
