@@ -30,9 +30,11 @@
 		        <li><a href="#tabs-5">Statistik</a></li>
 		    </ul>
 		    <div id="tabs-1">
+		    	<span style="float:right;"><button id="editplayer" class="btn">Redigera</button></span>
+		    	
 		    	<div style="width:500px;" id="gamedetails" class="infopanel">
 		    	<table width="450" class="bordered">
-					<thead><tr><th colspan="2">Matchfakta<span style="float:right;"><button id="editplayer" class="btn">Redigera</button></span></th></tr></thead>
+					
 					<tbody>
 					<tr><td>Motståndare:</td><td id="game_opponent"></td></tr>
 					<tr><td>Resultat:</td><td id="game_result"></td></tr>
@@ -60,7 +62,7 @@
 		        <div style="width:500px;" id="gamestats" class="infopanel">
 		        	<table width="450" class="bordered">
 						
-					<thead><tr><th colspan="2">Matchfakta<span style="float:right;"><button id="editplayer" class="btn">Redigera</button></span></th></tr></thead>
+					<thead><tr><th colspan="2" id="editgamestatshead"><span style="float:right;"><button id="editgamestats" class="btn">Redigera</button></span></th></tr></thead>
 						<tbody>
 			        		<tr><td>Skott:</td><td id="gamestats_shots"></td></tr>
 							<tr><td>- på mål:</td><td id="gamestats_shotsongoal"></td></tr>
@@ -81,6 +83,9 @@
 		$(document).ready(function() {
 			header();
 			$('#tabs').tabs();
+			$('#editgamestats').click(function() {
+				editGameStatistics($.urlParam('id'));
+			});
 			showGameDetails($.urlParam('id'));   
 		} );
 	</script>

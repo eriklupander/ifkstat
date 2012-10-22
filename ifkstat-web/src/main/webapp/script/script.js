@@ -72,6 +72,35 @@ function showGamesOfPlayerInTournamentSubstOut(id, tournamentId) {
     createGamesTable(data);
 }
 
+function editGameStatistics(id) {
+	var params = {"id":id};
+	var data = DataService.getGame(params);
+	stats = data.gameStats;
+	$('#gamestats_shots').html(createStatsControl('gamestats_shots', stats.shotsHomeTeam, stats.shotsAwayTeam));
+	$('#gamestats_shotsongoal').html(createStatsControl('gamestats_shotsongoal', stats.shotsOnGoalHomeTeam, stats.shotsOnGoalAwayTeam));
+	$('#gamestats_shotsoffgoal').html(createStatsControl('gamestats_shotsoffgoal', stats.shotsOffGoalHomeTeam, stats.shotsOffGoalAwayTeam));
+	$('#gamestats_offsides').html(createStatsControl('gamestats_offsides', stats.offsidesHomeTeam, stats.offsidesAwayTeam));
+	$('#gamestats_corners').html(createStatsControl('gamestats_corners', stats.cornersHomeTeam, stats.cornersAwayTeam));
+	$('#gamestats_throwins').html(createStatsControl('gamestats_throwins', stats.throwinsHomeTeam, stats.throwinsAwayTeam));
+	$('#gamestats_freekicks').html(createStatsControl('gamestats_freekicks', stats.freekicksHomeTeam, stats.freekicksAwayTeam));
+	$('#gamestats_possession').html(createStatsControl('gamestats_possession', stats.possessionHomeTeam, stats.possessionAwayTeam));
+
+	$('#editgamestatshead').html('<span style="float:right;"><button id="savestats" class="btn">Spara</button><button id="cancelstats" class="btn">Avbryt</button></span>');
+	
+	$('#savestats').click(function() {
+		
+	});
+	
+	$('#cancelstats').click(function() {
+		window.location = "game.html?id=" + id;
+	});
+}
+
+function createStatsControl(id, ht, at) {
+	return '<input type="text" size="2" id="' + id + '_ht" value="' + ht + '"></input> - ' +
+			'<input type="text" size="2" id="' + id + '_at" value="' + at + '"></input>';
+}
+
 function editPlayerDetails(id) {
 	
 	var params = {"id":id};
