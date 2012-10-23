@@ -112,4 +112,8 @@ public interface RegistrationDAO {
 
 	public void removeTournamentSeasonFromSeason(TournamentSeason ts);
 
+	public void cleanDatabase(String password);
+
+	public void reseedInitData(String password);
+
 }

@@ -14,13 +14,11 @@ public class Country  {
 	private Long id;
 	private String name;
 	private String code;
-	private String isoCode;
 	
 	public Country(){}
 	
-	public Country(String code, String isoCode, String name) {
+	public Country(String code, String name) {
 		this.name = name;
-		this.isoCode = isoCode;
 		this.code = code;
 	}
 
@@ -37,15 +35,7 @@ public class Country  {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getIsoCode() {
-		return isoCode;
-	}
-	public void setIsoCode(String isoCode) {
-		this.isoCode = isoCode;
-	}
 	
-	
-
 	public String getCode() {
 		return code;
 	}
@@ -59,7 +49,6 @@ public class Country  {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((isoCode == null) ? 0 : isoCode.hashCode());
 		return result;
 	}
 
@@ -76,11 +65,6 @@ public class Country  {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
-			return false;
-		if (isoCode == null) {
-			if (other.isoCode != null)
-				return false;
-		} else if (!isoCode.equals(other.isoCode))
 			return false;
 		return true;
 	}

@@ -69,7 +69,7 @@ public class Game {
 	@ManyToOne(cascade=CascadeType.PERSIST)
 	private Formation formation;
 	
-	@OneToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE}, mappedBy="game")
+	@OneToMany(cascade=CascadeType.ALL, orphanRemoval=true)
 	@JsonIgnore
 	private List<GameNote> gameNotes = new ArrayList<GameNote>();
 	
@@ -89,7 +89,7 @@ public class Game {
 	private Integer homeGoalsHalftime = 0;
 	private Integer awayGoalsHalftime = 0;
 	
-	@OneToOne
+	@OneToOne(cascade=CascadeType.ALL)
 	private GameStatistics gameStats = new GameStatistics();
 	
 	public Date getDateOfGame() {

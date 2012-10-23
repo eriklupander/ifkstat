@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
 import se.ifkgoteborg.stat.importer.MasterImporter;
+import se.ifkgoteborg.stat.importer.ejb.NotesImporter;
 import se.ifkgoteborg.stat.model.User;
 import se.ifkgoteborg.stat.model.Userrole;
 import se.ifkgoteborg.stat.util.PasswordUtil;
@@ -20,7 +21,13 @@ public class SuperAdminDataServiceBean implements SuperAdminDataService {
 	
 	@Inject
 	RegistrationDAO registrationDao;
+	
+	@Inject
+	MasterImporter masterImporter;
 
+	@Inject
+	NotesImporter notesImporter;
+	
 	@Override
 	public User createUser(User user) {
 		validateUser(user);
@@ -66,8 +73,22 @@ public class SuperAdminDataServiceBean implements SuperAdminDataService {
 	}
 
 	@Override
-	public void bulkUpload(String data) {
-		new MasterImporter(registrationDao).importMasterFile(data);
+	public void bulkUploadGameData(String data) {
+		masterImporter.importMasterFile(data);
 	}
 
+	@Override
+	public void bulkUploadNotes(String data) {
+		notesImporter.importNotes(data);
+	}
+	
+	@Override
+	public void cleanDatabase(String password) {
+		registrationDao.cleanDatabase(password);
+	}
+	
+	@Override
+	public void reseedInitData(String password) {
+		registrationDao.reseedInitData(password);
+	}
 }

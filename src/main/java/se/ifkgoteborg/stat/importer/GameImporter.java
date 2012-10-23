@@ -7,12 +7,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+
 import se.ifkgoteborg.stat.controller.RegistrationDAO;
 import se.ifkgoteborg.stat.model.Club;
 import se.ifkgoteborg.stat.model.Formation;
 import se.ifkgoteborg.stat.model.FormationPosition;
 import se.ifkgoteborg.stat.model.Game;
 import se.ifkgoteborg.stat.model.GameEvent;
+import se.ifkgoteborg.stat.model.GameStatistics;
 import se.ifkgoteborg.stat.model.GameEvent.EventType;
 import se.ifkgoteborg.stat.model.GameNote;
 import se.ifkgoteborg.stat.model.GameParticipation;
@@ -58,6 +62,7 @@ public class GameImporter {
 	 * @param tournamentName 
 	 * @param squadSeason 
 	 */
+	@TransactionAttribute(value=TransactionAttributeType.REQUIRES_NEW)
 	public void importTournamentSeason(String data, String season, Map<Integer, Player> players, String tournamentName, SquadSeason squadSeason) {
 		System.out.println("ENTER - importTournamentSeason: Season: " + season + ", Tournament name: " +  tournamentName);
 		
@@ -82,6 +87,8 @@ public class GameImporter {
 		String[] cells = dataRow.split("\t");
 
 		Game g = new Game();
+		GameStatistics gs = new GameStatistics();
+		g.setGameStats(gs);
 		g.setTournamentSeason(ts);
 		ts.getGames().add(g);
 		
@@ -124,7 +131,7 @@ public class GameImporter {
 				homegame = "H".equals(cells[a].trim());
 				if("N".equals(cells[a].trim())) {
 					homegame = true;
-					g.getGameNotes().add(new GameNote(g, "Neutral plan"));
+					g.getGameNotes().add(new GameNote("Neutral plan"));
 				}
 				break;
 			// Arena / ground

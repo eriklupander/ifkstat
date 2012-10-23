@@ -202,7 +202,7 @@ public class DataServiceBean implements DataService {
 
 	@Override
 	public List<GameNote> getGameNotes(Long id) {
-		return em.createQuery("select gn from GameNote gn WHERE gn.game.id = :id")
+		return em.createQuery("select gn from Game g join g.gameNotes gn WHERE g.id = :id")
 				.setParameter("id", id)
 				.getResultList();
 	}

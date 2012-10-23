@@ -4,8 +4,6 @@ import java.io.UnsupportedEncodingException;
 
 import se.ifkgoteborg.stat.controller.RegistrationDAO;
 import se.ifkgoteborg.stat.controller.upload.UploadReceiver;
-import se.ifkgoteborg.stat.importer.MasterImporter;
-import se.ifkgoteborg.stat.importer.NotesImporter;
 
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Upload;
@@ -41,7 +39,7 @@ public class ImportView extends VerticalLayout {
             public void uploadFinished(FinishedEvent event) {
                 
                 String data = readFile();                
-                new MasterImporter(ImportView.this.dao).importMasterFile(data);                                      
+                //new MasterImporterBean(ImportView.this.dao).importMasterFile(data);                                      
                 result.setValue("Import file uploaded");
             }
         });  
@@ -49,7 +47,7 @@ public class ImportView extends VerticalLayout {
         upload2.addListener(new Upload.FinishedListener() {
             public void uploadFinished(FinishedEvent event) {
                 String data = readFile2();                
-                new NotesImporter(ImportView.this.dao).importNotes(data);                                      
+               // new NotesImporter(ImportView.this.dao).importNotes(data);                                      
                 result.setValue("Notes file uploaded");
             }
         });   

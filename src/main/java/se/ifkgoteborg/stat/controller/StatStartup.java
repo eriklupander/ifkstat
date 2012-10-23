@@ -63,13 +63,17 @@ public class StatStartup {
 		userrole.setUserRoles("admin");
 		userrole = em.merge(userrole);
 		
-		 Locale[] locales = Locale.getAvailableLocales();
+		 createInitData();
+	}
+
+	public void createInitData() {
+		Locale[] locales = Locale.getAvailableLocales();
 	    for (Locale locale : locales) {
-	      String iso = locale.getISO3Country();
+	     // String iso = locale.getISO3Country();
 	      String code = locale.getCountry();
 	      String name = locale.getDisplayCountry();
 	      if(name.trim().length() > 0) {
-	    	  em.merge(new Country(code, iso, name));
+	    	  em.merge(new Country(code, name));
 	      }	
 	      
 	    }
@@ -82,7 +86,6 @@ public class StatStartup {
 		ifkgbg.setCity("Göteborg");
 		ifkgbg.setCountry(sweden);
 		ifkgbg.setDefaultClub(true);
-		//ifkgbg.setFoundedDate(Date.get)
 		
 		ifkgbg = em.merge(ifkgbg);
 		
@@ -91,46 +94,6 @@ public class StatStartup {
 		gullevi.setMaxCapacity(18500);
 		
 		gullevi = em.merge(gullevi);
-//		
-//		
-//		Player pl = new Player();
-//		pl.setFullName("Mamadou Diallo");
-//		pl.setName("Big Mama");
-//		pl.setGender(Gender.MALE);
-//		pl.setLength(191);
-//		pl.setWeight(100);
-//		pl.setNationality(senegal);
-//		
-//		PlayedForClub pfc = new PlayedForClub();
-//		pfc.setClub(ifkgbg);
-//		pfc.setFromDate(DateFactory.get(2003,3,25));
-//		pfc.setToDate(DateFactory.get(2003,11,31));
-//		
-//		pfc = em.merge(pfc);
-//		
-//		pl.getClubs().add(pfc);
-//		
-//		pl = em.merge(pl);
-//		
-//		Player pl2 = new Player();
-//		pl2.setFullName("Marino");
-//		pl2.setName("Rahmberg");
-//		pl2.setGender(Gender.MALE);
-//		pl2.setLength(179);
-//		pl2.setWeight(71);
-//		pl2.setNationality(sweden);
-//		
-//		PlayedForClub pfc2 = new PlayedForClub();
-//		pfc2.setClub(ifkgbg);
-//		pfc2.setFromDate(DateFactory.get(2002,7,25));
-//		pfc2.setToDate(DateFactory.get(2003,11,31));
-//		
-//		pfc2 = em.merge(pfc2);
-//		
-//		pl2.getClubs().add(pfc2);
-//		
-//		pl2 = em.merge(pl2);
-//		
 		
 		PositionType gk = em.merge(new PositionType("Målvakt", MajorVerticalAlignment.GK));
 		PositionType def = em.merge(new PositionType("Försvarare", MajorVerticalAlignment.DEF));

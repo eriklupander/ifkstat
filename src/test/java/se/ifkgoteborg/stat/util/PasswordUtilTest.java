@@ -8,7 +8,7 @@ public class PasswordUtilTest {
 	
 	@Test
 	public void testHashPassword() {
-		String passwordHash = PasswordUtil.getPasswordHash("test");
+		String passwordHash = PasswordUtil.getPasswordHash("admin");
 		Assert.assertEquals("CY9rzUYh03PK3k6DJie09g==", passwordHash);
 	}
 }

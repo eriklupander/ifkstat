@@ -35,6 +35,10 @@ public class RegistrationDAOBean implements RegistrationDAO {
 	@Inject
 	EntityManager em;
 	
+	@Inject
+	StatStartup statStartup;
+	
+	
 	/* (non-Javadoc)
 	 * @see se.ifkgoteborg.stat.controller.RegistrationDAO#getOrCreateGround(java.lang.String)
 	 */
@@ -504,7 +508,7 @@ public class RegistrationDAOBean implements RegistrationDAO {
 			Game g = (Game) em.createQuery("select g from Game g WHERE g.dateOfGame = :date").setParameter("date", date).getSingleResult();
 			// Append note onto game summary
 			g.setGameSummary(g.getGameSummary() + "\n\n" + note);
-			g.getGameNotes().add(new GameNote(g, note));
+			g.getGameNotes().add(new GameNote(note));
 			em.merge(g);
 			System.out.println("Saved note: " + note + " for game on date " + DateFactory.format(date));
 		} catch (NoResultException e) {
@@ -572,6 +576,47 @@ public class RegistrationDAOBean implements RegistrationDAO {
 	@Override
 	public void removeTournamentSeasonFromSeason(TournamentSeason ts) {
 		em.remove(ts);
+	}
+
+
+	@Override
+	public void cleanDatabase(String password) {
+		if("5ecret".equals(password)) {
+			
+			em.createQuery("DELETE FROM GameParticipation gp").executeUpdate();
+			em.createQuery("DELETE FROM GameEvent ge").executeUpdate();
+			em.createQuery("DELETE FROM GameNote gn").executeUpdate();
+			em.createQuery("DELETE FROM GameStatistics gs").executeUpdate();
+			em.createQuery("DELETE FROM Game g").executeUpdate();
+			em.createQuery("DELETE FROM Ground g").executeUpdate();
+			em.createQuery("DELETE FROM Referee r").executeUpdate();
+			
+			em.createQuery("DELETE FROM FormationPosition fp").executeUpdate();
+			em.createQuery("DELETE FROM Position p").executeUpdate();
+			em.createQuery("DELETE FROM Formation f").executeUpdate();
+			
+			em.createQuery("DELETE FROM PlayedForClub pfc").executeUpdate();
+			em.createQuery("DELETE FROM PlayerImage pi").executeUpdate();
+			em.createQuery("DELETE FROM Player p").executeUpdate();
+			em.createQuery("DELETE FROM PositionType pt").executeUpdate();
+			
+			em.createQuery("DELETE FROM TournamentSeason ts").executeUpdate();
+			em.createQuery("DELETE FROM SquadSeason ss").executeUpdate();
+			em.createQuery("DELETE FROM Tournament t").executeUpdate();
+			
+			em.createQuery("DELETE FROM Club c").executeUpdate();
+			em.createQuery("DELETE FROM Country c").executeUpdate();
+		
+			em.createQuery("DELETE FROM Setting s").executeUpdate();
+			em.flush();
+		}
+	}
+	
+	@Override
+	public void reseedInitData(String password) {
+		if("5ecret".equals(password)) {
+			statStartup.createInitData();
+		}
 	}
 
 	

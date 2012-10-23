@@ -1,3 +1,31 @@
+function setupAdminTabs() {
+	// First, do some "is logged in" check
+	var successful = SuperAdminDataService.login();
+	
+	$('#import_gamedata_btn').click(function() {
+		var params = {};
+		params.$entity = $('#import_gamedata').val();
+		SuperAdminDataService.bulkUploadGameData(params);
+		
+		alert('Uppladdning av matchdata klar!');
+	});
+	$('#import_notes_btn').click(function() {
+		var params = {};
+		params.$entity = $('#import_notes').val();
+		SuperAdminDataService.bulkUploadNotes(params);
+		alert('Uppladdning av noter färdig!');
+	});
+	$('#cleanDb').click(function() {
+		var params = {};
+		params.password = $('#cleandb_password').val();
+		SuperAdminDataService.cleanDatabase(params);
+		SuperAdminDataService.reseedInitData(params);
+		alert('Databas rensad och grunddata byggd!');
+	});
+	
+}
+
+
 function showCreateUserForm() {
 	
 	// First, do some "is logged in" check
