@@ -443,7 +443,10 @@ function showSeasonDetails(id) {
     	"bProcessing" : true,
         "aaData": data.tournamentSeasons,
         "aoColumns": [
-            { "mData": "name", "sTitle": "Namn" }
+            { "mData": "name", "sTitle": "Namn" },
+            { "mData": "games", "sTitle": "Matcher" },
+            { "mData": "goalsScored", "sTitle": "Gjorda mål" },
+            { "mData": "goalsConceded", "sTitle": "Insläppta mål" }
         ]
     } );
 	
@@ -457,7 +460,9 @@ function showSeasonDetails(id) {
         "aaData": data.squad,
         "aoColumns": [
             { "mData": "name", "sTitle": "Namn" },
-            { "mData": "squadNr", "sTitle": "Tröjnummer" }
+            { "mData": "squadNr", "sTitle": "Tröjnummer" },
+            { "mData": "games", "sTitle": "Matcher" },
+            { "mData": "goals", "sTitle": "Mål" }
         ]
     } );
 }

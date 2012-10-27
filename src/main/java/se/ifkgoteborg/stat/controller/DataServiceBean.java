@@ -36,6 +36,7 @@ import se.ifkgoteborg.stat.model.Referee;
 import se.ifkgoteborg.stat.model.SquadSeason;
 import se.ifkgoteborg.stat.model.Tournament;
 import se.ifkgoteborg.stat.model.TournamentSeason;
+import se.ifkgoteborg.stat.model.GameEvent.EventType;
 
 @Stateless
 @PermitAll
@@ -514,6 +515,8 @@ public class DataServiceBean implements DataService {
 			player.setId(pfc.getPlayer().getId());
 			player.setName(pfc.getPlayer().getName());
 			player.setSquadNr(pfc.getSquadNr());
+			player.setGames(countGamesOfSeason(pfc.getPlayer().getGames(), ss.getId()));
+			player.setGoals(countGoalsOfSeason(pfc.getPlayer().getGames(), ss.getId()));
 			players.add(player);
 		}
 		dto.setSquad(players);
@@ -523,10 +526,62 @@ public class DataServiceBean implements DataService {
 			TournamentSeasonDTO tsDto = new TournamentSeasonDTO();
 			tsDto.setId(ts.getId());
 			tsDto.setName(ts.getTournament().getName() + " " + ts.getSeasonName());
+			tsDto.setGames(ts.getGames().size());
+			tsDto.setGoalsScored(getGoalsScored(ts.getGames()));
+			tsDto.setGoalsConceded(getGoalsConceded(ts.getGames()));
 			tsList.add(tsDto);
 		}
 		dto.setTournamentSeasons(tsList);
 		return dto;
+	}
+
+	private Integer countGoalsOfSeason(List<GameParticipation> games, Long id) {
+		Integer goals = 0;
+		for(GameParticipation gp : games) {
+			if(gp.getGame().getTournamentSeason().getSeason().getId().equals(id)) {
+				Long playerId = gp.getPlayer().getId();
+				for(GameEvent ge : gp.getGame().getEvents()) {
+					if(ge.getEventType() == EventType.GOAL && ge.getPlayer().getId().equals(playerId)) {
+						goals++;
+					}
+				}
+			}
+		}
+		return goals;
+	}
+
+	private Integer countGamesOfSeason(List<GameParticipation> games, Long id) {
+		Integer gameCount = 0;
+		for(GameParticipation gp : games) {
+			if(gp.getGame().getTournamentSeason().getSeason().getId().equals(id)) {
+				gameCount++;
+			}			
+		}
+		return gameCount;
+	}
+
+	private Integer getGoalsConceded(List<Game> games) {
+		Integer goals = 0;
+		for(Game g : games) {
+			if(g.getHomeTeam().getDefaultClub()) {
+				goals += g.getAwayGoals();
+			} else {
+				goals += g.getHomeGoals();
+			}
+		}
+		return goals;
+	}
+
+	private Integer getGoalsScored(List<Game> games) {
+		Integer goals = 0;
+		for(Game g : games) {
+			if(g.getHomeTeam().getDefaultClub()) {
+				goals += g.getHomeGoals();
+			} else {
+				goals += g.getAwayGoals();
+			}
+		}
+		return goals;
 	}
 	
 }
