@@ -27,7 +27,7 @@ public class XlsTransformer {
 	private static final String OUTPUT_FILE = "c:\\tankesmedja\\ifkstat\\ifkstat\\data\\master.txt";
 
 	//private static final String ROOT_FOLDER = "F:\\Dropbox\\Statistik till webben";
-	private static final String ROOT_FOLDER = "C:\\Users\\Erik\\Dropbox\\Statistik till webben";
+	public static final String ROOT_FOLDER = "C:\\Users\\Erik\\Dropbox\\Statistik till webben";
 	
 	private static final String GOAL_TOKEN = "•";
 	private static final String N = "IFK statistik";
@@ -35,7 +35,7 @@ public class XlsTransformer {
 	private static final int PLAYERS_STARTINDEX_AFTER_2003 = 9;
 	private static final int MAX_CELL = 49;
 
-	private StringBuilder buf;
+	private StringBuilder buf = new StringBuilder();
 	
 	private static final List<String> blockList = new ArrayList<String>();
 	static {
@@ -53,7 +53,6 @@ public class XlsTransformer {
 	public void parseXlsToText(String outputFile) {
 		nf.setMaximumFractionDigits(0);
 		
-		buf = new StringBuilder();
 
 		File rootFolder = new File(ROOT_FOLDER);
 		if (!rootFolder.isDirectory()) {
@@ -93,7 +92,7 @@ public class XlsTransformer {
 		}
 	}
 
-	private void processFile(File f) {
+	public void processFile(File f) {
 		System.out.println("Processing file:" + f.getName());
 		if(inBlockList(f.getName())) {
 			return;
@@ -226,7 +225,8 @@ public class XlsTransformer {
 	private int readCellPost2003(HSSFRow gameRow, int cellIndex, int startYear) {
 		
 		if(cellIndex >= PLAYERS_STARTINDEX_AFTER_2003) {
-			if(gameRow.getCell(cellIndex) != null) {		
+			HSSFCell cell = gameRow.getCell(cellIndex);
+			if(cell != null) {		
 				if(gameRow.getCell(cellIndex).getCellType() == HSSFCell.CELL_TYPE_STRING) {
 					buf.append(gameRow.getCell(cellIndex).toString() + "\t");
 				} else {
@@ -237,7 +237,8 @@ public class XlsTransformer {
 					}
 				}
 			} else {
-				System.err.println("Error writing, cell null: Index: " + cellIndex);
+				buf.append("\t");
+				//System.err.println("Error writing, cell null: Index: " + cellIndex);
 			}
 		} else {
 			if(gameRow.getCell(cellIndex) != null) {
@@ -403,6 +404,10 @@ public class XlsTransformer {
 
 	private boolean isEmpty(HSSFCell cell) {
 		return cell == null || cell.toString() == null || cell.toString().trim().length() == 0;
+	}
+	
+	public String getBuffer() {
+		return buf.toString();
 	}
 
 	public static void main(String[] args) {

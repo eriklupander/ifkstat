@@ -16,15 +16,20 @@ import javax.persistence.Query;
 
 import se.ifkgoteborg.stat.dto.AveragesPerGameAndTournamentDTO;
 import se.ifkgoteborg.stat.dto.ClubStatDTO;
+import se.ifkgoteborg.stat.dto.FullSquadSeasonDTO;
 import se.ifkgoteborg.stat.dto.GamePositionStatDTO;
 import se.ifkgoteborg.stat.dto.GoalsPerTournamentDTO;
+import se.ifkgoteborg.stat.dto.PlayerSeasonDTO;
 import se.ifkgoteborg.stat.dto.PlayerStatDTO;
 import se.ifkgoteborg.stat.dto.PlayerSummaryDTO;
+import se.ifkgoteborg.stat.dto.SquadSeasonDTO;
+import se.ifkgoteborg.stat.dto.TournamentSeasonDTO;
 import se.ifkgoteborg.stat.model.Game;
 import se.ifkgoteborg.stat.model.GameEvent;
 import se.ifkgoteborg.stat.model.GameNote;
 import se.ifkgoteborg.stat.model.GameParticipation;
 import se.ifkgoteborg.stat.model.Ground;
+import se.ifkgoteborg.stat.model.PlayedForClub;
 import se.ifkgoteborg.stat.model.Player;
 import se.ifkgoteborg.stat.model.PositionType;
 import se.ifkgoteborg.stat.model.Referee;
@@ -485,6 +490,42 @@ public class DataServiceBean implements DataService {
 		dto.setHomeDraws(getInt(row[12]));
 		dto.setHomeLosses(getInt(row[13]));
 		
+		return dto;
+	}
+
+	@Override
+	public List<SquadSeasonDTO> getSeasons() {
+		List<SquadSeason> seasons = em.createQuery("SELECT ss FROM SquadSeason ss").getResultList();
+		List<SquadSeasonDTO> retList = new ArrayList<SquadSeasonDTO>();
+		for(SquadSeason ss : seasons) {
+			retList.add(new SquadSeasonDTO(ss.getId(), ss.getName(), ss.getStartYear(), ss.getEndYear()));
+		}
+		return retList;
+	}
+
+	@Override
+	public FullSquadSeasonDTO getSeason(Long id) {
+		SquadSeason ss = em.find(SquadSeason.class, id);
+		FullSquadSeasonDTO dto = new FullSquadSeasonDTO(ss.getId(), ss.getName(), ss.getStartYear(), ss.getEndYear());
+	
+		List<PlayerSeasonDTO> players = new ArrayList<PlayerSeasonDTO>();
+		for(PlayedForClub pfc : ss.getSquad()) {
+			PlayerSeasonDTO player = new PlayerSeasonDTO();
+			player.setId(pfc.getPlayer().getId());
+			player.setName(pfc.getPlayer().getName());
+			player.setSquadNr(pfc.getSquadNr());
+			players.add(player);
+		}
+		dto.setSquad(players);
+		
+		List<TournamentSeasonDTO> tsList = new ArrayList<TournamentSeasonDTO>();
+		for(TournamentSeason ts : ss.getTournamentSeasons()) {
+			TournamentSeasonDTO tsDto = new TournamentSeasonDTO();
+			tsDto.setId(ts.getId());
+			tsDto.setName(ts.getTournament().getName() + " " + ts.getSeasonName());
+			tsList.add(tsDto);
+		}
+		dto.setTournamentSeasons(tsList);
 		return dto;
 	}
 	

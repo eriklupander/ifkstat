@@ -410,6 +410,58 @@ function showGameDetails(id) {
 	    $('#content').css('width', '900px');
 }
 
+function showSeasons() {
+	var data = DataService.getSeasons();
+    $('#content').html( '<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );
+    createSeasonsTable(data);
+}
+
+function createSeasonsTable(data) {
+	$('#example').dataTable( {
+    	"fnRowCallback": function( nRow, aData, iDisplayIndex ) {	           
+                $('td:eq(0)', nRow).html( '<a href="season.html?id='+ aData.id + '">' + aData.name + '</a>' );
+    	},
+    	"bProcessing" : true,
+        "aaData": data,
+        "aoColumns": [
+            { "mData": "name", "sTitle": "Säsong" }
+        ]
+    } );	
+}
+
+function showSeasonDetails(id) {
+	var params = {"id":id};
+	var data = DataService.getSeason(params);
+
+	$('#seasonheading').html('Säsongen ' + data.name);
+	
+	$('#tournaments').html('<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="tournaments_table"></table>');
+	$('#tournaments_table').dataTable( {
+    	"fnRowCallback": function( nRow, aData, iDisplayIndex ) {	           
+                $('td:eq(0)', nRow).html( '<a href="gamesOfSeason.html?id='+aData.id + '">' + aData.name + '</a>' );
+    	},
+    	"bProcessing" : true,
+        "aaData": data.tournamentSeasons,
+        "aoColumns": [
+            { "mData": "name", "sTitle": "Namn" }
+        ]
+    } );
+	
+	$('#squad').html('<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="squad_table"></table>');
+	$('#squad_table').dataTable( {
+    	"fnRowCallback": function( nRow, aData, iDisplayIndex ) {	           
+    		$('td:eq(0)', nRow).html( '<a href="player.html?id='+aData.id + '">' + aData.name + '</a>' );    
+    		$('td:eq(1)', nRow).html( aData.squadNr != '-1' ? aDatam.squadNr : 'i.u.');
+    	},
+    	"bProcessing" : true,
+        "aaData": data.squad,
+        "aoColumns": [
+            { "mData": "name", "sTitle": "Namn" },
+            { "mData": "squadNr", "sTitle": "Tröjnummer" }
+        ]
+    } );
+}
+
 function showGames() {
 	var data = DataService.getGames();
     $('#content').html( '<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="example"></table>' );

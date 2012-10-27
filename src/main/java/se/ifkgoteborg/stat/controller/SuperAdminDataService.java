@@ -38,11 +38,9 @@ public interface SuperAdminDataService {
 
 	@POST
 	@Path("/clean/{password}")
-	@Consumes(MediaType.APPLICATION_JSON)
 	public void cleanDatabase(@PathParam("password") String password);
 
 	@POST
 	@Path("/reseed/{password}")
-	@Consumes(MediaType.APPLICATION_JSON)
 	public void reseedInitData(@PathParam("password") String password);
 }

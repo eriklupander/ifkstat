@@ -129,15 +129,17 @@ public class StatStartup {
 		Position p12 = em.merge(new Position("Innermitt", "IM", Side.CENTRAL, mid));
 		
 		
-		Position hh = em.merge(new Position("Högerhalv", "HH", Side.RIGHT, mid));
+		Position hh = em.merge(new Position("Högerhalv", "HH", Side.CENTRAL, mid, MinorHorizontalAlignment.RIGHT));
 		Position ch = em.merge(new Position("Centerhalv", "CH", Side.CENTRAL, mid));
-		Position vh = em.merge(new Position("Vänsterhalv", "VH", Side.LEFT, mid));
+		Position vh = em.merge(new Position("Vänsterhalv", "VH", Side.CENTRAL, mid, MinorHorizontalAlignment.LEFT));
 		
-		Position hi = em.merge(new Position("Högerinner", "HI", Side.RIGHT, forw));
-		Position c = em.merge(new Position("Center", "CE", Side.CENTRAL, forw));
-		Position vi = em.merge(new Position("Vänsterinner", "VI", Side.LEFT, forw));
+		Position hi = em.merge(new Position("Högerinner", "HI", Side.CENTRAL, forw, MinorHorizontalAlignment.RIGHT));
+		Position c = em.merge(new Position("Center", "CE", Side.CENTRAL, forw, MinorVerticalAlignment.OFFENSIVE));
+		Position vi = em.merge(new Position("Vänsterinner", "VI", Side.CENTRAL, forw, MinorHorizontalAlignment.LEFT));
 			
-
+		// Yttrarna i 2-3-5 
+		Position hy_classic = em.merge(new Position("Högerytter", "HY", Side.RIGHT, forw, MinorVerticalAlignment.DEFENSIVE));
+		Position vy_classic = em.merge(new Position("Vänsterytter", "VY", Side.LEFT, forw, MinorVerticalAlignment.DEFENSIVE));
 		
 		Formation f442 = new Formation("4-4-2");
 		f442 = em.merge(f442);

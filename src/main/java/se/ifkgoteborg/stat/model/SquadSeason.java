@@ -1,5 +1,6 @@
 package se.ifkgoteborg.stat.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +17,7 @@ import se.ifkgoteborg.stat.util.DateFactory;
 
 @Entity
 @Table(name="squad_season")
-public class SquadSeason {
+public class SquadSeason implements Serializable {
 
 	@Id
 	@GeneratedValue
@@ -36,14 +37,21 @@ public class SquadSeason {
 	@OneToMany(mappedBy="season")
 	private List<TournamentSeason> tournamentSeasons = new ArrayList<TournamentSeason>();
 	
-	private SquadSeason() {}
+    public SquadSeason() {}
 	
 	public SquadSeason(String name, int startYearInt, int endYearInt) {
 		if(startYearInt < 1900 || endYearInt < 1900) {
 			throw new IllegalArgumentException("Cannot create Season instance, supplied year was < 1900. Season name: " + name + ". Start year: " + startYear + " endYear: " + endYear);
 		}
 		System.out.println("creating new season based on name: " + name);
-		this.name = name;
+		
+		// name input may be 56/57. We want to save the "name" as 1957/58
+		if(name.contains("/")) {
+			String year = new String("" + startYearInt);
+			this.name = year.substring(0, 2) + name;
+		} else {
+			this.name = name;	
+		}
 		
 		setStartYear(DateFactory.get(startYearInt, 0, 1));
 		setEndYear(DateFactory.get(endYearInt, 11, 31));

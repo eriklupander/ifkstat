@@ -11,6 +11,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
+import org.apache.log4j.Logger;
+
 import se.ifkgoteborg.stat.controller.adapter.SquadPlayer;
 import se.ifkgoteborg.stat.model.Club;
 import se.ifkgoteborg.stat.model.Country;
@@ -31,6 +33,8 @@ import se.ifkgoteborg.stat.util.DateFactory;
 
 @Stateless
 public class RegistrationDAOBean implements RegistrationDAO {
+	
+	Logger log = Logger.getLogger(RegistrationDAOBean.class);
 
 	@Inject
 	EntityManager em;
@@ -582,33 +586,45 @@ public class RegistrationDAOBean implements RegistrationDAO {
 	@Override
 	public void cleanDatabase(String password) {
 		if("5ecret".equals(password)) {
-			
+			log.info("Start clean of database");
 			em.createQuery("DELETE FROM GameParticipation gp").executeUpdate();
 			em.createQuery("DELETE FROM GameEvent ge").executeUpdate();
-			em.createQuery("DELETE FROM GameNote gn").executeUpdate();
-			em.createQuery("DELETE FROM GameStatistics gs").executeUpdate();
+			em.createQuery("DELETE FROM GameNote gn").executeUpdate();			
 			em.createQuery("DELETE FROM Game g").executeUpdate();
+			em.createQuery("DELETE FROM GameStatistics gs").executeUpdate();
 			em.createQuery("DELETE FROM Ground g").executeUpdate();
 			em.createQuery("DELETE FROM Referee r").executeUpdate();
+			
+			log.info("Cleaned 8...");
 			
 			em.createQuery("DELETE FROM FormationPosition fp").executeUpdate();
 			em.createQuery("DELETE FROM Position p").executeUpdate();
 			em.createQuery("DELETE FROM Formation f").executeUpdate();
+			
+			log.info("Cleaned 11...");
 			
 			em.createQuery("DELETE FROM PlayedForClub pfc").executeUpdate();
 			em.createQuery("DELETE FROM PlayerImage pi").executeUpdate();
 			em.createQuery("DELETE FROM Player p").executeUpdate();
 			em.createQuery("DELETE FROM PositionType pt").executeUpdate();
 			
+			log.info("Cleaned 15...");
+			
 			em.createQuery("DELETE FROM TournamentSeason ts").executeUpdate();
 			em.createQuery("DELETE FROM SquadSeason ss").executeUpdate();
 			em.createQuery("DELETE FROM Tournament t").executeUpdate();
+			
+			log.info("Cleaned 18...");
 			
 			em.createQuery("DELETE FROM Club c").executeUpdate();
 			em.createQuery("DELETE FROM Country c").executeUpdate();
 		
 			em.createQuery("DELETE FROM Setting s").executeUpdate();
+			
+			log.info("Cleaned 21!");
 			em.flush();
+		} else {
+			log.error("Incorrect password");
 		}
 	}
 	
@@ -616,6 +632,8 @@ public class RegistrationDAOBean implements RegistrationDAO {
 	public void reseedInitData(String password) {
 		if("5ecret".equals(password)) {
 			statStartup.createInitData();
+		} else {
+			log.error("Incorrect password");
 		}
 	}
 

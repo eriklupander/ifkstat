@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>IFKSTAT web</title>
+	<link href="css/jquery-ui.css" type="text/css" rel="stylesheet">
+	<link href="css/style.css" type="text/css" rel="stylesheet">
+	<link href="css/demo_table.css" type="text/css" rel="stylesheet">
+	<link href="css/header.css" type="text/css" rel="stylesheet">
+	
+	<script type="text/javascript" src="script/jquery/jquery-1.8.1.min.js"></script>
+	<script type="text/javascript" src="script/jquery/jquery.ui.min.js"></script>
+	<script type="text/javascript" src="script/jquery/jquery.dataTables.js"></script>
+	
+	<script type="text/javascript" src="/ifkstat-server/rest-js"></script>
+	<script type="text/javascript" src="script/script.js"></script><script type="text/javascript" src="script/head.js"></script>
+	
+</head>
+<body>
+	<div id="header"></div>
+	<div id="content">
+		<h2 id="seasonheading"></h2>
+		<div id="tabs">
+		    <ul>
+		        <li><a href="#tabs-1">Turneringar</a></li>
+		        <li><a href="#tabs-2">Spelartrupp</a></li>
+		        <li><a href="#tabs-3">Statistik</a></li>
+		    </ul>
+		    <div id="tabs-1">
+		    	<div style="width:500px;" id="tournaments" class="infopanel"></div>  
+		    </div>
+		    <div id="tabs-2">
+		        <div style="width:500px;" id="squad" class="infopanel"></div>
+		    </div>
+		    <div id="tabs-3">
+		        <div style="width:500px;" id="stats" class="infopanel"></div>
+		    </div>
+		</div>
+	</div>
+	<div id="footer"></div>
+
+	<script>
+		$(document).ready(function() {
+			header();
+			$('#tabs').tabs();
+			showSeasonDetails($.urlParam('id')); 
+		} );
+	</script>
+</body>
+</html>

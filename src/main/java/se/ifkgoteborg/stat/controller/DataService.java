@@ -10,8 +10,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import se.ifkgoteborg.stat.dto.ClubStatDTO;
+import se.ifkgoteborg.stat.dto.FullSquadSeasonDTO;
 import se.ifkgoteborg.stat.dto.PlayerStatDTO;
 import se.ifkgoteborg.stat.dto.PlayerSummaryDTO;
+import se.ifkgoteborg.stat.dto.SquadSeasonDTO;
 import se.ifkgoteborg.stat.model.Game;
 import se.ifkgoteborg.stat.model.GameEvent;
 import se.ifkgoteborg.stat.model.GameNote;
@@ -28,6 +30,19 @@ import se.ifkgoteborg.stat.model.TournamentSeason;
 @Path("/")
 public interface DataService {
 
+
+		@Path("/seasons")
+		@GET
+		@Produces(MediaType.APPLICATION_JSON)
+		List<SquadSeasonDTO> getSeasons();
+		
+		@Path("/seasons/{id}")
+	    @GET
+	    @Produces(MediaType.APPLICATION_JSON)
+		FullSquadSeasonDTO getSeason(@PathParam("id") Long id);
+		
+		
+		
 		@Path("/players")
     	@GET
     	@Produces(MediaType.APPLICATION_JSON)
