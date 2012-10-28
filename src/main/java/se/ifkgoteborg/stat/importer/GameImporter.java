@@ -166,10 +166,18 @@ public class GameImporter {
 				}
 				htResult = htResult.replaceAll("[^\\d]", " ");
 				String[] htParts = htResult.trim().split(" ");
-				g.setHomeGoalsHalftime(htParts[0] != null ? Integer.parseInt(htParts[0].replaceAll("[^\\d]",
+				Integer homeGoalsHalfTime = (htParts[0] != null ? Integer.parseInt(htParts[0].replaceAll("[^\\d]",
 						"")) : 0);
-				g.setAwayGoalsHalftime(htParts[1] != null ?Integer.parseInt(htParts[1].replaceAll("[^\\d]",
+				Integer awayGoalsHalfTime = (htParts[1] != null ?Integer.parseInt(htParts[1].replaceAll("[^\\d]",
 						"")) : 0);
+				if(homegame) {
+					g.setHomeGoalsHalftime(homeGoalsHalfTime);
+					g.setAwayGoalsHalftime(awayGoalsHalfTime);
+				} else {
+					g.setHomeGoalsHalftime(awayGoalsHalfTime);
+					g.setAwayGoalsHalftime(homeGoalsHalfTime);
+				}
+				
 				break;
 			// attendance
 			case 6:

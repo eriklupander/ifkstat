@@ -53,13 +53,7 @@ public class Game {
 	
 	@ManyToOne(fetch=FetchType.EAGER)
 	private Referee referee;
-	
-//	@OneToMany
-//	private List<Goal> homeGoals;
-//	
-//	@OneToMany
-//	private List<Goal> awayGoals;
-	
+
 	@OneToMany(cascade=CascadeType.ALL, mappedBy="game")
 	@JsonIgnore
 	private List<GameEvent> events = new ArrayList<GameEvent>();
@@ -74,12 +68,6 @@ public class Game {
 	@OneToMany(cascade=CascadeType.ALL, orphanRemoval=true)
 	@JsonIgnore
 	private List<GameNote> gameNotes = new ArrayList<GameNote>();
-	
-	private Integer homeFreekicks = 0;
-	private Integer awayFreekicks = 0;
-	
-	private Integer homeCorners = 0;
-	private Integer awayCorners = 0;
 	
 	private Integer attendance;
 	
@@ -123,30 +111,6 @@ public class Game {
 	}
 	public void setEvents(List<GameEvent> events) {
 		this.events = events;
-	}
-	public Integer getHomeFreekicks() {
-		return homeFreekicks;
-	}
-	public void setHomeFreekicks(Integer homeFreekicks) {
-		this.homeFreekicks = homeFreekicks;
-	}
-	public Integer getAwayFreekicks() {
-		return awayFreekicks;
-	}
-	public void setAwayFreekicks(Integer awayFreekicks) {
-		this.awayFreekicks = awayFreekicks;
-	}
-	public Integer getHomeCorners() {
-		return homeCorners;
-	}
-	public void setHomeCorners(Integer homeCorners) {
-		this.homeCorners = homeCorners;
-	}
-	public Integer getAwayCorners() {
-		return awayCorners;
-	}
-	public void setAwayCorners(Integer awayCorners) {
-		this.awayCorners = awayCorners;
 	}
 	public Ground getGround() {
 		return ground;

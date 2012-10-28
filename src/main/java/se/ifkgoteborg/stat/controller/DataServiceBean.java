@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import se.ifkgoteborg.stat.dto.AveragesPerGameAndTournamentDTO;
+import se.ifkgoteborg.stat.dto.ClubDTO;
 import se.ifkgoteborg.stat.dto.ClubStatDTO;
 import se.ifkgoteborg.stat.dto.FullSquadSeasonDTO;
 import se.ifkgoteborg.stat.dto.GamePositionStatDTO;
@@ -24,8 +25,10 @@ import se.ifkgoteborg.stat.dto.PlayerStatDTO;
 import se.ifkgoteborg.stat.dto.PlayerSummaryDTO;
 import se.ifkgoteborg.stat.dto.SquadSeasonDTO;
 import se.ifkgoteborg.stat.dto.TournamentSeasonDTO;
+import se.ifkgoteborg.stat.model.Club;
 import se.ifkgoteborg.stat.model.Game;
 import se.ifkgoteborg.stat.model.GameEvent;
+import se.ifkgoteborg.stat.model.GameEvent.EventType;
 import se.ifkgoteborg.stat.model.GameNote;
 import se.ifkgoteborg.stat.model.GameParticipation;
 import se.ifkgoteborg.stat.model.Ground;
@@ -36,7 +39,6 @@ import se.ifkgoteborg.stat.model.Referee;
 import se.ifkgoteborg.stat.model.SquadSeason;
 import se.ifkgoteborg.stat.model.Tournament;
 import se.ifkgoteborg.stat.model.TournamentSeason;
-import se.ifkgoteborg.stat.model.GameEvent.EventType;
 
 @Stateless
 @PermitAll
@@ -184,12 +186,12 @@ public class DataServiceBean implements DataService {
 
 	@Override
 	public List<Ground> getGrounds() {
-		return em.createQuery("select g from Ground g").getResultList();
+		return em.createQuery("select g from Ground g ORDER BY g.name").getResultList();
 	}
 
 	@Override
 	public List<Referee> getReferees() {
-		return em.createQuery("select r from Referee r").getResultList();
+		return em.createQuery("select r from Referee r ORDER BY r.name").getResultList();
 	}
 
 	@Override
@@ -582,6 +584,19 @@ public class DataServiceBean implements DataService {
 			}
 		}
 		return goals;
+	}
+
+	@Override
+	public List<ClubDTO> getClubs() {
+		List<Club> clubs = em.createQuery("SELECT c FROM Club c ORDER BY c.name").getResultList();
+		List<ClubDTO> retList = new ArrayList<ClubDTO>();
+		for(Club c : clubs) {
+			ClubDTO dto = new ClubDTO();
+			dto.setId(c.getId());
+			dto.setName(c.getName());
+			retList.add(dto);
+		}
+		return retList;
 	}
 	
 }

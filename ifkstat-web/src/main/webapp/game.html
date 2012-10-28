@@ -30,11 +30,12 @@
 		        <li><a href="#tabs-5">Statistik</a></li>
 		    </ul>
 		    <div id="tabs-1">
-		    	<span style="float:right;"><button id="editplayer" class="btn">Redigera</button></span>
-		    	
+		    	<!-- 
+		    	<span style="float:right;"><button id="editgame_details" class="btn">Redigera</button></span>
+		    	 -->
 		    	<div style="width:500px;" id="gamedetails" class="infopanel">
 		    	<table width="450" class="bordered">
-					
+					<thead><tr><th colspan="2" id="editgamedetailshead"><span style="float:right;"><button id="editgame_details" class="btn">Redigera</button></span></th></tr></thead>
 					<tbody>
 					<tr><td>Motståndare:</td><td id="game_opponent"></td></tr>
 					<tr><td>Resultat:</td><td id="game_result"></td></tr>
@@ -44,7 +45,7 @@
 					<tr><td>Hemma/Borta:</td><td id="game_homeaway"></td></tr>
 					<tr><td>Datum:</td><td id="game_dateOfGame"></td></tr>
 					<tr><td>Arena:</td><td id="game_ground"></td></tr>
-					<tr><td>Publiksiffra:</td><td id="game_attendence"></td></tr>
+					<tr><td>Publiksiffra:</td><td id="game_attendance"></td></tr>
 					<tr><td>Domare</td><td id="game_referee"></td></tr>
 					</tbody></table>
 		    	</div>  
@@ -62,7 +63,7 @@
 		        <div style="width:500px;" id="gamestats" class="infopanel">
 		        	<table width="450" class="bordered">
 						
-					<thead><tr><th colspan="2" id="editgamestatshead"><span style="float:right;"><button id="editgamestats" class="btn">Redigera</button></span></th></tr></thead>
+					<thead><tr><th colspan="2" id="editgamestatshead"><span style="float:right;"><button id="editgame_stats" class="btn">Redigera</button></span></th></tr></thead>
 						<tbody>
 			        		<tr><td>Skott:</td><td id="gamestats_shots"></td></tr>
 							<tr><td>- på mål:</td><td id="gamestats_shotsongoal"></td></tr>
@@ -83,7 +84,10 @@
 		$(document).ready(function() {
 			header();
 			$('#tabs').tabs();
-			$('#editgamestats').click(function() {
+			$('#editgame_details').click(function() {
+				editGameDetails($.urlParam('id'));
+			});			
+			$('#editgame_stats').click(function() {
 				editGameStatistics($.urlParam('id'));
 			});
 			showGameDetails($.urlParam('id'));   

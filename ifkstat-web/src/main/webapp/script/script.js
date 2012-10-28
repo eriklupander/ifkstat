@@ -72,23 +72,93 @@ function showGamesOfPlayerInTournamentSubstOut(id, tournamentId) {
     createGamesTable(data);
 }
 
+function editGameDetails(id) {
+	var params = {"id":id};
+	var data = DataService.getGame(params);
+	var refereesData = DataService.getReferees();
+	var referees = toComboBoxFormat(refereesData);
+	
+	var groundsData = DataService.getGrounds();
+	var grounds = toComboBoxFormat(groundsData);
+	   
+	var clubsData = DataService.getClubs();
+	var clubs = toComboBoxFormat(clubsData);
+	
+	$('#game_result').html(createSplitControl('game_result', data.homeGoals, data.awayGoals));
+	$('#game_result_halftime').html(createSplitControl('game_result_halftime', data.homeGoalsHalftime, data.awayGoalsHalftime));
+//	$('#game_attendance').html('<input type="text" id="attendance" value="' + data.attendance + '"/>');
+//	$('#game_referee').html('<input id="referee_combobox" value="' + (data.referee != null ? data.referee.name : "") + '"/><input type="hidden" id="referee_combobox-id" value="' + (data.referee != null ? data.referee.id : "") + '"/>');
+	
+	createCombobox('game_opponent', 'club_combobox', clubs, (data.homeTeam.name != 'IFK Göteborg' ? data.homeTeam : data.awayTeam));
+	createCombobox('game_ground', 'ground_combobox', grounds, data.ground);
+	createCombobox('game_referee', 'referee_combobox', referees, data.referee);
+	
+	$('#editgamedetailshead').html('<span style="float:right;"><button id="savegamedetails" class="btn">Spara</button><button id="canceldetails" class="btn">Avbryt</button></span>');
+	
+	$('#savegamedetails').click(function() {
+		var params = {};
+		params.id = id;
+		params.$entity = {
+				attendance : 		$('#attendance').val(),
+				homeGoals : 		$('#game_result_ht').val(),
+				awayGoals : 		$('#game_result_at').val(),
+				homeGoalsHalftime : $('#game_result_halftime_ht').val(),
+				awayGoalsHalftime : $('#game_result_halftime_at').val(),
+				referee : 			{	id:$( "#referee_combobox-id" ).val(),
+						  				name:$( "#referee_combobox").val()
+						  			},
+			    ground : 			{	id:$( "#ground_combobox-id" ).val(),
+			    		  				name:$( "#ground_combobox").val()
+				  					}
+			    
+		};
+		
+		AdminDataService.saveGameDetails(params);
+		window.location = "game.html?id=" + id;
+	});
+	$('#canceldetails').click(function() {
+		window.location = "game.html?id=" + id;
+	});
+}
+
 function editGameStatistics(id) {
 	var params = {"id":id};
 	var data = DataService.getGame(params);
 	stats = data.gameStats;
-	$('#gamestats_shots').html(createStatsControl('gamestats_shots', stats.shotsHomeTeam, stats.shotsAwayTeam));
-	$('#gamestats_shotsongoal').html(createStatsControl('gamestats_shotsongoal', stats.shotsOnGoalHomeTeam, stats.shotsOnGoalAwayTeam));
-	$('#gamestats_shotsoffgoal').html(createStatsControl('gamestats_shotsoffgoal', stats.shotsOffGoalHomeTeam, stats.shotsOffGoalAwayTeam));
-	$('#gamestats_offsides').html(createStatsControl('gamestats_offsides', stats.offsidesHomeTeam, stats.offsidesAwayTeam));
-	$('#gamestats_corners').html(createStatsControl('gamestats_corners', stats.cornersHomeTeam, stats.cornersAwayTeam));
-	$('#gamestats_throwins').html(createStatsControl('gamestats_throwins', stats.throwinsHomeTeam, stats.throwinsAwayTeam));
-	$('#gamestats_freekicks').html(createStatsControl('gamestats_freekicks', stats.freekicksHomeTeam, stats.freekicksAwayTeam));
-	$('#gamestats_possession').html(createStatsControl('gamestats_possession', stats.possessionHomeTeam, stats.possessionAwayTeam));
+	$('#gamestats_shots').html(createSplitControl('gamestats_shots', stats.shotsHomeTeam, stats.shotsAwayTeam));
+	$('#gamestats_shotsongoal').html(createSplitControl('gamestats_shotsongoal', stats.shotsOnGoalHomeTeam, stats.shotsOnGoalAwayTeam));
+	$('#gamestats_shotsoffgoal').html(createSplitControl('gamestats_shotsoffgoal', stats.shotsOffGoalHomeTeam, stats.shotsOffGoalAwayTeam));
+	$('#gamestats_offsides').html(createSplitControl('gamestats_offsides', stats.offsidesHomeTeam, stats.offsidesAwayTeam));
+	$('#gamestats_corners').html(createSplitControl('gamestats_corners', stats.cornersHomeTeam, stats.cornersAwayTeam));
+	$('#gamestats_throwins').html(createSplitControl('gamestats_throwins', stats.throwinsHomeTeam, stats.throwinsAwayTeam));
+	$('#gamestats_freekicks').html(createSplitControl('gamestats_freekicks', stats.freekicksHomeTeam, stats.freekicksAwayTeam));
+	$('#gamestats_possession').html(createSplitControl('gamestats_possession', stats.possessionHomeTeam, stats.possessionAwayTeam));
 
 	$('#editgamestatshead').html('<span style="float:right;"><button id="savestats" class="btn">Spara</button><button id="cancelstats" class="btn">Avbryt</button></span>');
 	
 	$('#savestats').click(function() {
+		var gs = {
+				shotsOnGoalHomeTeam : $('#gamestats_shotsongoal_ht').val(),
+				shotsOnGoalAwayTeam : $('#gamestats_shotsongoal_at').val(),
+				shotsOffGoalHomeTeam : $('#gamestats_shotsoffgoal_ht').val(),
+				shotsOffGoalAwayTeam : $('#gamestats_shotsoffgoal_at').val(),
+				offsidesHomeTeam : $('#gamestats_offsides_ht').val(),
+				offsidesAwayTeam : $('#gamestats_offsides_at').val(),
+				cornersHomeTeam : $('#gamestats_corners_ht').val(),
+				cornersAwayTeam : $('#gamestats_corners_at').val(),
+				throwinsHomeTeam : $('#gamestats_throwins_ht').val(),
+				throwinsAwayTeam : $('#gamestats_throwins_at').val(),
+				freekicksHomeTeam : $('#gamestats_freekicks_ht').val(),
+				freekicksAwayTeam : $('#gamestats_freekicks_at').val(),
+				possessionHomeTeam : $('#gamestats_possession_ht').val(),
+				possessionAwayTeam : $('#gamestats_possession_at').val()
+		};
 		
+		var params = {};
+		params.id = id;
+		params.$entity = gs;
+		AdminDataService.saveGameStats(params);
+		window.location = "game.html?id=" + id;
 	});
 	
 	$('#cancelstats').click(function() {
@@ -96,7 +166,45 @@ function editGameStatistics(id) {
 	});
 }
 
-function createStatsControl(id, ht, at) {
+function toComboBoxFormat(arr) {
+	var outArr = new Array();
+	for(var a = 0; a < arr.length; a++) {
+		var item = arr[a];
+		outArr.push({
+	        value: item.id,
+	        label: item.name
+	    });
+	}
+	return outArr;
+}
+
+function createCombobox(parentId, id, data, selectedObject) {
+	
+	$('#' + parentId).html('<input id="' + id + '" value="' + (selectedObject != null ? selectedObject.name : "") + '"/><input type="hidden" id="' + id + '-id" value="' + (selectedObject != null ? selectedObject.id : "") + '"/>');
+	
+	
+	$( "#" + id).autocomplete({
+        minLength: 0,
+        source: data,
+        focus: function( event, ui ) {
+            $("#" + id).val( ui.item.label );
+            return false;
+        },
+        select: function( event, ui ) {
+            $("#" + id).val( ui.item.label );
+            $("#" + id + "-id" ).val( ui.item.value );
+
+            return false;
+        }
+    }).data( "autocomplete" )._renderItem = function( ul, item ) {
+        return $( "<li>" )
+        .data( "item.autocomplete", item )
+        .append( "<a>" + item.label + "</a>" )
+        .appendTo( ul );
+	};
+}
+
+function createSplitControl(id, ht, at) {
 	return '<input type="text" size="2" id="' + id + '_ht" value="' + ht + '"></input> - ' +
 			'<input type="text" size="2" id="' + id + '_at" value="' + at + '"></input>';
 }
@@ -339,16 +447,14 @@ function showGameDetails(id) {
 	$('#game_homeaway').html(data.homeTeam.name == 'IFK Göteborg' ? 'Hemmamatch' : 'Bortamatch');
 	$('#game_dateOfGame').html(data.dateOfGame);
 	$('#game_ground').html(data.ground.name + ', ' + data.ground.city);
-	$('#game_attendence').html(data.attendance);
-	$('#game_referee').html(data.referee != null ? data.referee.name : '');
+	$('#game_attendance').html(data.attendance);
+	$('#game_referee').html(data.referee != null ? data.referee.name : 'I.u.');
 
 	
 	// events
 	$('#gameheader').html( 
 		'<h2>' + data.homeTeam.name + '-' + data.awayTeam.name + ' ' + data.homeGoals + '-' + data.awayGoals + ' (' + data.homeGoalsHalftime + '-' + data.awayGoalsHalftime + ')</h2>');
-	//	'<div>' + data.dateOfGame + ' '+ data.ground.name + ', ' + data.attendance + ' åskådare</div>' + 
-				
-	
+		
 	
 		for(var a = 0; a < participants.length; a++) {
 			var prt = participants[a];
