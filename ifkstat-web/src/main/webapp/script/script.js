@@ -227,7 +227,13 @@ function editPlayerDetails(id) {
 		'<tr><td>Nationalitet</td><td><select id="nationality"/></td></tr>' +
 		'<tr><td>Position</td><td><select id="positionType"/></td></tr>' +
 		'<tr><td>Biografi</td><td><textarea id="biography"></textarea></td></tr>' +
-		'</tbody></table>');
+		'</tbody></table>' + 
+		'<form method="POST" action="/ifkstat-server/upload" enctype="multipart/form-data" >' + 
+	    'Bildfil:' + 
+	    '<input type="file" name="file" id="file" /> <br/>' + 
+	    '<input type="hidden" name="playerId" id="playerId" value="' + id + '"/> <br/>' + 
+	    '<input type="submit" value="Ladda upp" name="upload" id="upload" />' + 
+	    '</form>');
 	
 	// Populate
 	$('#name').val(data.name);

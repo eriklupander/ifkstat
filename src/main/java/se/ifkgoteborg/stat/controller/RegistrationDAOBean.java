@@ -1,5 +1,6 @@
 package se.ifkgoteborg.stat.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,7 @@ import se.ifkgoteborg.stat.model.GameNote;
 import se.ifkgoteborg.stat.model.Ground;
 import se.ifkgoteborg.stat.model.PlayedForClub;
 import se.ifkgoteborg.stat.model.Player;
+import se.ifkgoteborg.stat.model.PlayerImage;
 import se.ifkgoteborg.stat.model.Position;
 import se.ifkgoteborg.stat.model.PositionType;
 import se.ifkgoteborg.stat.model.Referee;
@@ -635,6 +637,25 @@ public class RegistrationDAOBean implements RegistrationDAO {
 		} else {
 			log.error("Incorrect password");
 		}
+	}
+
+
+	@Override
+	public void savePlayerImage(long playerId, byte[] data) {
+		Player p = em.find(Player.class, playerId);
+		
+		List<PlayerImage> playerImages = p.getPlayerImages();
+		if(playerImages == null) {
+			playerImages = new ArrayList<PlayerImage>();
+		}
+		
+		PlayerImage pi = new PlayerImage();
+		pi.setPlayer(p);
+		pi.setImageData(data);
+		pi = em.merge(pi);
+		playerImages.add(pi);
+		p.setPlayerImages(playerImages);
+		em.merge(p);
 	}
 
 	

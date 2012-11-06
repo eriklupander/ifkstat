@@ -116,4 +116,6 @@ public interface RegistrationDAO {
 
 	public void reseedInitData(String password);
 
+	public void savePlayerImage(long playerId, byte[] data);
+
 }
