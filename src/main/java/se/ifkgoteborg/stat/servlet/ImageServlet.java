@@ -9,9 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import se.ifkgoteborg.stat.controller.RegistrationDAO;
+import se.ifkgoteborg.stat.model.PlayerImage;
 
 public class ImageServlet extends HttpServlet {
-	
+
+	private static final long serialVersionUID = 1L;
+
 	@Inject
 	private RegistrationDAO dao;
 
@@ -20,6 +23,16 @@ public class ImageServlet extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		final String playerIdStr = request.getParameter("playerId");
 		
+		Long playerId = Long.parseLong(playerIdStr);
+		
+		PlayerImage pi = dao.getPlayerImage(playerId);
+		
+		if(pi != null) {
+			response.getOutputStream().write(pi.getImageData());
+			response.getOutputStream().flush();
+		} else {
+			System.err.println("No image available...");
+		}
 	}
 
 }

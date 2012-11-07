@@ -658,5 +658,20 @@ public class RegistrationDAOBean implements RegistrationDAO {
 		em.merge(p);
 	}
 
+
+	@Override
+	public PlayerImage getPlayerImage(Long playerId) {
+		List<PlayerImage> resultList = em.createQuery("select pi FROM PlayerImage pi WHERE pi.player.id=:playerId")
+				.setParameter("playerId", playerId)
+				.getResultList();
+		
+		if(resultList.size() > 0) {
+			return resultList.get(0);
+		} else {
+			return null;
+		}
+		
+	}
+
 	
 }

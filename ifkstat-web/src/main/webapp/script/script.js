@@ -384,16 +384,17 @@ function showPlayerDetails(id) {
 	$('#playerdetails').html('<table class="bordered">' + 
 		'<thead><tr><th colspan="2">' + data.name + '<span style="float:right;"><button id="editplayer" class="btn">Redigera</button></span></th></tr></thead>' +
 		'<tbody>' +
-		'<tr><td>Antal matcher</td><td><a href="gamesOfPlayer.html?id=' + data.id + '">' + nstr(data.numberOfGames) + '</a></td></tr>' + 
-		'<tr><td>Född</td><td>' + nstr(data.dateOfBirth) + '</td></tr>' + 
-		'<tr><td>Moderklubb</td><td>' + nstr(data.motherClub) + '</td></tr>' + 
-		'<tr><td>Övriga klubbar</td><td>' + nstr(data.playedForClubs) + '</td></tr>' + 
-		'<tr><td>Längd</td><td>' + nstr(data.length) + '</td></tr>' + 
-		'<tr><td>Vikt</td><td>' + nstr(data.weight) + '</td></tr>' + 
-		'<tr><td>Nationalitet</td><td>' + (data.nationality != null ? data.nationality.name : '') + '</td></tr>' + 
-		'<tr><td>Position</td><td>' + (data.positionType != null ? data.positionType.name : '' ) + '</td></tr>' + 
-		'<tr><td>Biografi</td><td>' + nstr(data.biography) + '</td></tr>' +
-			'</tbody></table>');
+			'<tr><td colspan="2"><img src="/ifkstat-server/image?playerId=' + id + '" width="100" height="100"></td></tr>' + 
+			'<tr><td>Antal matcher</td><td><a href="gamesOfPlayer.html?id=' + data.id + '">' + nstr(data.numberOfGames) + '</a></td></tr>' + 
+			'<tr><td>Född</td><td>' + nstr(data.dateOfBirth) + '</td></tr>' + 
+			'<tr><td>Moderklubb</td><td>' + nstr(data.motherClub) + '</td></tr>' + 
+			'<tr><td>Övriga klubbar</td><td>' + nstr(data.playedForClubs) + '</td></tr>' + 
+			'<tr><td>Längd</td><td>' + nstr(data.length) + '</td></tr>' + 
+			'<tr><td>Vikt</td><td>' + nstr(data.weight) + '</td></tr>' + 
+			'<tr><td>Nationalitet</td><td>' + (data.nationality != null ? data.nationality.name : '') + '</td></tr>' + 
+			'<tr><td>Position</td><td>' + (data.positionType != null ? data.positionType.name : '' ) + '</td></tr>' + 
+			'<tr><td>Biografi</td><td>' + nstr(data.biography) + '</td></tr>' +
+		'</tbody></table>');
 	
 	$('#editplayer').click(function() {
 		editPlayerDetails(id);

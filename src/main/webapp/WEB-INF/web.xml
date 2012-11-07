@@ -65,6 +65,18 @@
        <url-pattern>/upload</url-pattern>
    </servlet-mapping>
  
+    <!-- File upload -->
+ 	<servlet>
+       <servlet-name>ImageServlet</servlet-name>
+       <servlet-class>se.ifkgoteborg.stat.servlet.ImageServlet</servlet-class>
+       <load-on-startup>1</load-on-startup>       
+   </servlet>
+
+   <servlet-mapping>
+       <servlet-name>ImageServlet</servlet-name>
+       <url-pattern>/image</url-pattern>
+   </servlet-mapping>
+   
  <security-constraint>
       <web-resource-collection>
          <web-resource-name>resteasy-servlet</web-resource-name>

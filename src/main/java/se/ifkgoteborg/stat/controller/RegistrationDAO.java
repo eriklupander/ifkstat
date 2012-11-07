@@ -15,6 +15,7 @@ import se.ifkgoteborg.stat.model.Game;
 import se.ifkgoteborg.stat.model.Ground;
 import se.ifkgoteborg.stat.model.PlayedForClub;
 import se.ifkgoteborg.stat.model.Player;
+import se.ifkgoteborg.stat.model.PlayerImage;
 import se.ifkgoteborg.stat.model.Position;
 import se.ifkgoteborg.stat.model.PositionType;
 import se.ifkgoteborg.stat.model.Referee;
@@ -117,5 +118,7 @@ public interface RegistrationDAO {
 	public void reseedInitData(String password);
 
 	public void savePlayerImage(long playerId, byte[] data);
+
+	public PlayerImage getPlayerImage(Long playerId);
 
 }
