@@ -1,0 +1,17 @@
+After working with this all day, I finally found a solution, although I am not sure this is really the ideal fix.  It looks like the dependencies for jboss logging are not correct in that module.  So I added the following to modules/org/jboss/logging/main/module.xml:
+
+ 
+
+<dependencies>
+
+    <module name="org.jboss.logmanager"/>
+
+ 
+
+    <!-- added these 2 dependencies -->
+
+    <module name="org.apache.log4j"/>
+
+    <module name="org.slf4j"/>
+
+</dependencies>

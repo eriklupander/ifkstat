@@ -23,11 +23,11 @@ import se.ifkgoteborg.stat.util.StringUtil;
 
 public class XlsTransformer {
 
-	//private static final String OUTPUT_FILE = "c:\\java\\workspace\\ifkstat\\data\\master.txt";
-	private static final String OUTPUT_FILE = "c:\\tankesmedja\\ifkstat\\ifkstat\\data\\master.txt";
+	private static final String OUTPUT_FILE = "c:\\java\\workspace\\ifkstat\\data\\master.txt";
+	//private static final String OUTPUT_FILE = "c:\\tankesmedja\\ifkstat\\ifkstat\\data\\master.txt";
 
-	//private static final String ROOT_FOLDER = "F:\\Dropbox\\Statistik till webben";
-	public static final String ROOT_FOLDER = "C:\\Users\\Erik\\Dropbox\\Statistik till webben";
+	public static final String ROOT_FOLDER = "H:\\Dropbox\\Statistik till webben";
+	//public static final String ROOT_FOLDER = "C:\\Users\\Erik\\Dropbox\\Statistik till webben";
 	
 	private static final String GOAL_TOKEN = "•";
 	private static final String N = "IFK statistik";

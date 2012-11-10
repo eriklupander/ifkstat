@@ -54,7 +54,8 @@ public class StatStartup {
 		// Bootstrap user
 		User user = new User();
 		user.setUsername("admin");
-		user.setPasswd("admin");
+		// TODO change this once we go live!!!
+		user.setPasswd("ISMvKXpXpadDiUoOSoAfww==");
 		
 		user = em.merge(user);
 		

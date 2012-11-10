@@ -197,4 +197,19 @@ public interface DataService {
     	@GET
     	@Produces(MediaType.APPLICATION_JSON)
 		List<ClubDTO> getClubs();
+
+		@Path("/player/{id}/positions")
+	    @GET
+	    @Produces(MediaType.APPLICATION_JSON)
+		List<PlayerPositionStatsDTO> getPlayerPositionStats(@PathParam("id") Long id);
+
+		@Path("/player/{id}/resultstats")
+	    @GET
+	    @Produces(MediaType.APPLICATION_JSON)
+		List<PlayerResultStatDTO> getPlayerResultStats(@PathParam("id") Long id);
+
+		@Path("/player/{id}/gamespertournament")
+	    @GET
+	    @Produces(MediaType.APPLICATION_JSON)
+		List<PlayerGamesPerTournamentSeasonDTO> getPlayerGamesPerSeason(@PathParam("id") Long id);
 }

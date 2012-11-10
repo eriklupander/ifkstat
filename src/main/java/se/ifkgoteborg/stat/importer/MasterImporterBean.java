@@ -3,7 +3,6 @@ package se.ifkgoteborg.stat.importer;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-import se.ifkgoteborg.stat.controller.RegistrationDAO;
 import se.ifkgoteborg.stat.importer.ejb.SeasonImporter;
 import se.ifkgoteborg.stat.util.StringUtil;
 

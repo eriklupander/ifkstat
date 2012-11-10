@@ -429,7 +429,79 @@ function showPlayerDetails(id) {
 			    { "mData": "goalsAsSubstituteOut", "sTitle": "Mål, sedan utbytt" }
 			]
 		} );
-
+	
+	$('#playerpositions').html('<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="player_positions"></table>');
+	
+	var positionsdata = DataService.getPlayerPositionStats(params);
+	$('#player_positions').dataTable( {	 
+		"fnRowCallback": function( nRow, aData, iDisplayIndex ) {	           
+//            $('td:eq(1)', nRow).html( '<a href="gamesOfPlayerInTournament.html?id=' + id + '&tournament_id=' + aData.tournamentId + '">' + aData.totalGames + '</a>' );
+//            $('td:eq(2)', nRow).html( '<a href="gamesOfPlayerInTournamentGoalScored.html?id=' + id + '&tournament_id=' + aData.tournamentId + '">' + aData.goals + '</a>' );
+//            $('td:eq(3)', nRow).html( '<a href="gamesOfPlayerInTournamentSubstIn.html?id=' + id + '&tournament_id=' + aData.tournamentId + '">' + aData.gamesAsSubstituteIn + '</a>' );
+//            $('td:eq(4)', nRow).html( '<a href="gamesOfPlayerInTournamentSubstOut.html?id=' + id + '&tournament_id=' + aData.tournamentId + '">' + aData.gamesAsSubstituteOut + '</a>' );
+//            
+		},
+		"bProcessing" : true,
+		"aaData": positionsdata,
+		"bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": false,
+        "bSort": true,
+        "bInfo": false,
+		"aoColumns": [		    
+		    { "mData": "positionName", "sTitle": "Position" },
+		    { "mData": "formationName", "sTitle": "Formation" },
+		    { "mData": "games", "sTitle": "Matcher" },
+		    { "mData": "goals", "sTitle": "Mål" }
+		]
+	} );
+	
+	$('#playerresults').html('<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="player_results"></table>');
+	
+	var playerResults = DataService.getPlayerResultStats(params);
+	$('#player_results').dataTable( {	 
+		"fnRowCallback": function( nRow, aData, iDisplayIndex ) {	           
+            $('td:eq(0)', nRow).html( (aData.participationType == 'STARTER' ? 'Startelvan' : (aData.participationType == 'SUBSTITUTE' ? 'Inbytt' : 'Deltog ej')));
+//            $('td:eq(2)', nRow).html( '<a href="gamesOfPlayerInTournamentGoalScored.html?id=' + id + '&tournament_id=' + aData.tournamentId + '">' + aData.goals + '</a>' );
+//            $('td:eq(3)', nRow).html( '<a href="gamesOfPlayerInTournamentSubstIn.html?id=' + id + '&tournament_id=' + aData.tournamentId + '">' + aData.gamesAsSubstituteIn + '</a>' );
+//            $('td:eq(4)', nRow).html( '<a href="gamesOfPlayerInTournamentSubstOut.html?id=' + id + '&tournament_id=' + aData.tournamentId + '">' + aData.gamesAsSubstituteOut + '</a>' );
+//            
+		},
+		"bProcessing" : true,
+		"aaData": playerResults,
+		"bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": false,
+        "bSort": true,
+        "bInfo": false,
+		"aoColumns": [		    
+		    { "mData": "participationType", "sTitle": "Deltagande" },
+		    { "mData": "games", "sTitle": "Matcher" },
+		    { "mData": "wins", "sTitle": "Vinster" },
+		    { "mData": "draws", "sTitle": "Oavgjorda" },
+		    { "mData": "losses", "sTitle": "Förluster" },
+		    { "mData": "averagePoints", "sTitle": "Snittpoäng" }
+		]
+	} );
+	
+	$('#playerseasons').html('<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="player_seasons"></table>');
+	
+	var playerSeasons = DataService.getPlayerGamesPerSeason(params);
+	$('#player_seasons').dataTable( {	 
+		"bProcessing" : true,
+		"aaData": playerSeasons,
+		"bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": false,
+        "bSort": true,
+        "bInfo": false,
+		"aoColumns": [		    
+		    { "mData": "tournamentName", "sTitle": "Turnering" },
+		    { "mData": "seasonName", "sTitle": "Säsong" },
+		    { "mData": "gamesPlayed", "sTitle": "Spelade matcher" },
+		    { "mData": "totalGames", "sTitle": "Totalt antal matcher" }
+		]
+	} );
 }
 
 
