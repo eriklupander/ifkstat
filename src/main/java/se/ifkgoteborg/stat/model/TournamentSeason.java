@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -28,6 +29,7 @@ public class TournamentSeason {
 	private Tournament tournament;
 	
 	@Temporal(value=TemporalType.DATE)
+	@Column(name="ts_start_date")
 	private Date start;
 	
 	@JsonIgnore

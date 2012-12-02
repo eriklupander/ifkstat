@@ -208,8 +208,14 @@ public interface DataService {
 	    @Produces(MediaType.APPLICATION_JSON)
 		List<PlayerResultStatDTO> getPlayerResultStats(@PathParam("id") Long id);
 
+		@Path("/player/{id}/resultstats/full")
+	    @GET
+	    @Produces(MediaType.APPLICATION_JSON)
+		List<PlayerResultStatDTO> getFullPlayerResultStats(@PathParam("id") Long id);
+		
 		@Path("/player/{id}/gamespertournament")
 	    @GET
 	    @Produces(MediaType.APPLICATION_JSON)
 		List<PlayerGamesPerTournamentSeasonDTO> getPlayerGamesPerSeason(@PathParam("id") Long id);
+
 }

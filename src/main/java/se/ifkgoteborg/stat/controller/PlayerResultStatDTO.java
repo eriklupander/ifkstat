@@ -13,6 +13,27 @@ public class PlayerResultStatDTO {
 	private Integer losses;
 	
 	private String participationType;
+	
+	private String season;
+	private String tournament;
+
+	
+	
+	public String getSeason() {
+		return season;
+	}
+
+	public void setSeason(String season) {
+		this.season = season;
+	}
+
+	public String getTournament() {
+		return tournament;
+	}
+
+	public void setTournament(String tournament) {
+		this.tournament = tournament;
+	}
 
 	public Integer getWins() {
 		return wins;

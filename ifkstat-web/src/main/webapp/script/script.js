@@ -462,10 +462,6 @@ function showPlayerDetails(id) {
 	$('#player_results').dataTable( {	 
 		"fnRowCallback": function( nRow, aData, iDisplayIndex ) {	           
             $('td:eq(0)', nRow).html( (aData.participationType == 'STARTER' ? 'Startelvan' : (aData.participationType == 'SUBSTITUTE' ? 'Inbytt' : 'Deltog ej')));
-//            $('td:eq(2)', nRow).html( '<a href="gamesOfPlayerInTournamentGoalScored.html?id=' + id + '&tournament_id=' + aData.tournamentId + '">' + aData.goals + '</a>' );
-//            $('td:eq(3)', nRow).html( '<a href="gamesOfPlayerInTournamentSubstIn.html?id=' + id + '&tournament_id=' + aData.tournamentId + '">' + aData.gamesAsSubstituteIn + '</a>' );
-//            $('td:eq(4)', nRow).html( '<a href="gamesOfPlayerInTournamentSubstOut.html?id=' + id + '&tournament_id=' + aData.tournamentId + '">' + aData.gamesAsSubstituteOut + '</a>' );
-//            
 		},
 		"bProcessing" : true,
 		"aaData": playerResults,
@@ -476,6 +472,33 @@ function showPlayerDetails(id) {
         "bInfo": false,
 		"aoColumns": [		    
 		    { "mData": "participationType", "sTitle": "Deltagande" },
+		    { "mData": "games", "sTitle": "Matcher" },
+		    { "mData": "wins", "sTitle": "Vinster" },
+		    { "mData": "draws", "sTitle": "Oavgjorda" },
+		    { "mData": "losses", "sTitle": "Förluster" },
+		    { "mData": "averagePoints", "sTitle": "Snittpoäng" }
+		]
+	} );
+	
+	
+$('#full_playerresults').html('<table class="bordered" cellpadding="0" cellspacing="0" border="0" class="display" id="full_player_results"></table>');
+	
+	var fullPlayerResults = DataService.getFullPlayerResultStats(params);
+	$('#full_player_results').dataTable( {	 
+		"fnRowCallback": function( nRow, aData, iDisplayIndex ) {	           
+            $('td:eq(0)', nRow).html( (aData.participationType == 'STARTER' ? 'Startelvan' : (aData.participationType == 'SUBSTITUTE' ? 'Inbytt' : 'Deltog ej')));
+		},
+		"bProcessing" : true,
+		"aaData": fullPlayerResults,
+		"bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": false,
+        "bSort": true,
+        "bInfo": false,
+		"aoColumns": [		    
+		    { "mData": "participationType", "sTitle": "Deltagande" },
+			{ "mData": "tournament", "sTitle": "Turnering" },
+			{ "mData": "season", "sTitle": "Säsong" },
 		    { "mData": "games", "sTitle": "Matcher" },
 		    { "mData": "wins", "sTitle": "Vinster" },
 		    { "mData": "draws", "sTitle": "Oavgjorda" },

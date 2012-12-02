@@ -7,7 +7,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name="user")
+@Table(name="ifkstat_users")
 public class User {
 	
 	@Id

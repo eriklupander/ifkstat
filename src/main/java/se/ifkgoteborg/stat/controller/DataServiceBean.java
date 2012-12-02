@@ -1,5 +1,6 @@
 package se.ifkgoteborg.stat.controller;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,10 +56,10 @@ public class DataServiceBean implements DataService {
 			"	INNER JOIN game g ON g.id = pg.game_id  " + 
 			"	INNER JOIN tournament_season ts ON ts.id = g.tournamentseason_id  " + 
 			"	INNER JOIN tournament t ON t.id = ts.tournament_id  " + 
-			"	LEFT OUTER JOIN game_event ge2 ON ge2.player_id=p.id AND ge2.game_id=g.id AND ge2.EVENTTYPE ='SUBSTITUTION_IN'  " + 
-			"	LEFT OUTER JOIN game_event ge3 ON ge3.player_id=p.id AND ge3.game_id=g.id AND ge3.EVENTTYPE ='SUBSTITUTION_OUT'  " + 
+			"	LEFT OUTER JOIN game_event ge2 ON ge2.player_id=p.id AND ge2.game_id=g.id AND ge2.EVENTTYPE = 'SUBSTITUTION_IN'  " + 
+			"	LEFT OUTER JOIN game_event ge3 ON ge3.player_id=p.id AND ge3.game_id=g.id AND ge3.EVENTTYPE = 'SUBSTITUTION_OUT'  " + 
 			"	WHERE p.id = :id " + 
-			"	GROUP BY t.name ORDER BY t.name;";
+			"	GROUP BY t.name, t.id ORDER BY t.name";
 	
 	private static final String GOALS_PER_PLAYER_TOURNAMENT = 
 			"SELECT t.name, COUNT(ge.id) as goals, COUNT(ge4.id) as goals_as_subst " +
@@ -240,7 +241,7 @@ public class DataServiceBean implements DataService {
 			"INNER JOIN game g ON g.id = ge.game_id " +
 			"INNER JOIN tournament_season ts ON ts.id = g.tournamentseason_id " +
 			"INNER JOIN tournament t ON t.id = ts.tournament_id " +
-			"WHERE ge.EVENTTYPE ='GOAL' AND p.id=" + id + " GROUP BY t.name ORDER BY goals DESC");
+			"WHERE ge.EVENTTYPE ='GOAL' AND p.id=" + id + " GROUP BY t.id, t.name ORDER BY goals DESC");
 		List<Object[]> res1 = q1.getResultList();
 		for(Object[] row : res1) {
 			dto.getGoalsPerTournament().add(new GoalsPerTournamentDTO((String) row[0], (Number) row[1]));
@@ -289,7 +290,7 @@ public class DataServiceBean implements DataService {
 	
 	@Override
 	public List<PlayerPositionStatsDTO> getPlayerPositionStats(Long id) {
-		String sql ="SELECT pos.name as posname, f.name as fname, j1.games, j2.goals FROM " +
+		String sql ="SELECT DISTINCT(pos.name) as posname, f.name as fname, j1.games, j2.goals FROM " +
 					"player p  " +
 					"inner join player_game pg ON pg.player_id=p.id " +
 					"INNER JOIN formation_position fp ON pg.formationposition_id=fp.id " +
@@ -319,8 +320,8 @@ public class DataServiceBean implements DataService {
 					"					GROUP BY (p.id, pos.name, f.id) " +
 					"			 	) j2  " +
 					"			 	ON j2.playerId=p.id AND j2.posname = pos.name AND j2.fid=f.id " +
-					"WHERE p.id= :id " + 
-					"GROUP BY (p.name, pos.name, f.name)";
+					"WHERE p.id= :id "; // + 
+					//"GROUP BY (p.name, pos.name, f.name)";
 		
 		Query q4 = em.createNativeQuery(sql)
 				.setParameter("id", id);
@@ -341,39 +342,246 @@ public class DataServiceBean implements DataService {
 		return retList;
 	}
 	
+	private String fullStatsSql = " SELECT" + 
+			"     'STARTER' as participationType," + 
+			"     ts.seasonName," + 
+			"     t.name," + 
+			"     COUNT(g2.id)  + COUNT(g5.id) wins," + 
+			"     COUNT(g3.id)  + COUNT(g4.id) losses," + 
+			"     COUNT(g6.id)  + COUNT(g7.id) draws" + 
+			" FROM" + 
+			"     player p" + 
+			" INNER JOIN" + 
+			"     player_game pg" + 
+			"         ON pg.player_id=p.id" + 
+			" INNER JOIN" + 
+			"     game g" + 
+			"         ON g.id=pg.game_id" + 
+			" INNER JOIN" + 
+			"     tournament_season ts ON ts.id=g.tournamentseason_id" + 
+			" INNER JOIN" + 
+			"     tournament t ON t.id=ts.tournament_id" + 
+			" LEFT OUTER JOIN" + 
+			"     game g2" + 
+			"         ON g2.id=pg.game_id" + 
+			"         AND g2.homeGoals > g2.awayGoals" + 
+			"         AND g2.hometeam_id=:defaultClubId" + 
+			" LEFT OUTER JOIN" + 
+			"     game g3" + 
+			"         ON g3.id=pg.game_id" + 
+			"         AND g3.homeGoals < g3.awayGoals" + 
+			"         AND g3.hometeam_id=:defaultClubId" + 
+			" LEFT OUTER JOIN" + 
+			"     game g6" + 
+			"         ON g6.id=pg.game_id" + 
+			"         AND g6.homeGoals = g6.awayGoals" + 
+			"         AND g6.hometeam_id=:defaultClubId" + 
+			" LEFT OUTER JOIN" + 
+			"     game g4" + 
+			"         ON g4.id=pg.game_id" + 
+			"         AND g4.homeGoals > g4.awayGoals" + 
+			"         AND g4.awayteam_id=:defaultClubId" + 
+			" LEFT OUTER JOIN" + 
+			"     game g5" + 
+			"         ON g5.id=pg.game_id" + 
+			"         AND g5.homeGoals < g5.awayGoals" + 
+			"         AND g5.awayteam_id=:defaultClubId" + 
+			" LEFT OUTER JOIN" + 
+			"     game g7" + 
+			"         ON g7.id=pg.game_id" + 
+			"         AND g7.homeGoals = g7.awayGoals" + 
+			"         AND g7.awayteam_id=:defaultClubId" + 
+			" WHERE" + 
+			"     p.id=:playerId" + 
+			"     AND pg.participationtype IN (" + 
+			"         'STARTER','SUBSTITUTE_OUT'" + 
+			"     )" + 
+			"     GROUP BY ('STARTER',ts.seasonName, t.name)" + 
+			" UNION" + 
+			" SELECT" + 
+			"     'SUBSTITUTE' as participationType," + 
+			"     ts.seasonName," + 
+			"     t.name," + 
+			"     COUNT(g2.id)  + COUNT(g5.id) wins," + 
+			"     COUNT(g3.id)  + COUNT(g4.id) losses," + 
+			"     COUNT(g6.id)  + COUNT(g7.id) draws" + 
+			" FROM" + 
+			"     player p" + 
+			" INNER JOIN" + 
+			"     player_game pg" + 
+			"         ON pg.player_id=p.id" + 
+			" INNER JOIN" + 
+			"     game g" + 
+			"         ON g.id=pg.game_id" + 
+			" INNER JOIN" + 
+			"     tournament_season ts ON g.tournamentseason_id=ts.id" + 
+			" INNER JOIN" + 
+			"     tournament t ON t.id=ts.tournament_id" + 
+			" LEFT OUTER JOIN" + 
+			"     game g2" + 
+			"         ON g2.id=pg.game_id" + 
+			"         AND g2.homeGoals > g2.awayGoals" + 
+			"         AND g2.hometeam_id=:defaultClubId" + 
+			" LEFT OUTER JOIN" + 
+			"     game g3" + 
+			"         ON g3.id=pg.game_id" + 
+			"         AND g3.homeGoals < g3.awayGoals" + 
+			"         AND g3.hometeam_id=:defaultClubId" + 
+			" LEFT OUTER JOIN" + 
+			"     game g6" + 
+			"         ON g6.id=pg.game_id" + 
+			"         AND g6.homeGoals = g6.awayGoals" + 
+			"         AND g6.hometeam_id=:defaultClubId" + 
+			" LEFT OUTER JOIN" + 
+			"     game g4" + 
+			"         ON g4.id=pg.game_id" + 
+			"         AND g4.homeGoals > g4.awayGoals" + 
+			"         AND g4.awayteam_id=:defaultClubId" + 
+			" LEFT OUTER JOIN" + 
+			"     game g5" + 
+			"         ON g5.id=pg.game_id" + 
+			"         AND g5.homeGoals < g5.awayGoals" + 
+			"         AND g5.awayteam_id=:defaultClubId" + 
+			" LEFT OUTER JOIN" + 
+			"     game g7" + 
+			"         ON g7.id=pg.game_id" + 
+			"         AND g7.homeGoals = g7.awayGoals" + 
+			"         AND g7.awayteam_id=:defaultClubId" + 
+			" WHERE" + 
+			"     p.id=:playerId" + 
+			"     AND pg.participationtype IN (" + 
+			"         'SUBSTITUTE_IN'" + 
+			"     )" + 
+			"     GROUP BY ('SUBSTITUTE',ts.seasonName, t.name)" + 
+			" UNION" + 
+			" SELECT" + 
+			"     'NO_PART' c1," + 
+			"     ts.seasonName," + 
+			"     t.name," + 
+			"     COUNT(g2.id)  + COUNT(g5.id) wins," + 
+			"     COUNT(g3.id)  + COUNT(g4.id) losses," + 
+			"     COUNT(g6.id)  + COUNT(g7.id) draws" + 
+			" FROM" + 
+			"     game g" + 
+			" INNER JOIN" + 
+			"     tournament_season ts" + 
+			"         ON ts.id=g.tournamentseason_id" + 
+			"  INNER JOIN" + 
+			"     tournament t ON t.id=ts.tournament_id" + 
+			" LEFT OUTER JOIN" + 
+			"     game g2" + 
+			"         ON g2.id=g.id" + 
+			"         AND g2.homeGoals > g2.awayGoals" + 
+			"         AND g2.hometeam_id=:defaultClubId" + 
+			" LEFT OUTER JOIN" + 
+			"     game g3" + 
+			"         ON g3.id=g.id" + 
+			"         AND g3.homeGoals < g3.awayGoals" + 
+			"         AND g3.hometeam_id=:defaultClubId" + 
+			" LEFT OUTER JOIN" + 
+			"     game g6" + 
+			"         ON g6.id=g.id" + 
+			"         AND g6.homeGoals = g6.awayGoals" + 
+			"         AND g6.hometeam_id=:defaultClubId" + 
+			" LEFT OUTER JOIN" + 
+			"     game g4" + 
+			"         ON g4.id=g.id" + 
+			"         AND g4.homeGoals > g4.awayGoals" + 
+			"         AND g4.awayteam_id=:defaultClubId" + 
+			" LEFT OUTER JOIN" + 
+			"     game g5" + 
+			"         ON g5.id=g.id" + 
+			"         AND g5.homeGoals < g5.awayGoals" + 
+			"         AND g5.awayteam_id=:defaultClubId" + 
+			" LEFT OUTER JOIN" + 
+			"     game g7" + 
+			"         ON g7.id=g.id" + 
+			"         AND g7.homeGoals = g7.awayGoals" + 
+			"         AND g7.awayteam_id=:defaultClubId" + 
+			" WHERE" + 
+			"     g.id NOT IN (" + 
+			"         SELECT" + 
+			"             g.id" + 
+			"         FROM" + 
+			"             player_game pg" + 
+			"         INNER JOIN" + 
+			"             game g" + 
+			"                 ON g.id=pg.game_id" + 
+			"         WHERE" + 
+			"             pg.player_id=:playerId" + 
+			"     )" + 
+			"     AND ts.id IN (" + 
+			"         SELECT" + 
+			"             DISTINCT(ts.id)" + 
+			"         FROM" + 
+			"             game g" + 
+			"         INNER JOIN" + 
+			"             tournament_season ts" + 
+			"                 ON ts.id=g.tournamentseason_id" + 
+			"         INNER JOIN" + 
+			"             player_game pg" + 
+			"                 ON pg.game_id=g.id" + 
+			"         WHERE" + 
+			"             pg.player_id=:playerId" + 
+			"     )" + 
+			"     GROUP BY ('NO_PART',ts.seasonName, t.name)";
+	
+	
+	@Override
+	public List<PlayerResultStatDTO> getFullPlayerResultStats(Long id) {
+		Query q4 = em.createNativeQuery(fullStatsSql)
+				.setParameter("playerId", id)
+				.setParameter("defaultClubId", defaultClub());
+		List<Object[]> rows = (List<Object[]>) q4.getResultList();
+		
+		List<PlayerResultStatDTO> retList = new ArrayList<PlayerResultStatDTO>();
+		for(Object[] row : rows) {
+			PlayerResultStatDTO dto = new PlayerResultStatDTO();
+			dto.setParticipationType((String) row[0]);
+			dto.setSeason( (String) row[1]);
+			dto.setTournament( (String) row[2]);
+			dto.setWins(formatNumber(row[3]));
+			dto.setLosses(formatNumber(row[4]));
+			dto.setDraws(formatNumber(row[5]));
+			
+			retList.add(dto);
+		}
+		return retList;
+	}
+	
 	@Override
 	public List<PlayerResultStatDTO> getPlayerResultStats(Long id) {
 		String sql = "SELECT 'STARTER' as participationType, COUNT(g2.id)  + COUNT(g5.id) wins, COUNT(g3.id)  + COUNT(g4.id) losses, COUNT(g6.id)  + COUNT(g7.id) draws FROM player p " +
 						"INNER JOIN player_game pg ON pg.player_id=p.id " +
 						"INNER JOIN game g ON g.id=pg.game_id " +
-						"LEFT OUTER JOIN game g2 ON g2.id=pg.game_id AND g2.homeGoals > g2.awayGoals AND g2.hometeam_id=110 " +
-						"LEFT OUTER JOIN game g3 ON g3.id=pg.game_id AND g3.homeGoals < g3.awayGoals AND g3.hometeam_id=110 " +
-						"LEFT OUTER JOIN game g6 ON g6.id=pg.game_id AND g6.homeGoals = g6.awayGoals AND g6.hometeam_id=110 " +
-						"LEFT OUTER JOIN game g4 ON g4.id=pg.game_id AND g4.homeGoals > g4.awayGoals AND g4.awayteam_id=110 " +
-						"LEFT OUTER JOIN game g5 ON g5.id=pg.game_id AND g5.homeGoals < g5.awayGoals AND g5.awayteam_id=110 " +
-						"LEFT OUTER JOIN game g7 ON g7.id=pg.game_id AND g7.homeGoals = g7.awayGoals AND g7.awayteam_id=110 " +
+						"LEFT OUTER JOIN game g2 ON g2.id=pg.game_id AND g2.homeGoals > g2.awayGoals AND g2.hometeam_id=:defaultClubId " +
+						"LEFT OUTER JOIN game g3 ON g3.id=pg.game_id AND g3.homeGoals < g3.awayGoals AND g3.hometeam_id=:defaultClubId " +
+						"LEFT OUTER JOIN game g6 ON g6.id=pg.game_id AND g6.homeGoals = g6.awayGoals AND g6.hometeam_id=:defaultClubId " +
+						"LEFT OUTER JOIN game g4 ON g4.id=pg.game_id AND g4.homeGoals > g4.awayGoals AND g4.awayteam_id=:defaultClubId " +
+						"LEFT OUTER JOIN game g5 ON g5.id=pg.game_id AND g5.homeGoals < g5.awayGoals AND g5.awayteam_id=:defaultClubId " +
+						"LEFT OUTER JOIN game g7 ON g7.id=pg.game_id AND g7.homeGoals = g7.awayGoals AND g7.awayteam_id=:defaultClubId " +
 						"WHERE p.id=:id AND pg.participationtype IN ('STARTER','SUBSTITUTE_OUT') " +
 						"UNION " +
 						"SELECT  'SUBSTITUTE' as participationType, COUNT(g2.id)  + COUNT(g5.id) wins, COUNT(g3.id)  + COUNT(g4.id) losses, COUNT(g6.id)  + COUNT(g7.id) draws FROM player p " +
 						"INNER JOIN player_game pg ON pg.player_id=p.id " +
 						"INNER JOIN game g ON g.id=pg.game_id " +
-						"LEFT OUTER JOIN game g2 ON g2.id=pg.game_id AND g2.homeGoals > g2.awayGoals AND g2.hometeam_id=110 " +
-						"LEFT OUTER JOIN game g3 ON g3.id=pg.game_id AND g3.homeGoals < g3.awayGoals AND g3.hometeam_id=110 " +
-						"LEFT OUTER JOIN game g6 ON g6.id=pg.game_id AND g6.homeGoals = g6.awayGoals AND g6.hometeam_id=110 " +
-						"LEFT OUTER JOIN game g4 ON g4.id=pg.game_id AND g4.homeGoals > g4.awayGoals AND g4.awayteam_id=110 " +
-						"LEFT OUTER JOIN game g5 ON g5.id=pg.game_id AND g5.homeGoals < g5.awayGoals AND g5.awayteam_id=110 " +
-						"LEFT OUTER JOIN game g7 ON g7.id=pg.game_id AND g7.homeGoals = g7.awayGoals AND g7.awayteam_id=110 " +
+						"LEFT OUTER JOIN game g2 ON g2.id=pg.game_id AND g2.homeGoals > g2.awayGoals AND g2.hometeam_id=:defaultClubId " +
+						"LEFT OUTER JOIN game g3 ON g3.id=pg.game_id AND g3.homeGoals < g3.awayGoals AND g3.hometeam_id=:defaultClubId " +
+						"LEFT OUTER JOIN game g6 ON g6.id=pg.game_id AND g6.homeGoals = g6.awayGoals AND g6.hometeam_id=:defaultClubId " +
+						"LEFT OUTER JOIN game g4 ON g4.id=pg.game_id AND g4.homeGoals > g4.awayGoals AND g4.awayteam_id=:defaultClubId " +
+						"LEFT OUTER JOIN game g5 ON g5.id=pg.game_id AND g5.homeGoals < g5.awayGoals AND g5.awayteam_id=:defaultClubId " +
+						"LEFT OUTER JOIN game g7 ON g7.id=pg.game_id AND g7.homeGoals = g7.awayGoals AND g7.awayteam_id=:defaultClubId " +
 						"WHERE p.id=:id AND pg.participationtype IN ('SUBSTITUTE_IN')" +
 						"" +
 						"UNION " +
 						"SELECT 'NO_PART', COUNT(g2.id)  + COUNT(g5.id) wins, COUNT(g3.id)  + COUNT(g4.id) losses, COUNT(g6.id)  + COUNT(g7.id) draws FROM game g " +  
 						"INNER JOIN tournament_season ts ON ts.id=g.tournamentseason_id " + 
-						"LEFT OUTER JOIN game g2 ON g2.id=g.id AND g2.homeGoals > g2.awayGoals AND g2.hometeam_id=110 " +  
-						"LEFT OUTER JOIN game g3 ON g3.id=g.id AND g3.homeGoals < g3.awayGoals AND g3.hometeam_id=110  " + 
-						"LEFT OUTER JOIN game g6 ON g6.id=g.id AND g6.homeGoals = g6.awayGoals AND g6.hometeam_id=110  " + 
-						"LEFT OUTER JOIN game g4 ON g4.id=g.id AND g4.homeGoals > g4.awayGoals AND g4.awayteam_id=110  " + 
-						"LEFT OUTER JOIN game g5 ON g5.id=g.id AND g5.homeGoals < g5.awayGoals AND g5.awayteam_id=110  " + 
-						"LEFT OUTER JOIN game g7 ON g7.id=g.id AND g7.homeGoals = g7.awayGoals AND g7.awayteam_id=110 " + 
+						"LEFT OUTER JOIN game g2 ON g2.id=g.id AND g2.homeGoals > g2.awayGoals AND g2.hometeam_id=:defaultClubId " +  
+						"LEFT OUTER JOIN game g3 ON g3.id=g.id AND g3.homeGoals < g3.awayGoals AND g3.hometeam_id=:defaultClubId  " + 
+						"LEFT OUTER JOIN game g6 ON g6.id=g.id AND g6.homeGoals = g6.awayGoals AND g6.hometeam_id=:defaultClubId  " + 
+						"LEFT OUTER JOIN game g4 ON g4.id=g.id AND g4.homeGoals > g4.awayGoals AND g4.awayteam_id=:defaultClubId  " + 
+						"LEFT OUTER JOIN game g5 ON g5.id=g.id AND g5.homeGoals < g5.awayGoals AND g5.awayteam_id=:defaultClubId  " + 
+						"LEFT OUTER JOIN game g7 ON g7.id=g.id AND g7.homeGoals = g7.awayGoals AND g7.awayteam_id=:defaultClubId " + 
 						"WHERE g.id NOT IN ( " + 
 						"SELECT g.id FROM player_game pg INNER JOIN game g ON g.id=pg.game_id WHERE pg.player_id=:id " + 
 						") " + 
@@ -386,29 +594,39 @@ public class DataServiceBean implements DataService {
 						")";
 		
 		Query q4 = em.createNativeQuery(sql)
-				.setParameter("id", id);
+				.setParameter("id", id)
+				.setParameter("defaultClubId", defaultClub());
 		List<Object[]> rows = (List<Object[]>) q4.getResultList();
 		
 		List<PlayerResultStatDTO> retList = new ArrayList<PlayerResultStatDTO>();
 		for(Object[] row : rows) {
 			PlayerResultStatDTO dto = new PlayerResultStatDTO();
 			dto.setParticipationType((String) row[0]);
-			dto.setWins( ((BigInteger) row[1]).intValue());
-			dto.setLosses( ((BigInteger) row[2]).intValue());
-			dto.setDraws( ((BigInteger) row[3]).intValue());
+			dto.setWins(formatNumber(row[1]));
+			dto.setLosses(formatNumber(row[2]));
+			dto.setDraws(formatNumber(row[3]));
 			
 			retList.add(dto);
 		}
 		return retList;
 	}
 	
+	private Integer formatNumber(Object object) {
+		if(object instanceof BigInteger) {
+			return ((BigInteger) object).intValue();
+		} else if(object instanceof BigDecimal) {
+			return ((BigDecimal) object).intValue();
+		}
+		return ((Number) object).intValue();
+	}
+
 	@Override
 	public List<PlayerGamesPerTournamentSeasonDTO> getPlayerGamesPerSeason(Long id) {
 		String sql = "SELECT DISTINCT(ts.id), t.name, ts.seasonName, COUNT(pg.id), COUNT(g.id)  FROM game g " + 
 						"INNER JOIN tournament_season ts ON ts.id=g.tournamentseason_id " +
 						"INNER JOIN tournament t ON t.id=ts.tournament_id " + 
 						"LEFT OUTER JOIN player_game pg ON pg.game_id=g.id AND  pg.player_id=:id " + 
-						"GROUP BY ts.id " +
+						"GROUP BY ts.id, t.name, ts.seasonName " +
 						"HAVING COUNT(pg.id) > 0 " +
 						"ORDER BY ts.seasonName DESC, t.name";
 		
@@ -419,14 +637,23 @@ public class DataServiceBean implements DataService {
 		List<PlayerGamesPerTournamentSeasonDTO> retList = new ArrayList<PlayerGamesPerTournamentSeasonDTO>();
 		for(Object[] row : rows) {
 			PlayerGamesPerTournamentSeasonDTO dto = new PlayerGamesPerTournamentSeasonDTO();
-			dto.setId(((BigInteger) row[0]).longValue());
+			dto.setId(formatLong(row[0]));
 			dto.setTournamentName( (String) row[1]);
 			dto.setSeasonName( (String) row[2]);
-			dto.setGamesPlayed( ((BigInteger) row[3]).intValue());
-			dto.setTotalGames( ((BigInteger) row[4]).intValue());
+			dto.setGamesPlayed(formatNumber(row[3]));
+			dto.setTotalGames(formatNumber(row[4]));
 			retList.add(dto);
 		}
 		return retList;
+	}
+
+	private Long formatLong(Object object) {
+		if(object instanceof BigInteger) {
+			return ((BigInteger) object).longValue();
+		} else if(object instanceof BigDecimal) {
+			return ((BigDecimal) object).longValue();
+		}
+		return ((Number) object).longValue();
 	}
 
 	private String getParticipation(String pType) {
@@ -462,7 +689,7 @@ public class DataServiceBean implements DataService {
 		String sql = "select p.id, p.name, COUNT(pg.id) as games, MIN(g.dateOfGame) as firstGame, MAX(g.dateOfGame) as lastGame FROM player p " +
 				"INNER JOIN player_game pg ON pg.player_id=p.id " +
 				"INNER JOIN game g ON pg.game_id=g.id " +
-				"GROUP BY p.name ORDER BY p.name";
+				"GROUP BY (p.id, p.name) ORDER BY p.name";
 		
 		Query q1 = em.createNativeQuery(sql);
 		List<Object[]> res1 = q1.getResultList();
@@ -472,8 +699,8 @@ public class DataServiceBean implements DataService {
 			dto.setId( ((Number) row[0]).longValue());
 			dto.setName((String) row[1]);
 			dto.setGames( ((Number) row[2]).intValue());
-			dto.setFirstGame(new Date(((java.sql.Date) row[3]).getTime()));
-			dto.setLastGame(new Date(((java.sql.Date) row[4]).getTime()));
+			dto.setFirstGame(formatDate(row[3]));
+			dto.setLastGame(formatDate(row[4]));
 			map.put(dto.getId(), dto);
 		}
 		
@@ -504,6 +731,16 @@ public class DataServiceBean implements DataService {
 		return map.values();
 	}
 
+	private Date formatDate(Object date) {
+		if(date instanceof java.sql.Date) {
+			return new Date(((java.sql.Date) date).getTime());
+		}
+		if(date instanceof java.sql.Timestamp) {
+			return new Date(((java.sql.Timestamp) date).getTime());	
+		}
+		return (Date) date;
+	}
+
 	
 	public List<Game> getGamesOfDate(String date) {
 		try {
@@ -527,9 +764,9 @@ public class DataServiceBean implements DataService {
 							"	LEFT OUTER JOIN game g2 ON g2.id=g.id AND g2.homegoals > g2.awaygoals " +
 							"	LEFT OUTER JOIN game g3 ON g3.id=g.id AND g3.homegoals = g3.awaygoals " +
 							"	LEFT OUTER JOIN game g4 ON g4.id=g.id AND g4.homegoals < g4.awaygoals " +
-							"	WHERE c1.id <> 110 " +
+							"	WHERE c1.id <> :defaultClubId " +
 							"	GROUP BY c1.id " +
-							"	) as j1 " +
+							"	) j1 " +
 							"	ON j1id=c.id " +
 							"	 " +
 							"	LEFT OUTER JOIN " +
@@ -540,14 +777,26 @@ public class DataServiceBean implements DataService {
 							"	LEFT OUTER JOIN game g2 ON g2.id=g.id AND g2.homegoals > g2.awaygoals " +
 							"	LEFT OUTER JOIN game g3 ON g3.id=g.id AND g3.homegoals = g3.awaygoals " +
 							"	LEFT OUTER JOIN game g4 ON g4.id=g.id AND g4.homegoals < g4.awaygoals " +
-							"	WHERE c2.id <> 110 " +
+							"	WHERE c2.id <> :defaultClubId " +
 							"	GROUP BY c2.id " +
 							"	) j2 " +
 							"	ON j2.j2id = c.id";
 	
+	private Long defaultClubId = null;
+	
+	private Long defaultClub() {
+		if(this.defaultClubId != null) {
+			return this.defaultClubId;
+		}
+		this.defaultClubId = formatLong(em.createQuery("SELECT c.id FROM Club c WHERE c.defaultClub=true").getSingleResult());
+		return this.defaultClubId;
+	}
+	
 	@Override
 	public List<ClubStatDTO> getAllClubStatistics() {
-		List<Object[]> rows = em.createNativeQuery(statSql).getResultList();
+		List<Object[]> rows = em.createNativeQuery(statSql).
+				setParameter("defaultClubId", defaultClub()).
+				getResultList();
 		
 		List<ClubStatDTO> res = new ArrayList<ClubStatDTO>();
 		
