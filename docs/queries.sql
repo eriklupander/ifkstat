@@ -159,8 +159,10 @@ SELECT g.id FROM player_game pg INNER JOIN game g ON g.id=pg.game_id WHERE pg.pl
 )
 AND ts.id IN 
 (
-SELECT DISTINCT(ts.id) FROM game g 
+SELECT DISTINCT(ts.id)  FROM game g 
 INNER JOIN tournament_season ts ON ts.id=g.tournamentseason_id
 INNER JOIN player_game pg ON pg.game_id=g.id
-WHERE pg.player_id=36837
+WHERE pg.player_id=36837 
+GROUP BY ts.id
+HAVING COUNT(pg.id) > 5
 )

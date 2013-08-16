@@ -1,0 +1,197 @@
+-- Installation av Oracle XE 2011 på Ubuntu 64-bit --
+
+Källa: http://meandmyubuntulinux.blogspot.se/2012/05/installing-oracle-11g-r2-express.html
+Source: http://meandmyubuntulinux.blogspot.se/2012/05/installing-oracle-11g-r2-express.html
+ 
+ 1) Ladda hem rpm.zip från Oracle, skapa konto ifall du saknar. Flytta över på käckt vis (WinSCP t.ex.) till exempelvis /srv/oracleinst
+
+ 2) Unzip it :
+unzip oracle-xe-11.2.0-1.0.x86_64.rpm.zip
+
+3) Install the following packages :
+sudo apt-get install alien libaio1 unixodbc vim
+
+4) Convert the red-hat ( rpm ) package to Ubuntu-package :
+sudo alien --scripts -d oracle-xe-11.2.0-1.0.x86_64.rpm
+
+(Note: this may take a while, till that time you can go for step 5 ) Dvs - du kan fortsätta med 5) i ett annan terminalfönster under tiden.
+
+5) Do the following pre-requisite things:
+a) Create a special chkconfig script :
+
+The Red Hat based installer of Oracle XE 11gR2 relies on /sbin/chkconfig, which is not used in Ubuntu. The chkconfig package available for the current version of Ubuntu produces errors and my not be safe to use. Below is a simple trick to get around the problem and install Oracle XE successfully: 
+sudo vim /sbin/chkconfig
+
+(copy and paste the following into the file )
+#!/bin/bash
+# Oracle 11gR2 XE installer chkconfig hack for Ubuntu
+file=/etc/init.d/oracle-xe
+if [[ ! `tail -n1 $file | grep INIT` ]]; then
+echo >> $file
+echo '### BEGIN INIT INFO' >> $file
+echo '# Provides: OracleXE' >> $file
+echo '# Required-Start: $remote_fs $syslog' >> $file
+echo '# Required-Stop: $remote_fs $syslog' >> $file
+echo '# Default-Start: 2 3 4 5' >> $file
+echo '# Default-Stop: 0 1 6' >> $file
+echo '# Short-Description: Oracle 11g Express Edition' >> $file
+echo '### END INIT INFO' >> $file
+fi
+update-rc.d oracle-xe defaults 80 01
+Save the above file and provide appropriate execute privilege :
+       chmod 755 /sbin/chkconfig
+
+b) Set the Kernel parameters :
+Oracle 11gR2 XE requires to set the following additional kernel parameters:
+sudo vim /etc/sysctl.d/60-oracle.conf 
+
+(Enter the following) 
+
+# Oracle 11g XE kernel parameters  
+fs.file-max=6815744  
+net.ipv4.ip_local_port_range=9000 65000  
+kernel.sem=250 32000 100 128 
+kernel.shmmax=536870912 
+
+(Save the file) 
+Note: kernel.shmmax = max possible value , e.g. size of physical RAM ( in bytes e.g. 512MB RAM == 512*1024*1024 == 536870912 bytes ) 
+
+Verify the change : 
+sudo cat /etc/sysctl.d/60-oracle.conf 
+
+Load new kernel parameters: 
+sudo service procps start  
+Verify: sudo sysctl -q fs.file-max 
+       -> fs.file-max = 6815744 
+
+	   c) Increase the system swap space : Analyze your current swap space by following command :
+           free -m 
+Minimum swap space requirement of Oracle 11gR2 XE is 2 GB . In case, your is lesser , you can increase it by following steps in my one of previous post .
+d) make some more required changes :
+i) ln -s /usr/bin/awk /bin/awk 
+ii) mkdir /var/lock/subsys 
+iii) touch /var/lock/subsys/listener 
+
+
+6) Now you are ready to install Oracle 11gR2 XE. Go to the directory where you created the ubuntu package file in Step 4 and enter following commands in terminal :
+i) sudo dpkg --install oracle-xe_11.2.0-2_amd64.deb  
+
+Update : Before you proceed to next step , do have a look at this trouble-shooting post in order to avoid MEMORY TARGET or any other "shared memory" error.
+
+FIXA MEMORY TARGET SÅ HÄR INNAN DU GÅR VIDARE.
+ Now, once you have reached the configuration part. Do the following to avoid getting MEMORY TARGET error ( ORA-00845: MEMORY_TARGET not supported on this system ) :
+sudo rm -rf /dev/shm
+sudo mkdir /dev/shm
+sudo mount -t tmpfs shmfs -o size=2048m /dev/shm
+
+(here size will be the size of your RAM in MBs ).
+
+The reason of doing all this is that on a Ubuntu system  /dev/shm is just a link to /run/shm but Oracle requires to have a seperate /dev/shm mount point.
+
+3) Next you can proceed with the configuration and other consequent steps.
+To make the change permanent do the following :
+
+a) create a file named S01shm_load in /etc/rc2.d :
+
+sudo vim /etc/rc2.d/S01shm_load
+
+Now copy and paste following lines into the file :
+
+#!/bin/sh
+case "$1" in
+start) mkdir /var/lock/subsys 2>/dev/null
+       touch /var/lock/subsys/listener
+       rm /dev/shm 2>/dev/null
+       mkdir /dev/shm 2>/dev/null
+       mount -t tmpfs shmfs -o size=2048m /dev/shm ;;
+*) echo error
+   exit 1 ;;
+esac
+
+b) Save the file and provide execute permissions :
+
+         chmod 755 /etc/rc2.d/S01shm_load
+
+This will ensure that every-time you start your system, you get a working Oracle environment.
+
+ii) sudo /etc/init.d/oracle-xe configure 
+Enter the following configuration information:
+
+    A valid HTTP port for the Oracle Application Express (the default is 8080)  
+    A valid port for the Oracle database listener (the default is 1521) 
+    A password for the SYS and SYSTEM administrative user accounts
+    Confirm password for SYS and SYSTEM administrative user accounts
+    Whether you want the database to start automatically when the computer starts (next reboot).
+
+7) Before you start using Oracle 11gR2 XE you have to set-up more things :
+a) Set-up the environmental variables :
+Add following lines to your .bashrc :
+export ORACLE_HOME=/u01/app/oracle/product/11.2.0/xe
+export ORACLE_SID=XE
+export NLS_LANG=`$ORACLE_HOME/bin/nls_lang.sh`
+export ORACLE_BASE=/u01/app/oracle
+export LD_LIBRARY_PATH=$ORACLE_HOME/lib:$LD_LIBRARY_PATH
+export PATH=$ORACLE_HOME/bin:$PATH
+ 
+b) execute your .profile to load the changes:
+     
+          . ./.profile
+
+8) Start the Oracle 11gR2 XE :
+
+sudo service oracle-xe start
+
+The output should be similar to following :
+user@machine:~$ sudo service oracle-xe start
+Starting Oracle Net Listener.
+Starting Oracle Database 11g Express Edition instance.
+user@machine:~$
+ 
+8) Create your user :
+a) start sqlplus and login as sys :
+sqlplus sys as sysdba
+( provide the password you gave while configuring the oracle in Step 6 (ii) ).
+This should come to following :
+
+SQL*Plus: Release 11.2.0.2.0 Production on Wed May 9 12:12:16 2012
+
+Copyright (c) 1982, 2011, Oracle. All rights reserved.
+
+Enter password:
+
+Connected to:
+Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
+
+SQL>
+
+b) Enter following on the sql prompt : Replace username and password by your desired ones.
+SQL> create user username identified by password;
+
+User created.
+
+SQL> grant connect,resource to username;
+
+Grant succeeded. 
+ 
+
+9) Now as you have created the user , you can login to it :
+
+user@machine:~$ sqlplus
+
+SQL*Plus: Release 11.2.0.2.0 Production on Wed May 9 12:28:48 2012
+
+Copyright (c) 1982, 2011, Oracle. All rights reserved.
+
+Enter user-name: temp
+Enter password:
+
+Connected to:
+Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
+
+SQL> select 2+2 from dual;
+
+2+2
+----------
+4
+
+SQL>

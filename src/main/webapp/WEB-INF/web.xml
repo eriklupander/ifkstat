@@ -76,7 +76,7 @@
        <servlet-name>ImageServlet</servlet-name>
        <url-pattern>/image</url-pattern>
    </servlet-mapping>
-   
+   <!-- 
  <security-constraint>
       <web-resource-collection>
          <web-resource-name>resteasy-servlet</web-resource-name>
@@ -99,5 +99,5 @@
    <security-role>
       <role-name>user</role-name>
    </security-role>
-    
+    -->
 </web-app>

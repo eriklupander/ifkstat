@@ -1,0 +1,59 @@
+-- Sätta upp JBoss 7 för produktion --
+
+Fritt ur minnet:
+
+1. Packa upp JBoss-zippen till /srv/myproject/jboss eller motsv.
+2. Lägg till Oracle-stöd genom att skapa modules/com/oracle/ojdbc6/main och kopiera in rätt filer där, dvs. module.xml:
+
+<module xmlns="urn:jboss:module:1.0" name="com.oracle.ojdbc6">
+  <resources>
+    <resource-root path="ojdbc6.jar"/>
+  </resources>
+  <dependencies>
+    <module name="javax.api"/>
+  </dependencies>
+</module>
+
+samt ojdbc6.jar
+
+3.1 Lägg till oracle-datakälla i standalone/configuration/standalone.xml (under <datasources>
+
+<datasource jndi-name="java:jboss/datasources/ifkstatOracleDS" pool-name="OracleDS" enabled="true" jta="true" use-java-context="true" use-ccm="true">
+  <connection-url>jdbc:oracle:thin:@localhost:1521:xe</connection-url>
+  <driver>oracle</driver>
+  <transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
+  <pool>
+	<prefill>true</prefill>
+	<use-strict-min>false</use-strict-min>
+	<flush-strategy>FailingConnectionOnly</flush-strategy>
+  </pool>
+  <security>
+	<user-name>ifkstat</user-name>
+	<password>ifkstat</password>
+  </security>
+</datasource>
+
+3.2 Lägg till Oracle-driver i standalone/configuration/standalone.xml (under <drivers>)
+<driver name="oracle" module="com.oracle.ojdbc6">
+  <xa-datasource-class>oracle.jdbc.OracleDriver</xa-datasource-class>
+</driver>	
+
+4. Lägg till IFKSTAT security domain i standalone/configuration/standalone.xml
+
+<security-domain name="IFKSTAT">
+	<authentication>
+		<login-module code="Database" flag="required">
+			<module-option name="dsJndiName" value="java:jboss/datasources/ifkstatOracleDS"/>
+			<module-option name="principalsQuery" value="select passwd from User where username=?"/>
+			<module-option name="rolesQuery" value="select userRoles,'Roles' from UserRole where username=?"/>
+			<module-option name="hashAlgorithm" value="MD5"/>
+			<module-option name="hashEncoding" value="base64"/>
+			<module-option name="unauthenticatedIdentity" value="guest"/>
+		</login-module>
+	</authentication>
+</security-domain>
+
+5. Fixa org.slf4j-felet vid uppstart genom att lägga in följande under <dependencies> i /modules/org/jboss/logging/main/module.xml:
+
+ <module name="org.apache.log4j"/>
+ <module name="org.slf4j"/>
